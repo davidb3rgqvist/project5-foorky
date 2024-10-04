@@ -5,12 +5,16 @@
 
 .NavBar a {
   color: #ffffff !important;
+  font-size: 1.2rem;
+  padding: 7px;
+  vertical-align: middle;
 }
 
 .NavBar a:hover {
   text-decoration: underline;
 }
 
-.NavBar a.active {
+.NavBar .Active {
   text-decoration: underline;
+  font-weight: bold;
 }
