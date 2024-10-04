@@ -1,0 +1,16 @@
+.NavBar {
+  background-color: #1A4D2E;
+  border: 1px solid #dadadf;
+}
+
+.NavBar a {
+  color: #ffffff !important;
+}
+
+.NavBar a:hover {
+  text-decoration: underline;
+}
+
+.NavBar a.active {
+  text-decoration: underline;
+}
