@@ -1,8 +1,11 @@
+
 .App {
-  font-family: "roboto", sans-serif;
+  font-family: "Roboto", sans-serif;
   background-color: #F5EFE6;
   min-height: 100vh;
+  min-width: 100vw;
   color: #202020;
+  padding-bottom: 20px;
 }
 
 .Main {
@@ -13,41 +16,56 @@
   box-sizing: border-box;
 }
 
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Vollkorn', serif;
+}
+
+h1 {
+  font-weight: 700;
+}
+
+h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+
 .Content {
   background-color: #ffffff;
-  padding: 10px;
-  border-radius: 2px;
-  border: 1px solid #dadadf;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+  margin: auto;
+}
+
+@media (min-width: 768px) {
+  .Content {
+    max-width: 500px;
+    margin: auto;
+  }
 }
 
 .FillerImage {
   object-fit: cover;
   height: 100%;
   width: 100%;
+  border-radius: 15px;
 }
 
 .Image {
   max-height: 40vh;
   max-width: 100%;
   object-fit: contain;
-}
-
-* {
-  box-sizing: border-box;
+  border-radius: 10px;
 }
 
 a {
   color: #555555;
-  transition: color ease-in-out 0.3s;
+  transition: color 0.3s ease-in-out;
 }
 
 a:hover {
-  text-decoration: none;
-}
-
-a:hover i {
-  color: #2142b2;
-  transition: color ease-in-out 0.3s;
+  text-decoration: underline;
 }
 
 input[type="file"] {
@@ -61,18 +79,15 @@ i {
   vertical-align: middle;
 }
 
-i:hover {
+/* i:hover {
   cursor: pointer;
-  transition: color ease-in-out 0.3s;
-  color: #2142b2;
-}
+} */
 
 figure {
   text-align: center;
   display: inline-block;
 }
 
-/* scrollbar */
 *::-webkit-scrollbar {
   width: 5px;
 }
