@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import signin from "../../assets/signin.png";
 import Form from "react-bootstrap/Form";
@@ -14,10 +14,10 @@ import { Link, useHistory } from "react-router-dom";
 import styles from "../../styles/SignInUpForm.module.css";
 import btnStyles from "../../styles/Button.module.css";
 import appStyles from "../../App.module.css";
-import { SetCurrentUserContext } from "../../App";
+import { useSetCurrentUser } from "../../contexts/CurrentUserContext";
 
 function SignInForm() {
-  const setCurrentUser = useContext(SetCurrentUserContext);
+  const setCurrentUser = useSetCurrentUser();
 
   const [signInData, setSignInData] = useState({
     username: "",
@@ -28,6 +28,7 @@ function SignInForm() {
   const [errors, setErrors] = useState({});
 
   const history = useHistory();
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -50,7 +51,7 @@ function SignInForm() {
   return (
     <Row className={styles.Row}>
       <Col className="my-auto p-0 p-md-2" md={6}>
-        <Container className={`${appStyles.Content} p-4 `}>
+        <Container className={`${appStyles.Content} p-4`}>
           <h1 className={styles.Header}>Sign in</h1>
           <Form onSubmit={handleSubmit}>
             <Form.Group controlId="username">
@@ -86,6 +87,7 @@ function SignInForm() {
                 {message}
               </Alert>
             ))}
+
             <Button
               className={`${btnStyles.Button} ${btnStyles.Wide} ${btnStyles.Bright}`}
               type="submit"
