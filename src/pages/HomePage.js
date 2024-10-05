@@ -34,7 +34,8 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <h1 className={styles.HeroText}>
-                Foorky connects you with a global community of culinary enthusiasts. Join us and find your next favorite recipe!
+                Foorky connects you with a global community of culinary enthusiasts. 
+                Join us and find your next favorite recipe!
               </h1>
               <Link to="/signup" className={styles.CTAButton}>
                 Get Started
@@ -76,7 +77,7 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <div className={styles.AboutText}>
-              Find exciting new dishes every day – 
+              Find new exciting dishes every day – 
               from beginners to seasoned chefs!
               </div>
             </Col>
