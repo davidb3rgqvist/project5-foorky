@@ -9,18 +9,18 @@ function HomePage() {
   const benefits = [
     {
       icon: "fas fa-utensils",
-      heading: "Personalized Recipes",
-      text: "Get custom meal plans tailored to your tastes and preferences.",
+      heading: "Discover Delicious Recipes with Foorky!",
+      text: "Sign up today to explore inspiring recipes shared by friends and food lovers from around the world. Whether you're looking for quick meals or gourmet dishes",
     },
     {
       icon: "fas fa-clock",
-      heading: "Save Time",
-      text: "Reduce meal prep time with easy-to-follow recipes.",
+      heading: "Stress-Free Cooking",
+      text: "With Foorky’s easy-to-follow recipe format, you’ll save time and avoid the headache of constantly having to reread instructions. Our streamlined structure ensures you can focus on cooking, not deciphering complicated steps. Plus, every recipe follows the same format, so once you’ve learned it, preparing meals becomes even easier and faster!",
     },
     {
       icon: "fas fa-heart",
-      heading: "Healthy & Nutritious",
-      text: "Enjoy balanced, nutritious meals that suit your lifestyle.",
+      heading: "We’re a community of food lovers",
+      text: "Discover recipes that suit your lifestyle while connecting with a vibrant community of food lovers. Share tips, ideas, and inspiration as you create wholesome meals together. With Foorky, you’re never cooking alone!",
     },
   ];
 
@@ -34,7 +34,7 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <h1 className={styles.HeroText}>
-                Discover Delicious Recipes with Foorky! Sign up today for personalized meal plans and more.
+                Foorky connects you with a global community of culinary enthusiasts. Join us and find your next favorite recipe!
               </h1>
               <Link to="/signup" className={styles.CTAButton}>
                 Get Started
@@ -76,9 +76,8 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <div className={styles.AboutText}>
-                Foorky helps you explore new dishes and offers curated meal plans
-                tailored to your preferences. Whether you're a beginner cook or an
-                expert chef, there's something for everyone!
+              Find exciting new dishes every day – 
+              from beginners to seasoned chefs!
               </div>
             </Col>
           </Row>
@@ -91,7 +90,7 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <div className={styles.FooterText}>
-                © 2024 Foorky | Your guide to better eating habits.
+                © 2024 Foorky | Your guide to exciting eating habits.
               </div>
             </Col>
           </Row>
