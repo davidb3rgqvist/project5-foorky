@@ -9,8 +9,9 @@ const RecipeFeedPage = () => {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const { data } = await axios.get("/api/recipes/");
-        setRecipes(data);
+        const { data } = await axios.get("/recipes/");
+        console.log("API response:", data);
+        setRecipes(data.results);
       } catch (err) {
         console.error(err);
       }
@@ -21,9 +22,13 @@ const RecipeFeedPage = () => {
 
   return (
     <div className={styles.RecipeFeed}>
-      {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
-      ))}
+      {recipes.length > 0 ? (
+        recipes.map((recipe) => (
+          <RecipeCard key={recipe.id} recipe={recipe} />
+        ))
+      ) : (
+        <p>No recipes found.</p>
+      )}
     </div>
   );
 };

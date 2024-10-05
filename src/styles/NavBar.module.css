@@ -28,7 +28,7 @@
 
 /* Style for the hamburger menu */
 .NavBar .navbar-toggler {
-  border-color: rgba(255, 255, 255, 0.5); /* White button outline */
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .NavBar .navbar-toggler-icon {

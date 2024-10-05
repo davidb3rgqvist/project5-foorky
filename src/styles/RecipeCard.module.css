@@ -1,0 +1,214 @@
+.cardContainer {
+  perspective: 1000px;
+  width: 100%;
+  max-width: 350px;
+  margin: 20px;
+}
+
+.card {
+  width: 100%;
+  height: 500px;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.8s;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.isFlipped {
+  transform: rotateY(180deg);
+}
+
+.cardFront, .cardBack {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cardFront {
+  background-color: #f7f7f7;
+  text-align: center;
+}
+
+.cardImage {
+  width: 100%;
+  height: 180px;
+  object-fit: cover;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+.cardContent {
+  padding: 20px;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 10px;
+}
+
+.likeButton, .updateButton, .deleteButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.likeButton:hover, .updateButton:hover, .deleteButton:hover {
+  background-color: #0056b3;
+}
+
+.cardBack {
+  background-color: #fff;
+  transform: rotateY(180deg);
+  overflow-y: auto;
+  padding: 20px;
+  border-radius: 15px;
+}
+
+.cardBackContent {
+  height: 100%;
+  overflow-y: auto;
+}
+
+h2, h3 {
+  margin: 10px 0;
+}
+
+p {
+  margin: 5px 0;
+}
+
+.commentsSection {
+  margin-top: 10px;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.comment {
+  background-color: #f1f1f1;
+  margin-bottom: 10px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.deleteConfirmModal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  text-align: center;
+}
+
+.deleteConfirmModal button {
+  margin: 5px;
+  padding: 8px 12px;
+  border: none;
+  background-color: #007bff;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.deleteConfirmModal button:hover {
+  background-color: #0056b3;
+}
+.actionsBack {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 15px;
+}
+
+.updateButton, .deleteButton, .likeButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.updateButton:hover, .deleteButton:hover, .likeButton:hover {
+  background-color: #0056b3;
+}
+/* Toggleable Section Headers */
+h3 {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Align icon and title to opposite sides */
+  padding: 10px 0;
+  margin: 0;
+  font-size: 1.2em;
+  border-bottom: 2px solid #ddd; /* Thicker bottom border for distinction */
+  transition: background-color 0.3s ease;
+}
+
+h3:hover {
+  background-color: #f9f9f9; /* Highlight on hover */
+}
+
+/* Comment Styling */
+.comment {
+  margin-bottom: 15px; /* More spacing between comments */
+  padding: 10px;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+}
+
+/* Add Comment Section */
+.addComment {
+  margin-top: 15px;
+  display: flex;
+  align-items: center;
+}
+
+.addComment input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  margin-right: 10px;
+  transition: border-color 0.3s ease;
+}
+
+.addComment input:focus {
+  border-color: #007bff; /* Blue border on focus */
+  outline: none;
+}
+
+.addComment button {
+  padding: 10px 15px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.addComment button:hover {
+  background-color: #0056b3;
+}
+
+.addComment button:active {
+  background-color: #004494; /* Darker blue on click */
+}
+
+/* Optional: Add subtle animations for focus effects */
+input, button {
+  transition: all 0.3s ease;
+}
