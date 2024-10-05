@@ -37,14 +37,27 @@
 
 .cardImage {
   width: 100%;
-  height: 180px;
-  object-fit: cover;
+  height: 200px; /* Fixed height for uniform image size */
+  object-fit: cover; /* Crop image to fit container */
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
 
 .cardContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Create two columns for grid */
+  grid-gap: 10px;
   padding: 20px;
+  align-items: center;
+  text-align: left;
+}
+
+.cardContent h2 {
+  grid-column: span 2; /* Title takes full width */
+}
+
+.cardContent p {
+  margin: 0;
 }
 
 .actions {
@@ -125,6 +138,7 @@ p {
 .deleteConfirmModal button:hover {
   background-color: #0056b3;
 }
+
 .actionsBack {
   display: flex;
   justify-content: space-between;
@@ -143,72 +157,48 @@ p {
 .updateButton:hover, .deleteButton:hover, .likeButton:hover {
   background-color: #0056b3;
 }
-/* Toggleable Section Headers */
-h3 {
-  cursor: pointer;
+
+/* Grid-specific styling for recipe front content */
+.cardContent {
   display: flex;
-  align-items: center;
-  justify-content: space-between; /* Align icon and title to opposite sides */
-  padding: 10px 0;
+  flex-direction: column;
+  padding: 20px;
+  text-align: left;
+}
+
+.cardContent h2 {
+  grid-column: span 2; /* Title takes full width */
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.cardContent p {
   margin: 0;
-  font-size: 1.2em;
-  border-bottom: 2px solid #ddd; /* Thicker bottom border for distinction */
-  transition: background-color 0.3s ease;
-}
-
-h3:hover {
-  background-color: #f9f9f9; /* Highlight on hover */
-}
-
-/* Comment Styling */
-.comment {
-  margin-bottom: 15px; /* More spacing between comments */
-  padding: 10px;
-  background-color: #f1f1f1;
-  border-radius: 5px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-}
-
-/* Add Comment Section */
-.addComment {
-  margin-top: 15px;
+  padding-bottom: 10px;
   display: flex;
   align-items: center;
 }
 
-.addComment input {
-  flex: 1;
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  margin-right: 10px;
-  transition: border-color 0.3s ease;
+/* Single column for short description */
+.shortDescription {
+  margin-bottom: 20px;
 }
 
-.addComment input:focus {
-  border-color: #007bff; /* Blue border on focus */
-  outline: none;
+/* Row with three columns for like count, cook time, and difficulty */
+.cardFooter {
+  display: flex;
+  justify-content: space-between; /* Space between each column */
+  border-top: 1px solid #ddd; /* Optional border on top of footer */
+  padding-top: 10px;
 }
 
-.addComment button {
-  padding: 10px 15px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
+.cardFooter p {
+  margin: 0;
+  display: flex;
+  align-items: center;
 }
 
-.addComment button:hover {
-  background-color: #0056b3;
-}
-
-.addComment button:active {
-  background-color: #004494; /* Darker blue on click */
-}
-
-/* Optional: Add subtle animations for focus effects */
-input, button {
-  transition: all 0.3s ease;
+/* Icon margin */
+.cardFooter svg {
+  margin-right: 5px;
 }

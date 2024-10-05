@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useCurrentUser } from "../contexts/CurrentUserContext"; // Import the context hook
+import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
 
 const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment }) => {
@@ -13,18 +13,16 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment })
   const [newComment, setNewComment] = useState("");
   const [editingCommentId, setEditingCommentId] = useState(null);
   const [editingContent, setEditingContent] = useState("");
-  const [focusMode, setFocusMode] = useState(false); // State to manage focus mode
+  const [focusMode, setFocusMode] = useState(false);
 
   const currentUser = useCurrentUser();
 
-  // Flip the card when the card itself (not interactive elements) is clicked
   const handleFlip = (e) => {
-    if (!focusMode) { // Prevent flip in focus mode
+    if (!focusMode) {
       setIsFlipped(!isFlipped);
     }
   };
 
-  // Prevent card flip on interactive elements
   const preventFlip = (e) => {
     e.stopPropagation();
   };
@@ -88,12 +86,16 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment })
         <div className={styles.cardFront}>
           <img src={recipe.image} alt={recipe.title} className={styles.cardImage} />
           <div className={styles.cardContent}>
+            {/* Title and Description */}
             <h2 className={styles.recipeTitle}>{recipe.title}</h2>
-            <p><strong>Cook Time:</strong> {recipe.cook_time} mins</p>
-            <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
             <p className={styles.shortDescription}>{recipe.short_description}</p>
-            {/* Show like count on the front without the like button */}
-            <p><strong>Likes:</strong> {likes}</p>
+
+            {/* Footer Section: Cook Time, Difficulty, and Likes */}
+            <div className={styles.cardFooter}>
+              <p><strong>Cook Time:</strong> {recipe.cook_time} mins</p>
+              <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
+              <p><strong>Likes:</strong> {likes}</p>
+            </div>
           </div>
         </div>
 
@@ -128,7 +130,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment })
                             type="text"
                             value={editingContent}
                             onChange={(e) => setEditingContent(e.target.value)}
-                            onClick={preventFlip} // Prevent flipping when interacting with input
+                            onClick={preventFlip}
                           />
                           <button onClick={(event) => handleSaveComment(event, comment.id)}>
                             Save

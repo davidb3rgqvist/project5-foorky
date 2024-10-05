@@ -2,6 +2,8 @@
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
+    background-color: white !important;
+    border-radius: 20px;
   }
   
   .FormLabel {
@@ -16,5 +18,25 @@
   .SubmitButton {
     background-color: #516a52;
     color: white;
+  }
+  .ql-container {
+    background-color: white !important;
+  }
+  
+  .ql-editor {
+    background-color: white !important;
+    min-height: 400px;
+    color: black; /* Ensure text is readable */
+  }
+  .imagePreviewContainer {
+    margin-top: 10px;
+    text-align: center;
+  }
+  
+  .imagePreview {
+    max-width: 300px;
+    max-height: 200px;
+    display: block;
+    margin: 10px auto;
   }
   
