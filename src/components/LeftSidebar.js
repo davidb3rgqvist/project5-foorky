@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import styles from '../styles/LeftSidebar.module.css';
 
 const LeftSidebar = ({ handleFilter, handleSearch }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -9,11 +10,15 @@ const LeftSidebar = ({ handleFilter, handleSearch }) => {
   };
 
   return (
-    <div className="sidebar-left">
-      <h3>Filter</h3>
-      <button onClick={() => handleFilter("easy")}>Easy Recipes</button>
-      <button onClick={() => handleFilter("medium")}>Medium Recipes</button>
-      <button onClick={() => handleFilter("hard")}>Hard Recipes</button>
+    <div className={styles.Sidebar}>
+      <h3>Filter by Difficulty</h3>
+      <button onClick={() => handleFilter("Easy")}>Easy</button>
+      <button onClick={() => handleFilter("Medium")}>Medium</button>
+      <button onClick={() => handleFilter("Hard")}>Hard</button>
+
+      <h3>Filter by Cooking Time</h3>
+      <button onClick={() => handleFilter("quick")}>Quick Recipes</button>
+      <button onClick={() => handleFilter("long")}>Long Recipes</button>
 
       <h3>Search</h3>
       <input 

@@ -1,8 +1,8 @@
 .cardContainer {
   perspective: 1000px;
-  width: 100%;
   max-width: 350px;
   margin: 20px;
+  width: 100%;
 }
 
 .card {
@@ -32,32 +32,32 @@
 
 .cardFront {
   background-color: #f7f7f7;
-  text-align: center;
+  text-align: left;
 }
 
 .cardImage {
   width: 100%;
-  height: 200px; /* Fixed height for uniform image size */
-  object-fit: cover; /* Crop image to fit container */
+  height: 330px;
+  object-fit: cover;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
 }
 
 .cardContent {
-  display: grid;
-  grid-template-columns: 1fr 1fr; /* Create two columns for grid */
-  grid-gap: 10px;
-  padding: 20px;
-  align-items: center;
+  padding: 10px;
+  display: flex;
+  flex-direction: column;
   text-align: left;
 }
 
 .cardContent h2 {
-  grid-column: span 2; /* Title takes full width */
+  padding-bottom: 10px;
+  margin-bottom: 10px;
 }
 
 .cardContent p {
   margin: 0;
+  padding-bottom: 10px;
 }
 
 .actions {
@@ -66,8 +66,8 @@
   margin-top: 10px;
 }
 
-.likeButton, .updateButton, .deleteButton {
-  background-color: #007bff;
+button {
+  background-color: #243925;
   color: white;
   border: none;
   padding: 8px 12px;
@@ -75,28 +75,18 @@
   cursor: pointer;
 }
 
-.likeButton:hover, .updateButton:hover, .deleteButton:hover {
-  background-color: #0056b3;
+button:hover {
+  background-color: #101b11;
 }
 
 .cardBack {
   background-color: #fff;
   transform: rotateY(180deg);
-  overflow-y: auto;
   padding: 20px;
-  border-radius: 15px;
-}
-
-.cardBackContent {
-  height: 100%;
   overflow-y: auto;
 }
 
-h2, h3 {
-  margin: 10px 0;
-}
-
-p {
+h2, h3, p {
   margin: 5px 0;
 }
 
@@ -120,23 +110,19 @@ p {
   transform: translate(-50%, -50%);
   background-color: white;
   padding: 20px;
+  border: solid #101b11;
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
 .deleteConfirmModal button {
+  background-color: #ff0000;
   margin: 5px;
-  padding: 8px 12px;
-  border: none;
-  background-color: #007bff;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
 }
 
 .deleteConfirmModal button:hover {
-  background-color: #0056b3;
+  background-color: #940202;
 }
 
 .actionsBack {
@@ -145,60 +131,19 @@ p {
   margin-top: 15px;
 }
 
-.updateButton, .deleteButton, .likeButton {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.updateButton:hover, .deleteButton:hover, .likeButton:hover {
-  background-color: #0056b3;
-}
-
-/* Grid-specific styling for recipe front content */
-.cardContent {
-  display: flex;
-  flex-direction: column;
-  padding: 20px;
-  text-align: left;
-}
-
-.cardContent h2 {
-  grid-column: span 2; /* Title takes full width */
-  padding-bottom: 10px;
-  margin-bottom: 10px;
-}
-
-.cardContent p {
-  margin: 0;
-  padding-bottom: 10px;
-  display: flex;
-  align-items: center;
-}
-
-/* Single column for short description */
-.shortDescription {
-  margin-bottom: 20px;
-}
-
-/* Row with three columns for like count, cook time, and difficulty */
 .cardFooter {
   display: flex;
-  justify-content: space-between; /* Space between each column */
-  border-top: 1px solid #ddd; /* Optional border on top of footer */
+  justify-content: space-between;
+  border-top: 1px solid #ddd;
   padding-top: 10px;
 }
 
-.cardFooter p {
+.cardFooter p, .cardFooter svg {
   margin: 0;
   display: flex;
   align-items: center;
 }
 
-/* Icon margin */
-.cardFooter svg {
-  margin-right: 5px;
+.shortDescription {
+  margin-bottom: 20px;
 }

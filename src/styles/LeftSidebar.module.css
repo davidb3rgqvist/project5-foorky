@@ -1,0 +1,98 @@
+.Sidebar {
+    background-color: #E8DFCA;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    margin: 20px;
+  }
+  
+  .Sidebar h3 {
+    color: #1A4D2E;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+  
+  .Sidebar button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 30px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    color: #1A4D2E;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .Sidebar button:hover {
+    background-color: #F5EFE6;
+  }
+  
+  .Sidebar input[type="text"] {
+    width: 100%;
+    padding: 10px 20px;
+    border-radius: 30px;
+    margin-bottom: 15px;
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    color: #1A4D2E;
+    transition: border 0.3s ease;
+  }
+  
+  .Sidebar input[type="text"]:focus {
+    border-color: #4F6F52;
+    outline: none;
+  }
+  
+  .ProfileCard {
+    background-color: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  
+  .ProfileCard img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 10px;
+  }
+  
+  .ProfileCard h4 {
+    color: #1A4D2E;
+    margin-bottom: 5px;
+  }
+  
+  .ProfileCard button {
+    background-color: #4F6F52;
+    color: #ffffff;
+    border-radius: 20px;
+    padding: 8px 16px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .ProfileCard button:hover {
+    background-color: #1A4D2E;
+  }
+  
+  @media (max-width: 768px) {
+    .Sidebar {
+      padding: 20px;
+      border-radius: 0;
+    }
+  
+    .Sidebar h3 {
+      font-size: 1.2rem;
+    }
+  
+    .ProfileCard img {
+      width: 80px;
+      height: 80px;
+    }
+  }
+  
