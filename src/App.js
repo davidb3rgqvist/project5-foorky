@@ -10,6 +10,8 @@ import RecipeFeedPage from "./pages/RecipeFeedPage";
 import CreateRecipePage from "./pages/CreateRecipePage";
 import { CurrentUserProvider, useCurrentUser } from "./contexts/CurrentUserContext";
 import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
+
 
 // Custom PrivateRoute for authenticated routes
 function PrivateRoute({ component: Component, ...rest }) {
@@ -35,6 +37,7 @@ function App() {
             <Route exact path="/" component={HomePage} />
             <Route exact path="/signin" component={SignInForm} />
             <Route exact path="/signup" component={SignUpForm} />
+            <Route path="/profiles/:id" component={ProfilePage} />
 
             {/* Protected Routes */}
             <PrivateRoute exact path="/recipe-feed" component={RecipeFeedPage} />
