@@ -13,8 +13,31 @@ export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
   const history = useHistory();
   
-  const isRefreshingToken = useRef(false); // Ref to persist value across renders
-  const failedRequestsQueue = useRef([]);  // Ref for storing failed requests
+  const isRefreshingToken = useRef(false);
+  const failedRequestsQueue = useRef([]);
+
+  const handleSignOut = async () => {
+    try {
+      // Perform logout on the server
+      await axios.post("/dj-rest-auth/logout/");
+      
+      // Clear the tokens in React state
+      setCurrentUser(null);
+      
+      // Explicitly clear the tokens from cookies
+      document.cookie = "my-app-auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      document.cookie = "my-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+      
+      // Optionally, remove tokens from localStorage/sessionStorage if used
+      localStorage.removeItem("authToken");
+      sessionStorage.removeItem("authToken");
+  
+      // Redirect user to sign-in page
+      history.push("/signin");
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleMount = async () => {
     try {

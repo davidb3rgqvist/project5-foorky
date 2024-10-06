@@ -2,15 +2,9 @@
     text-align: center;
   }
   
-  .profileImage {
+  .ProfileImage {
     width: 150px;
     height: 150px;
     object-fit: cover;
     margin-bottom: 20px;
   }
-  
-  .statCard {
-    text-align: center;
-    padding: 20px;
-  }
-  
