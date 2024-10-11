@@ -47,14 +47,27 @@ const RecipeFeedPage = () => {
     fetchRecipes();
   }, [filter, searchQuery]);
 
+  const handleDelete = (recipeId) => {
+    // Logic to delete a recipe
+    console.log(`Delete recipe with id: ${recipeId}`);
+  };
+
+  const handleAddComment = (comment) => {
+    // Logic to add a comment
+    console.log(`Add comment: ${comment}`);
+  };
+
+  const handleEditComment = (commentId, content) => {
+    // Logic to edit a comment
+    console.log(`Edit comment ${commentId}: ${content}`);
+  };
+
   return (
     <Row className={styles.FeedLayout}>
-      {/* Left Sidebar */}
       <Col xs={12} md={3} className="d-none d-md-block">
         <LeftSidebar handleFilter={setFilter} handleSearch={setSearchQuery} />
       </Col>
 
-      {/* Main Recipe Feed */}
       <Col xs={12} md={6}>
         <div className={styles.RecipeFeed}>
           {loading ? (
@@ -65,7 +78,14 @@ const RecipeFeedPage = () => {
             </div>
           ) : recipes.length > 0 ? (
             recipes.map((recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} />
+              <RecipeCard
+                key={recipe.id}
+                recipe={recipe}
+                onUpdate={(recipeId) => console.log(`Update recipe with id: ${recipeId}`)}
+                onDelete={handleDelete}
+                onAddComment={handleAddComment}
+                onEditComment={handleEditComment}
+              />
             ))
           ) : (
             <p>No recipes found.</p>
@@ -73,7 +93,6 @@ const RecipeFeedPage = () => {
         </div>
       </Col>
 
-      {/* Right Sidebar */}
       <Col xs={12} md={3} className="d-none d-md-block">
         <RightSidebar />
       </Col>

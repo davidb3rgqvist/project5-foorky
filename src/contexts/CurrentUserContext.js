@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, useRef } from "react";
+import { createContext, useContext, useEffect, useMemo, useState, useRef, useCallback } from "react";
 import axios from "axios";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
 import { useHistory } from "react-router";
@@ -16,60 +16,51 @@ export const CurrentUserProvider = ({ children }) => {
   const isRefreshingToken = useRef(false);
   const failedRequestsQueue = useRef([]);
 
-  const handleSignOut = async () => {
+  // Sign out logic wrapped in useCallback
+  const handleSignOut = useCallback(async () => {
     try {
-      // Perform logout on the server
       await axios.post("/dj-rest-auth/logout/");
-      
-      // Clear the tokens in React state
       setCurrentUser(null);
-      
-      // Explicitly clear the tokens from cookies
-      document.cookie = "my-app-auth=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      document.cookie = "my-refresh-token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-      
-      // Optionally, remove tokens from localStorage/sessionStorage if used
       localStorage.removeItem("authToken");
-      sessionStorage.removeItem("authToken");
-  
-      // Redirect user to sign-in page
+      localStorage.removeItem("refreshToken");
       history.push("/signin");
     } catch (err) {
       console.log(err);
     }
-  };
+  }, [history]);
 
   const handleMount = async () => {
-    try {
-      const { data } = await axiosRes.get("dj-rest-auth/user/");
-      setCurrentUser(data);
-    } catch (err) {
-      console.log(err);
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      try {
+        const { data } = await axiosRes.get("dj-rest-auth/user/", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setCurrentUser(data);
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
   useEffect(() => {
-    handleMount();
+    handleMount(); // Run on mount
   }, []);
 
   useMemo(() => {
-    // Interceptor for request
+    // Request Interceptor: Attach token to request
     const requestInterceptor = axiosReq.interceptors.request.use(
-      async (config) => {
-        try {
-          await axios.post("/dj-rest-auth/token/refresh/");
-        } catch (err) {
-          setCurrentUser(null);
-          history.push("/signin");
+      (config) => {
+        const token = localStorage.getItem("authToken");
+        if (token) {
+          config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
       },
-      (err) => {
-        return Promise.reject(err);
-      }
+      (err) => Promise.reject(err)
     );
 
-    // Interceptor for response
+    // Response Interceptor: Handle token refresh on 401 errors
     const responseInterceptor = axiosRes.interceptors.response.use(
       (response) => response,
       async (err) => {
@@ -80,27 +71,34 @@ export const CurrentUserProvider = ({ children }) => {
             originalRequest._retry = true;
 
             try {
-              await axios.post("/dj-rest-auth/token/refresh/");
+              const refreshToken = localStorage.getItem("refreshToken");
+              const { data } = await axios.post("/dj-rest-auth/token/refresh/", {
+                refresh: refreshToken,
+              });
+
+              const newToken = data.access_token;
+              localStorage.setItem("authToken", newToken);
               isRefreshingToken.current = false;
 
-              // Process failed requests in queue
-              failedRequestsQueue.current.forEach((req) => req.onSuccess());
+              failedRequestsQueue.current.forEach((req) => req.onSuccess(newToken));
               failedRequestsQueue.current = [];
-              
+
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
               return axiosRes(originalRequest);
             } catch (refreshErr) {
-              setCurrentUser(null);
-              history.push("/signin");
+              handleSignOut(); // Now using the memoized handleSignOut
               failedRequestsQueue.current.forEach((req) => req.onFailure(refreshErr));
               failedRequestsQueue.current = [];
             }
           }
 
-          // Queue the failed request while token is refreshing
           return new Promise((resolve, reject) => {
             failedRequestsQueue.current.push({
-              onSuccess: () => resolve(axiosRes(originalRequest)),
-              onFailure: (refreshErr) => reject(refreshErr),
+              onSuccess: (token) => {
+                originalRequest.headers.Authorization = `Bearer ${token}`;
+                resolve(axiosRes(originalRequest));
+              },
+              onFailure: (err) => reject(err),
             });
           });
         }
@@ -109,12 +107,12 @@ export const CurrentUserProvider = ({ children }) => {
       }
     );
 
-    // Cleanup interceptors
+    // Cleanup interceptors when the component unmounts
     return () => {
       axiosReq.interceptors.request.eject(requestInterceptor);
       axiosRes.interceptors.response.eject(responseInterceptor);
     };
-  }, [history]);
+  }, [handleSignOut]); // Removed `history` from dependencies
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

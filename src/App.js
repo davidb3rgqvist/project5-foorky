@@ -11,7 +11,7 @@ import CreateRecipePage from "./pages/CreateRecipePage";
 import { CurrentUserProvider, useCurrentUser } from "./contexts/CurrentUserContext";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
-
+import { useEffect } from "react";
 
 // Custom PrivateRoute for authenticated routes
 function PrivateRoute({ component: Component, ...rest }) {
@@ -27,6 +27,13 @@ function PrivateRoute({ component: Component, ...rest }) {
 }
 
 function App() {
+  useEffect(() => {
+    const token = localStorage.getItem("authToken");
+    if (token) {
+      // Logic to validate or refresh token can go here, if needed
+    }
+  }, []);
+
   return (
     <CurrentUserProvider>
       <div className={styles.App}>

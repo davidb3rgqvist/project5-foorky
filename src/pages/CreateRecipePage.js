@@ -2,8 +2,6 @@ import React, { useState } from "react";
 import { Form, Button, Container, Alert } from "react-bootstrap";
 import { useHistory } from "react-router-dom";
 import axios from "axios";
-import ReactQuill from "react-quill"; // Import React Quill
-import "react-quill/dist/quill.snow.css"; // Import Quill styles
 import styles from "../styles/CreateRecipePage.module.css";
 
 const CreateRecipePage = () => {
@@ -27,20 +25,6 @@ const CreateRecipePage = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: value,
-    }));
-  };
-
-  const handleIngredientsChange = (value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ingredients: value, // Update ingredients with formatted text
-    }));
-  };
-
-  const handleStepsChange = (value) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      steps: value, // Update steps with formatted text
     }));
   };
 
@@ -85,39 +69,45 @@ const CreateRecipePage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Check if all fields are filled
-    if (!formData.title || !formData.short_description || !formData.ingredients || !formData.steps) {
-      setErrorMessage("Please fill in all the fields.");
+  
+    // Check if all fields are filled, including the image
+    if (!formData.title || !formData.short_description || !formData.ingredients || !formData.steps || !formData.image) {
+      setErrorMessage("Please fill in all the fields and upload an image.");
       return;
     }
-
+  
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("title", formData.title);
     formDataToSubmit.append("short_description", formData.short_description);
-    formDataToSubmit.append("ingredients", formData.ingredients); // Ingredients with formatting
-    formDataToSubmit.append("steps", formData.steps); // Steps with formatting
-    formDataToSubmit.append("cook_time", formData.cook_time); // Append cooking time
-    formDataToSubmit.append("difficulty", formData.difficulty); // Append difficulty
-    if (formData.image) {
-      formDataToSubmit.append("image", formData.image);
-    }
+    formDataToSubmit.append("ingredients", formData.ingredients);
+    formDataToSubmit.append("steps", formData.steps);
+    formDataToSubmit.append("cook_time", formData.cook_time);
+    formDataToSubmit.append("difficulty", formData.difficulty);
+    formDataToSubmit.append("image", formData.image);
 
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      setErrorMessage("You need to be logged in to create a recipe.");
+      return;
+    }
+  
     try {
-      const { data } = await axios.post("/recipes/", formDataToSubmit, {
+      await axios.post("/recipes/", formDataToSubmit, {
         headers: {
           "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Include the token here
         },
       });
       setSuccessMessage("Recipe created successfully!");
       setErrorMessage(null);
-
+  
       // Clear the form fields
       clearForm();
-
-      // Redirect to feed after 2 seconds
+  
+      // Redirect to recipe-feed after 2 seconds
       setTimeout(() => {
-        history.push("/feed");
+        history.push("/recipe-feed");
       }, 2000);
     } catch (error) {
       console.log("Error creating recipe", error);
@@ -125,6 +115,7 @@ const CreateRecipePage = () => {
       setSuccessMessage(null);
     }
   };
+  
 
   return (
     <Container className={styles.CreateRecipeContainer}>
@@ -156,25 +147,29 @@ const CreateRecipePage = () => {
           />
         </Form.Group>
 
-        {/* Ingredients Field with React Quill */}
+        {/* Ingredients Field */}
         <Form.Group controlId="ingredients">
           <Form.Label>Ingredients</Form.Label>
-          <ReactQuill
-            theme="snow"
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Enter ingredients (comma separated)"
+            name="ingredients"
             value={formData.ingredients}
-            onChange={handleIngredientsChange}
-            placeholder="Enter ingredients with formatting (comma separated)"
+            onChange={handleChange}
           />
         </Form.Group>
 
-        {/* Steps Field with React Quill */}
+        {/* Steps Field */}
         <Form.Group controlId="steps">
           <Form.Label>Steps</Form.Label>
-          <ReactQuill
-            theme="snow"
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Enter cooking steps"
+            name="steps"
             value={formData.steps}
-            onChange={handleStepsChange}
-            placeholder="Enter cooking steps with formatting"
+            onChange={handleChange}
           />
         </Form.Group>
 
@@ -205,13 +200,14 @@ const CreateRecipePage = () => {
         {/* Image Upload Section */}
         <Form.Group controlId="image">
           <Form.Label>Upload Image</Form.Label>
-          {/* Image Preview */}
           {previewImage && (
             <div className={styles.imagePreviewContainer}>
               <img src={previewImage} alt="Recipe Preview" className={styles.imagePreview} />
-              <Button variant="danger" onClick={handleDeleteImage}>
-                Remove Image
-              </Button>
+              <div className={styles.imagePreviewButtonContainer}>
+                <Button variant="danger" onClick={handleDeleteImage}>
+                  Remove Image
+                </Button>
+              </div>
             </div>
           )}
           <div>

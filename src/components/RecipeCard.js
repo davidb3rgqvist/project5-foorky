@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import axios from "axios";
+import React, { useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
 
-const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment }) => {
+const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [likes, setLikes] = useState(recipe.likes_count || 0);
   const [isLiked, setIsLiked] = useState(recipe.is_liked);
@@ -11,30 +12,80 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment })
   const [showSteps, setShowSteps] = useState(true);
   const [showComments, setShowComments] = useState(true);
   const [newComment, setNewComment] = useState("");
-  const [editingCommentId, setEditingCommentId] = useState(null);
-  const [editingContent, setEditingContent] = useState("");
-  const [focusMode, setFocusMode] = useState(false);
 
   const currentUser = useCurrentUser();
+  const cardRef = useRef(null);
 
-  const handleFlip = (e) => {
-    if (!focusMode) {
-      setIsFlipped(!isFlipped);
+  const handleFlip = () => setIsFlipped(!isFlipped);
+  const preventFlip = (e) => e.stopPropagation();
+
+  // Close the flipped card when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
+        setIsFlipped(false);
+      }
+    };
+    
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isFlipped]);
+
+  const handleLike = async (event) => {
+    event.preventDefault();
+
+    // Check if user is logged in
+    if (!currentUser) {
+      alert("You need to be logged in to like recipes!");
+      return;
+    }
+
+    const token = localStorage.getItem("authToken");
+
+    if (!token) {
+      alert("You need to be logged in to like recipes!");
+      return;
+    }
+
+    try {
+      // Send POST request to the likes endpoint
+      await axios.post("/likes/", { recipe_id: recipe.id }, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      // Toggle like status and update like count
+      setIsLiked(!isLiked);
+      setLikes(isLiked ? likes - 1 : likes + 1);
+    } catch (error) {
+      console.error("Error updating like status:", error);
+      alert("Failed to like the recipe. Please try again.");
     }
   };
 
-  const preventFlip = (e) => {
-    e.stopPropagation();
-  };
-
-  const handleLike = (event) => {
+  const handleAddComment = async (event) => {
     preventFlip(event);
-    if (isLiked) {
-      setLikes(likes - 1);
-    } else {
-      setLikes(likes + 1);
+
+    if (!currentUser) {
+      alert("You need to be logged in to comment!");
+      return;
     }
-    setIsLiked(!isLiked);
+
+    const token = localStorage.getItem("authToken");
+
+    if (newComment.trim()) {
+      try {
+        const response = await axios.post(
+          `/comments/`,
+          { recipe: recipe.id, content: newComment },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+        onAddComment(response.data);
+        setNewComment("");
+      } catch (error) {
+        console.error("Error adding comment:", error);
+        alert("Failed to add comment. Please try again.");
+      }
+    }
   };
 
   const confirmDelete = (event) => {
@@ -48,118 +99,50 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment })
     setShowDeleteConfirm(false);
   };
 
-  const handleAddComment = (event) => {
-    preventFlip(event);
-    if (newComment.trim()) {
-      onAddComment(newComment);
-      setNewComment("");
-    }
-  };
-
-  const handleEditComment = (event, commentId, content) => {
-    preventFlip(event);
-    setEditingCommentId(commentId);
-    setEditingContent(content);
-  };
-
-  const handleSaveComment = (event, commentId) => {
-    preventFlip(event);
-    onEditComment(commentId, editingContent);
-    setEditingCommentId(null);
-  };
-
-  // Handle focus mode
-  const enterFocusMode = (event) => {
-    preventFlip(event);
-    setFocusMode(true);
-  };
-
-  const exitFocusMode = (event) => {
-    preventFlip(event);
-    setFocusMode(false);
-  };
-
   return (
-    <div className={`${styles.cardContainer} ${focusMode ? styles.focusMode : ""}`} onClick={handleFlip}>
+    <div ref={cardRef} className={`${styles.cardContainer}`} onClick={handleFlip}>
       <div className={`${styles.card} ${isFlipped ? styles.isFlipped : ""}`}>
-        {/* Front Side of the Card */}
+        {/* Front Side */}
         <div className={styles.cardFront}>
           <img src={recipe.image} alt={recipe.title} className={styles.cardImage} />
           <div className={styles.cardContent}>
-            {/* Title and Description */}
             <h2 className={styles.recipeTitle}>{recipe.title}</h2>
             <p className={styles.shortDescription}>{recipe.short_description}</p>
 
-            {/* Footer Section: Cook Time, Difficulty, and Likes */}
             <div className={styles.cardFooter}>
-              <p><strong>Cook Time:</strong> {recipe.cook_time} mins</p>
-              <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
-              <p><strong>Likes:</strong> {likes}</p>
+              <p><i className="fas fa-clock"></i> {recipe.cook_time} mins</p>
+              <p><i className="fas fa-tachometer-alt"></i> {recipe.difficulty}</p>
+              <p><i className="fas fa-heart"></i> {likes}</p>
             </div>
           </div>
         </div>
 
-        {/* Back Side of the Card */}
+        {/* Back Side */}
         <div className={styles.cardBack}>
           <div className={styles.cardBackContent} onClick={preventFlip}>
-            {/* Toggleable Section: Ingredients */}
             <h3 onClick={() => setShowIngredients(!showIngredients)}>
               {showIngredients ? "▾ Ingredients" : "▸ Ingredients"}
             </h3>
             {showIngredients && <p>{recipe.ingredients}</p>}
 
-            {/* Toggleable Section: Steps */}
             <h3 onClick={() => setShowSteps(!showSteps)}>
               {showSteps ? "▾ Steps" : "▸ Steps"}
             </h3>
             {showSteps && <p>{recipe.steps}</p>}
 
-            {/* Toggleable Section: Comments */}
             <h3 onClick={() => setShowComments(!showComments)}>
               {showComments ? "▾ Comments" : "▸ Comments"}
             </h3>
             {showComments && (
               <div className={styles.commentsSection}>
-                {/* Display comments */}
-                {recipe.comments && recipe.comments.length > 0 ? (
-                  recipe.comments.map((comment, index) => (
-                    <div key={index} className={styles.comment}>
-                      {editingCommentId === comment.id ? (
-                        <>
-                          <input
-                            type="text"
-                            value={editingContent}
-                            onChange={(e) => setEditingContent(e.target.value)}
-                            onClick={preventFlip}
-                          />
-                          <button onClick={(event) => handleSaveComment(event, comment.id)}>
-                            Save
-                          </button>
-                        </>
-                      ) : (
-                        <>
-                          <p><strong>{comment.owner}:</strong> {comment.content}</p>
-                          {currentUser?.username === comment.owner && (
-                            <button onClick={(event) => handleEditComment(event, comment.id, comment.content)}>
-                              Edit
-                            </button>
-                          )}
-                        </>
-                      )}
-                    </div>
-                  ))
-                ) : (
-                  <p>No comments yet.</p>
-                )}
-
-                {/* Add new comment */}
+                {/* Add Comment */}
                 <div className={styles.addComment}>
                   <input
                     type="text"
                     value={newComment}
                     placeholder="Add a comment..."
                     onChange={(e) => setNewComment(e.target.value)}
-                    onClick={preventFlip} // Prevent flip when adding a comment
+                    onClick={preventFlip}
                   />
                   <button onClick={handleAddComment}>Add</button>
                 </div>
@@ -167,33 +150,18 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment, onEditComment })
             )}
 
             <div className={styles.actionsBack}>
-              {/* Show like button on the backside */}
               <button className={styles.likeButton} onClick={handleLike}>
                 {isLiked ? 'Unlike' : 'Like'} ({likes})
               </button>
-
-              {/* Only show Update and Delete buttons if the current user is the owner */}
               {currentUser?.username === recipe.owner && (
                 <>
-                  <button className={styles.updateButton} onClick={(event) => onUpdate(recipe.id)}>
-                    Update
-                  </button>
-                  <button className={styles.deleteButton} onClick={confirmDelete}>
-                    Delete
-                  </button>
+                  <button className={styles.deleteButton} onClick={confirmDelete}>Delete</button>
                 </>
               )}
+            </div>
 
-              {/* Focus Mode Button */}
-              {!focusMode ? (
-                <button className={styles.focusButton} onClick={enterFocusMode}>
-                  Enter Focus Mode
-                </button>
-              ) : (
-                <button className={styles.exitFocusButton} onClick={exitFocusMode}>
-                  Exit Focus Mode
-                </button>
-              )}
+            <div className={styles.chefName}>
+              <p>Created by: {recipe.owner}</p>
             </div>
           </div>
         </div>

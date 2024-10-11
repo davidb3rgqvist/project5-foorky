@@ -26,11 +26,24 @@
   font-weight: bold;
 }
 
-/* Style for the hamburger menu */
 .NavBar .navbar-toggler {
   border-color: rgba(255, 255, 255, 0.5);
 }
 
-.NavBar .navbar-toggler-icon {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+.profileToggle {
+  color: #fff;
+  background-color: #1A4D2E;
+  border: none;
+}
+
+.customDropdownMenu {
+  background-color: #1A4D2E;
+}
+
+.customDropdownMenu .dropdown-item {
+  color: #ffffff;
+}
+
+.customDropdownMenu .dropdown-item:hover {
+  background-color: #154026;
 }

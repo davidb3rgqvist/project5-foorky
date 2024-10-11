@@ -31,11 +31,15 @@ function SignInForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
+  
     try {
       const { data } = await axios.post("/dj-rest-auth/login/", signInData);
+  
+      localStorage.setItem("authToken", data.access_token);
+      localStorage.setItem("refreshToken", data.refresh_token);
+  
       setCurrentUser(data.user);
-      history.push("/");
+      history.push("/recipe-feed");
     } catch (err) {
       setErrors(err.response?.data);
     }

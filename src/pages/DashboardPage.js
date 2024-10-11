@@ -4,30 +4,31 @@ import axios from "axios";
 import styles from "../styles/DashboardPage.module.css";
 
 const DashboardPage = () => {
-  const currentUser = useCurrentUser(); // Access the current user context
+  const currentUser = useCurrentUser();
   const [userRecipes, setUserRecipes] = useState([]);
   const [likedRecipes, setLikedRecipes] = useState([]);
   const [profileData, setProfileData] = useState({});
   const [loading, setLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
 
   useEffect(() => {
-    if (!currentUser) return;
+    // Ensure currentUser exists and has an id
+    if (!currentUser?.id) return;
 
     const fetchUserData = async () => {
       try {
         setLoading(true);
-
-        // Fetch the user's profile information
+        // Fetch profile information
         const { data: profile } = await axios.get(`/profiles/${currentUser.id}/`);
         setProfileData(profile);
 
-        // Fetch the user's created recipes
+        // Fetch user's created recipes
         const { data: recipes } = await axios.get("/recipes/", {
           params: { owner: currentUser.id },
         });
         setUserRecipes(recipes.results);
 
-        // Fetch the user's liked recipes
+        // Fetch liked recipes
         const { data: likes } = await axios.get("/likes/");
         setLikedRecipes(likes.results);
       } catch (error) {
@@ -40,6 +41,56 @@ const DashboardPage = () => {
     fetchUserData();
   }, [currentUser]);
 
+  // Handle profile image change
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setProfileData({ ...profileData, image: file });
+    }
+  };
+
+  // Handle profile update
+  const handleProfileUpdate = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("name", profileData.name);
+    formData.append("bio", profileData.bio);
+    if (profileData.image) {
+      formData.append("image", profileData.image);
+    }
+
+    try {
+      const response = await axios.put(`/profiles/${currentUser.id}/`, formData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      setProfileData(response.data);
+      alert("Profile updated successfully!");
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error updating profile", error);
+      alert("Failed to update profile.");
+    }
+  };
+
+  // Handle profile deletion
+  const handleDeleteProfile = async () => {
+    if (window.confirm("Are you sure you want to delete your profile?")) {
+      try {
+        await axios.delete(`/profiles/${currentUser.id}/`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
+        });
+        alert("Profile deleted successfully.");
+      } catch (error) {
+        console.error("Error deleting profile", error);
+        alert("Failed to delete profile.");
+      }
+    }
+  };
+
+  // Display loading state
   if (loading) {
     return <div>Loading...</div>;
   }
@@ -48,15 +99,36 @@ const DashboardPage = () => {
     <div className={styles.Dashboard}>
       {/* Profile Information */}
       <div className={styles.ProfileSection}>
-        <h2>{currentUser.username}'s Dashboard</h2>
-        <img
-          src={profileData.image || "default-profile.jpg"}
-          alt="Profile"
-          className={styles.ProfileImage}
-        />
-        <p>Bio: {profileData.bio || "No bio available"}</p>
-        <p>Total Likes on All Recipes: {profileData.total_likes || 0}</p>
-        <p>Total Followers: {profileData.total_followers || 0}</p>
+        {isEditing ? (
+          <form onSubmit={handleProfileUpdate}>
+            <input
+              type="text"
+              name="name"
+              value={profileData.name || ""}
+              onChange={(e) => setProfileData({ ...profileData, name: e.target.value })}
+              placeholder="Name"
+            />
+            <textarea
+              name="bio"
+              value={profileData.bio || ""}
+              onChange={(e) => setProfileData({ ...profileData, bio: e.target.value })}
+              placeholder="Bio"
+            />
+            <input type="file" onChange={handleFileChange} />
+            <button type="submit">Save Changes</button>
+          </form>
+        ) : (
+          <>
+            <h2>{currentUser?.username}'s Dashboard</h2>
+            <img
+              src={profileData.image || "default-profile.jpg"}
+              alt="Profile"
+              className={styles.ProfileImage}
+            />
+            <p>{profileData.bio || "No bio available"}</p>
+            <button onClick={() => setIsEditing(true)}>Edit Profile</button>
+          </>
+        )}
       </div>
 
       {/* User's Created Recipes */}
@@ -94,9 +166,10 @@ const DashboardPage = () => {
       {/* Profile Management */}
       <div className={styles.ProfileManagement}>
         <h3>Manage Your Profile</h3>
-        <button>Edit Profile</button>
-        <button>Update Profile Image</button>
-        <button>Delete Profile</button>
+        <button onClick={() => document.getElementById("fileInput").click()}>
+          Update Profile Image
+        </button>
+        <button onClick={handleDeleteProfile}>Delete Profile</button>
       </div>
     </div>
   );

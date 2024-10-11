@@ -1,42 +1,77 @@
+/* Create Recipe Form Styles */
 .CreateRecipeContainer {
-    max-width: 600px;
-    margin: 0 auto;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.FormGroup {
+  margin-bottom: 15px;
+}
+
+.FormLabel {
+  color: #1A4D2E;
+  font-weight: bold;
+}
+
+.FormControl {
+  padding: 10px 15px;
+  border-radius: 30px;
+  border: 1px solid #E8DFCA;
+  background-color: #FFFFFF;
+  transition: border 0.3s ease;
+}
+
+.FormControl:focus {
+  border-color: #4F6F52;
+  outline: none;
+}
+
+.Button {
+  background-color: #516a52;
+  color: white;
+  border-radius: 30px;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.Button:hover {
+  background-color: #1A4D2E;
+}
+
+/* Image Preview */
+.imagePreviewContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15px;
+}
+
+.imagePreview {
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.imagePreviewButtonContainer {
+  margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .CreateRecipeContainer {
     padding: 20px;
-    background-color: white !important;
-    border-radius: 20px;
   }
-  
-  .FormLabel {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  
+
   .FormControl {
-    margin-bottom: 15px;
+    padding: 8px 15px;
   }
-  
-  .SubmitButton {
-    background-color: #516a52;
-    color: white;
-  }
-  .ql-container {
-    background-color: white !important;
-  }
-  
-  .ql-editor {
-    background-color: white !important;
-    min-height: 400px;
-    color: black; /* Ensure text is readable */
-  }
-  .imagePreviewContainer {
-    margin-top: 10px;
-    text-align: center;
-  }
-  
-  .imagePreview {
-    max-width: 300px;
-    max-height: 200px;
-    display: block;
-    margin: 10px auto;
-  }
-  
+}
