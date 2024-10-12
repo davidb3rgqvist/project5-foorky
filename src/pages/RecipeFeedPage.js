@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
-import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 import { Spinner, Row, Col } from "react-bootstrap";
 import styles from "../styles/RecipeFeedPage.module.css";
@@ -64,11 +63,7 @@ const RecipeFeedPage = () => {
 
   return (
     <Row className={styles.FeedLayout}>
-      <Col xs={12} md={3} className="d-none d-md-block">
-        <LeftSidebar handleFilter={setFilter} handleSearch={setSearchQuery} />
-      </Col>
-
-      <Col xs={12} md={6}>
+      <Col xs={12} md={9}>
         <div className={styles.RecipeFeed}>
           {loading ? (
             <div className={styles.loaderContainer}>

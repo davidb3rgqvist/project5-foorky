@@ -42,9 +42,14 @@ const CreateRecipePage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+  
+    const updatedValue = name === "short_description" && value.length > 80
+      ? value.slice(0, 77) + "..."
+      : value;
+  
     setFormData((prevFormData) => ({
       ...prevFormData,
-      [name]: value,
+      [name]: updatedValue,
     }));
   };
 
@@ -146,7 +151,7 @@ const CreateRecipePage = () => {
         </Form.Group>
 
         <Form.Group controlId="short_description">
-          <Form.Label>Short Description</Form.Label>
+          <Form.Label>Short Description (max 80 characters)</Form.Label>
           <Form.Control type="text" placeholder="Enter a short description" name="short_description" value={formData.short_description} onChange={handleChange} />
         </Form.Group>
 

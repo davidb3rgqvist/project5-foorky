@@ -1,5 +1,5 @@
 .NavBar {
-  background-color: #1A4D2E;
+  background-color: #5f6b62;
   border: 1px solid #0c2315;
 }
 
@@ -32,7 +32,8 @@
 
 .profileToggle {
   color: #fff;
-  background-color: #1A4D2E;
+  background-color: #5f6b62;
+  font-size: 1.2rem;
   border: none;
 }
 
