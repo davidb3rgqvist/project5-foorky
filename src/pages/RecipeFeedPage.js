@@ -11,6 +11,7 @@ const RecipeFeedPage = () => {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
+  
 
   useEffect(() => {
     const fetchRecipes = async () => {

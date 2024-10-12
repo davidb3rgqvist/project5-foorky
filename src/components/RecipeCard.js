@@ -1,4 +1,5 @@
 import axios from "axios";
+import { useHistory } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
@@ -12,6 +13,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [showSteps, setShowSteps] = useState(true);
   const [showComments, setShowComments] = useState(true);
   const [newComment, setNewComment] = useState("");
+  const history = useHistory();
 
   const currentUser = useCurrentUser();
   const cardRef = useRef(null);
@@ -94,6 +96,13 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     }
   };
 
+  const handleEdit = (recipe) => {
+    history.push({
+      pathname: "/create-recipe",
+      state: { recipe },
+    });
+  };
+
   const confirmDelete = (event) => {
     preventFlip(event);
     setShowDeleteConfirm(true);
@@ -163,6 +172,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
               </button>
               {currentUser?.username === recipe.owner && (
                 <>
+                  <button className={styles.editButton} onClick={() => handleEdit(recipe)}>Edit</button>
                   <button className={styles.deleteButton} onClick={confirmDelete}>Delete</button>
                 </>
               )}
