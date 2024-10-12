@@ -103,6 +103,25 @@ h2, h3, p {
   border-radius: 5px;
 }
 
+.commentItem {
+  margin-bottom: 10px;
+}
+
+.commentAuthor {
+  font-size: 0.9em;
+  color: #555;
+}
+
+#commentbutton {
+  color: #ff0000;
+}
+
+.commentDivider {
+  border: 0;
+  border-top: 1px solid #ddd;
+  margin: 10px 0;
+}
+
 .deleteConfirmModal {
   position: fixed;
   top: 50%;

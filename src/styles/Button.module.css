@@ -4,13 +4,13 @@
   border-radius: 30px;
   padding: 10px 20px;
   border: none;
-  background-color: #1A4D2E;
+  background-color: #304839;
   color: #ffffff;
   transition: background-color 0.3s ease;
 }
 
 .Button:hover {
-  background-color: #4F6F52;
+  background-color: #253a27;
   cursor: pointer;
 }
 

@@ -28,8 +28,8 @@ const NavBar = ({ handleSearch }) => {
 
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    handleSearch(searchQuery); // Use the same filtering logic
-    setExpanded(false);  // Close navbar after search
+    handleSearch(searchQuery);
+    setExpanded(false);
   };
 
   const loggedInIcons = (

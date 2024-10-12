@@ -18,6 +18,7 @@ const DashboardPage = () => {
     const fetchUserData = async () => {
       try {
         setLoading(true);
+
         // Fetch profile information
         const { data: profile } = await axios.get(`/profiles/${currentUser.id}/`);
         setProfileData(profile);
@@ -26,7 +27,12 @@ const DashboardPage = () => {
         const { data: recipes } = await axios.get("/recipes/", {
           params: { owner: currentUser.id },
         });
-        setUserRecipes(recipes.results);
+
+        if (recipes.results) {
+          setUserRecipes(recipes.results);
+        } else {
+          console.error("No user recipes returned");
+        }
 
         // Fetch liked recipes
         const { data: likes } = await axios.get("/likes/");
@@ -90,9 +96,8 @@ const DashboardPage = () => {
     }
   };
 
-  // Display loading state
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!currentUser) {
+    return <div>Error: User not logged in</div>;
   }
 
   return (

@@ -1,6 +1,6 @@
 .NavBar {
-  background-color: #5f6b62;
-  border: 1px solid #0c2315;
+  background-color: #7fb9b9;
+  border: 1px solid #5c8989;
 }
 
 .NavBar a {
@@ -26,19 +26,19 @@
   font-weight: bold;
 }
 
-.NavBar .navbar-toggler {
+/* .NavBar .navbar-toggler {
   border-color: rgba(255, 255, 255, 0.5);
-}
+} */
 
 .profileToggle {
   color: #fff;
-  background-color: #5f6b62;
+  background-color: #7fb9b9;
   font-size: 1.2rem;
   border: none;
 }
 
 .customDropdownMenu {
-  background-color: #1A4D2E;
+  background-color: #456464;
 }
 
 .customDropdownMenu .dropdown-item {
@@ -46,5 +46,5 @@
 }
 
 .customDropdownMenu .dropdown-item:hover {
-  background-color: #154026;
+  background-color: #456464;
 }

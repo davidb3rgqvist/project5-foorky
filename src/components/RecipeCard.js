@@ -13,6 +13,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [showSteps, setShowSteps] = useState(true);
   const [showComments, setShowComments] = useState(true);
   const [newComment, setNewComment] = useState("");
+  const [editCommentId, setEditCommentId] = useState(null);
+  const [editCommentContent, setEditCommentContent] = useState("");
   const history = useHistory();
 
   const currentUser = useCurrentUser();
@@ -120,6 +122,35 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       }
     }
   };
+  const handleEditComment = async (commentId) => {
+    const token = localStorage.getItem("authToken");
+    try {
+      await axios.put(
+        `/comments/${commentId}/`,
+        { content: editCommentContent },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setEditCommentId(null);
+      setEditCommentContent("");
+      fetchComments();
+    } catch (error) {
+      console.error("Error editing comment:", error);
+      alert("Failed to edit comment. Please try again.");
+    }
+  };
+
+  const handleDeleteComment = async (commentId) => {
+    const token = localStorage.getItem("authToken");
+    try {
+      await axios.delete(`/comments/${commentId}/`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchComments();
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+      alert("Failed to delete comment. Please try again.");
+    }
+  };
 
   const handleEdit = (recipe) => {
     history.push({
@@ -179,8 +210,31 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                   {/* Comments List */}
                   {comments.length > 0 ? (
                     comments.map((comment) => (
-                      <div key={comment.id}>
-                        <p><strong>{comment.owner.username}:</strong> {comment.content}</p>
+                      <div key={comment.id} className={styles.commentItem}>
+                        {editCommentId === comment.id ? (
+                          <>
+                            <input
+                              type="text"
+                              value={editCommentContent}
+                              onChange={(e) => setEditCommentContent(e.target.value)}
+                            />
+                            <button onClick={() => handleEditComment(comment.id)}>Save</button>
+                            <button onClick={() => setEditCommentId(null)}>Cancel</button>
+                          </>
+                        ) : (
+                          <>
+                            <p>{comment.content}</p>
+                            <p className={styles.commentAuthor}><em>— Chef: {comment.owner}</em></p>
+                          </>
+                        )}
+                        
+                        {currentUser?.username === comment.owner && (
+                          <>
+                            <button onClick={() => {setEditCommentId(comment.id); setEditCommentContent(comment.content);}}>Edit</button>
+                            <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                          </>
+                        )}
+                        <hr className={styles.commentDivider} />
                       </div>
                     ))
                   ) : (
@@ -195,7 +249,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     onClick={preventFlip}
                   />
-                  <button onClick={handleAddComment}>Add</button>
+                  <button className="commentbutton" onClick={handleAddComment}>Add</button>
                 </div>
               </div>
             )}
