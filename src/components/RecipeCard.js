@@ -48,11 +48,18 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     }
 
     try {
-      // Send POST request to the likes endpoint
-      await axios.post("/likes/", { recipe_id: recipe.id }, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
+      if (!isLiked) {
+        // Send POST request to the likes endpoint
+        await axios.post("/likes/", { recipe: recipe.id }, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+      else {
+        await axios.delete(`/likes/${recipe.id}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      }
+    
       // Toggle like status and update like count
       setIsLiked(!isLiked);
       setLikes(isLiked ? likes - 1 : likes + 1);
