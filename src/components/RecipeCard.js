@@ -71,24 +71,49 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     }
   };
 
+  const [comments, setComments] = useState([]);
+  const fetchComments = async () => {
+    try {
+      const { data } = await axios.get("/comments/");
+      
+      const filteredComments = data.results.filter(comment => comment.recipe === recipe.id);
+      
+      setComments(filteredComments);
+    } catch (err) {
+      console.error("Error fetching comments:", err);
+    }
+  };
+  
+  useEffect(() => {
+    
+  
+    if (recipe.id) {
+      fetchComments();
+    }
+  }, [recipe.id]);
+  
   const handleAddComment = async (event) => {
     preventFlip(event);
-
+  
     if (!currentUser) {
       alert("You need to be logged in to comment!");
       return;
     }
-
+  
     const token = localStorage.getItem("authToken");
-
+  
     if (newComment.trim()) {
       try {
-        const response = await axios.post(
+
+        await axios.post(
           `/comments/`,
           { recipe: recipe.id, content: newComment },
           { headers: { Authorization: `Bearer ${token}` } }
         );
+
         setNewComment("");
+  
+        fetchComments();
       } catch (error) {
         console.error("Error adding comment:", error);
         alert("Failed to add comment. Please try again.");
@@ -150,9 +175,18 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
             </h3>
             {showComments && (
               <div className={styles.commentsSection}>
-                <p>
-                  Comments
-                </p>
+                <div>
+                  {/* Comments List */}
+                  {comments.length > 0 ? (
+                    comments.map((comment) => (
+                      <div key={comment.id}>
+                        <p><strong>{comment.owner.username}:</strong> {comment.content}</p>
+                      </div>
+                    ))
+                  ) : (
+                    <p>No comments yet.</p>
+                  )}
+                </div>
                 <div className={styles.addComment}>
                   <input
                     type="text"
