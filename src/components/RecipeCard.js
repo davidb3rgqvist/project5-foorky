@@ -86,7 +86,6 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
           { recipe: recipe.id, content: newComment },
           { headers: { Authorization: `Bearer ${token}` } }
         );
-        onAddComment(response.data);
         setNewComment("");
       } catch (error) {
         console.error("Error adding comment:", error);
@@ -142,7 +141,9 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
             </h3>
             {showComments && (
               <div className={styles.commentsSection}>
-                {/* Add Comment */}
+                <p>
+                  Comments
+                </p>
                 <div className={styles.addComment}>
                   <input
                     type="text"

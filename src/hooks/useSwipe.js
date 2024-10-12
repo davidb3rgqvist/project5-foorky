@@ -22,7 +22,7 @@ export const useSwipe = (length) => {
   // Handle swipe functionality
   const handleSwipe = useCallback(
     (direction) => {
-      if (!isSwipeEnabled) return; // Skip if swipe is disabled
+      if (!isSwipeEnabled) return;
 
       if (direction === "left" && activeIndex < length - 1) {
         setActiveIndex((prevIndex) => prevIndex + 1);
@@ -34,7 +34,7 @@ export const useSwipe = (length) => {
   );
 
   useEffect(() => {
-    if (!isSwipeEnabled) return; // Disable swipe for larger screens
+    if (!isSwipeEnabled) return;
 
     let touchStartX = 0;
     let touchEndX = 0;

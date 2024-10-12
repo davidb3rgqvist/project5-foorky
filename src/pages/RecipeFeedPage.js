@@ -47,20 +47,19 @@ const RecipeFeedPage = () => {
     fetchRecipes();
   }, [filter, searchQuery]);
 
-  const handleDelete = (recipeId) => {
-    // Logic to delete a recipe
-    console.log(`Delete recipe with id: ${recipeId}`);
+  const handleDelete = async (recipeId) => {
+    try {
+      await axios.delete(`/recipes/${recipeId}/`);
+  
+      setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== recipeId));
+  
+      console.log(`Deleted recipe with id: ${recipeId}`);
+    } catch (error) {
+      console.error("Error deleting the recipe:", error);
+      alert("Failed to delete the recipe. Please try again.");
+    }
   };
-
-  const handleAddComment = (comment) => {
-    // Logic to add a comment
-    console.log(`Add comment: ${comment}`);
-  };
-
-  const handleEditComment = (commentId, content) => {
-    // Logic to edit a comment
-    console.log(`Edit comment ${commentId}: ${content}`);
-  };
+  
 
   return (
     <Row className={styles.FeedLayout}>
@@ -83,8 +82,6 @@ const RecipeFeedPage = () => {
                 recipe={recipe}
                 onUpdate={(recipeId) => console.log(`Update recipe with id: ${recipeId}`)}
                 onDelete={handleDelete}
-                onAddComment={handleAddComment}
-                onEditComment={handleEditComment}
               />
             ))
           ) : (
