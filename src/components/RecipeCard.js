@@ -39,19 +39,19 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     event.preventDefault();
 
     // Check if user is logged in
-    if (!currentUser) {
-      alert("You need to be logged in to like recipes!");
-      return;
-    }
+    // if (!currentUser) {
+    //   alert("You need to be logged in to like recipes!");
+    //   return;
+    // }
 
     const token = localStorage.getItem("authToken");
 
-    if (!token) {
-      alert("You need to be logged in to like recipes!");
-      return;
-    }
+    // if (!token) {
+    //   alert("You need to be logged in to like recipes!");
+    //   return;
+    // }
 
-    try {
+    // try {
       if (!isLiked) {
         // Send POST request to the likes endpoint
         await axios.post("/likes/", { recipe: recipe.id }, {
@@ -67,10 +67,10 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       // Toggle like status and update like count
       setIsLiked(!isLiked);
       setLikes(isLiked ? likes - 1 : likes + 1);
-    } catch (error) {
-      console.error("Error updating like status:", error);
-      alert("Failed to like the recipe. Please try again.");
-    }
+    // } catch (error) {
+    //   console.error("Error updating like status:", error);
+    //   alert("Failed to like the recipe. Please try again.");
+    // }
   };
 
   const [comments, setComments] = useState([]);
@@ -97,10 +97,10 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const handleAddComment = async (event) => {
     preventFlip(event);
   
-    if (!currentUser) {
-      alert("You need to be logged in to comment!");
-      return;
-    }
+    // if (!currentUser) {
+    //   alert("You need to be logged in to comment!");
+    //   return;
+    // }
   
     const token = localStorage.getItem("authToken");
   
@@ -110,7 +110,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
         await axios.post(
           `/comments/`,
           { recipe: recipe.id, content: newComment },
-          { headers: { Authorization: `Bearer ${token}` } }
+          // { headers: { Authorization: `Bearer ${token}` } }
         );
 
         setNewComment("");
@@ -127,8 +127,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     try {
       await axios.put(
         `/comments/${commentId}/`,
-        { content: editCommentContent },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { content: editCommentContent , recipe: recipe.id },
+        // { headers: { Authorization: `Bearer ${token}` } }
       );
       setEditCommentId(null);
       setEditCommentContent("");
@@ -143,7 +143,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     const token = localStorage.getItem("authToken");
     try {
       await axios.delete(`/comments/${commentId}/`, {
-        headers: { Authorization: `Bearer ${token}` },
+        // headers: { Authorization: `Bearer ${token}` },
       });
       fetchComments();
     } catch (error) {

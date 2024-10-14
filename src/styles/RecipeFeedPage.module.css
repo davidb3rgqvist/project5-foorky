@@ -7,6 +7,12 @@
   padding: 20px;
 }
 
+.loaderContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
 @media (max-width: 768px) {
   .FeedLayout {
     flex-direction: column;
