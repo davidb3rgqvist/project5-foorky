@@ -3,26 +3,33 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import { Button } from "react-bootstrap";
 import styles from "../styles/TopBar.module.css";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
+import buttonStyles from "../styles/Button.module.css";
+
 
 const TopBar = () => {
   const [profiles, setProfiles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const history = useHistory();
+  const currentUser = useCurrentUser();
 
   useEffect(() => {
     const fetchProfiles = async () => {
       try {
         const { data } = await axios.get(`/profiles/?page=${currentPage}`);
-        setProfiles(data.results);
-        setTotalPages(Math.ceil(data.count / 5)); 
+        const filteredProfiles = data.results.filter(
+          (profile) => profile.owner !== currentUser?.username
+        );
+        setProfiles(filteredProfiles);
+        setTotalPages(Math.ceil(data.count / 5));
       } catch (error) {
         console.error("Failed to fetch profiles", error);
       }
     };
 
     fetchProfiles();
-  }, [currentPage]);
+  }, [currentPage, currentUser]);
 
   const handleProfileClick = (profileId) => {
     history.push(`/profiles/${profileId}`);
@@ -42,7 +49,12 @@ const TopBar = () => {
 
   return (
     <div className={styles.topBar}>
-      <Button variant="light" className={styles.arrowButton} onClick={prevPage} disabled={currentPage === 1}>
+      <Button
+        variant="light"
+        className={buttonStyles.arrowButton}
+        onClick={prevPage}
+        disabled={currentPage === 1}
+      >
         &lt;
       </Button>
 
@@ -50,15 +62,22 @@ const TopBar = () => {
         <div key={profile.id} className={styles.profileItem}>
           <img
             src={profile.image || "default-profile.jpg"}
-            alt={profile.username}
+            alt={profile.username || profile.name}
             className={styles.profileImage}
             onClick={() => handleProfileClick(profile.id)}
           />
-          <p className={styles.profileName}>{profile.username}</p>
+          <p className={styles.profileName}>
+            {profile.name || profile.username}
+          </p>
         </div>
       ))}
 
-      <Button variant="light" className={styles.arrowButton} onClick={nextPage} disabled={currentPage === totalPages}>
+      <Button
+        variant="light"
+        className={buttonStyles.arrowButton}
+        onClick={nextPage}
+        disabled={currentPage === totalPages}
+      >
         &gt;
       </Button>
     </div>

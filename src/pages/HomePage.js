@@ -2,7 +2,9 @@ import React from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import styles from "../styles/Homepage.module.css";
+import buttonStyles from "../styles/Button.module.css";
 import { useSwipe } from "../hooks/useSwipe";
+
 
 function HomePage() {
 
@@ -37,7 +39,7 @@ function HomePage() {
                 Foorky connects you with a global community of culinary enthusiasts. 
                 Join us and find your next favorite recipe!
               </h1>
-              <Link to="/signup" className={styles.CTAButton}>
+              <Link to="/signup" className={buttonStyles.CTAButton}>
                 Get Started
               </Link>
             </Col>

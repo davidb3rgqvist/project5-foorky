@@ -10,7 +10,7 @@
 
 .Header {
   font-size: 2rem;
-  color: #1A4D2E;
+  color: #3e7979;
   text-align: center;
   margin-bottom: 20px;
 }
@@ -44,12 +44,12 @@
 .Link {
   text-align: center;
   font-size: 1rem;
-  color: #1A4D2E;
+  color: #3e7979;
 }
 
 .Link span {
   font-weight: bold;
-  color: #4F6F52;
+  color: #3e7979;
 }
 
 @media (max-width: 768px) {

@@ -3,7 +3,9 @@ import { useCurrentUser } from "../contexts/CurrentUserContext";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
 import ProfileCard from "../components/ProfileCard";
+import { Spinner } from "react-bootstrap"; // Import Spinner from react-bootstrap
 import styles from "../styles/DashboardPage.module.css";
+
 
 const DashboardPage = () => {
   const currentUser = useCurrentUser();
@@ -17,7 +19,7 @@ const DashboardPage = () => {
 
     const fetchUserData = async () => {
       try {
-        setLoading(true);
+        setLoading(true); // Start loading
 
         // Fetch profile information
         const { data: profile } = await axios.get(`/profiles/${currentUser.profile_id}/`);
@@ -25,7 +27,9 @@ const DashboardPage = () => {
 
         // Fetch user's created recipes
         const { data: recipes } = await axios.get("/recipes/");
-        const filteredRecipes = recipes.results.filter(recipe => recipe.owner === currentUser.username);
+        const filteredRecipes = recipes.results.filter(
+          (recipe) => recipe.owner === currentUser.username
+        );
         setUserRecipes(filteredRecipes);
 
         // Fetch user's liked recipes
@@ -33,7 +37,7 @@ const DashboardPage = () => {
       } catch (error) {
         console.error("Error fetching user data", error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading
       }
     };
 
@@ -42,7 +46,7 @@ const DashboardPage = () => {
         const { data: likes } = await axios.get("/likes/", {
           headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
         });
-        const likedRecipes = likes.results.map(like => like.recipe);
+        const likedRecipes = likes.results.map((like) => like.recipe);
         setLikedRecipes(likedRecipes);
       } catch (error) {
         console.error("Error fetching liked recipes", error);
@@ -68,37 +72,55 @@ const DashboardPage = () => {
 
   return (
     <div className={styles.Dashboard}>
-      {/* ProfileCard Section */}
-      <ProfileCard
-        profileData={profileData}
-        currentUser={currentUser}
-        onProfileUpdate={handleProfileUpdate}
-        onProfileDelete={handleProfileDelete}
-      />
+      {/* Loading Spinner */}
+      {loading && (
+        <div className={styles.loaderContainer}>
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Loading...</span>
+          </Spinner>
+        </div>
+      )}
 
-      {/* User's Created Recipes */}
-      <div className={styles.RecipesSection}>
-        <h3>Your Created Recipes</h3>
-        {userRecipes.length > 0 ? (
-          userRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))
-        ) : (
-          <p>You haven't created any recipes yet.</p>
-        )}
-      </div>
+      {/* Content displayed after loading */}
+      {!loading && (
+        <>
+          {/* ProfileCard Section */}
+          <ProfileCard
+            profileData={profileData}
+            currentUser={currentUser}
+            onProfileUpdate={handleProfileUpdate}
+            onProfileDelete={handleProfileDelete}
+          />
 
-      {/* Liked Recipes */}
-      <div className={styles.LikedRecipesSection}>
-        <h3>Your Liked Recipes</h3>
-        {likedRecipes.length > 0 ? (
-          likedRecipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))
-        ) : (
-          <p>You haven't liked any recipes yet.</p>
-        )}
-      </div>
+          {/* User's Created Recipes */}
+          <div className={styles.RecipesSection}>
+            <h3>Your Created Recipes</h3>
+            <div className={styles.recipeGrid}>
+              {userRecipes.length > 0 ? (
+                userRecipes.map((recipe) => (
+                  <RecipeCard key={recipe.id} recipe={recipe} />
+                ))
+              ) : (
+                <p>You haven't created any recipes yet.</p>
+              )}
+            </div>
+          </div>
+
+          {/* Liked Recipes */}
+          <div className={styles.LikedRecipesSection}>
+            <h3>Your Liked Recipes</h3>
+            <div className={styles.recipeGrid}>
+              {likedRecipes.length > 0 ? (
+                likedRecipes.map((recipe) => (
+                  <RecipeCard key={recipe.id} recipe={recipe} />
+                ))
+              ) : (
+                <p>You haven't liked any recipes yet.</p>
+              )}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

@@ -23,7 +23,7 @@
   
   .cardTitle {
     font-size: 1.5rem;
-    color: #243925;
+    color: #3e7979;
     margin-bottom: 10px;
   }
   
@@ -59,56 +59,7 @@
     font-size: 1rem;
   }
   
-  .buttonGroup {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
+
   
-  button {
-    background-color: #243925;
-    color: white;
-    border: none;
-    padding: 8px 20px;
-    border-radius: 5px;
-    cursor: pointer;
-    margin: 0 5px;
-    transition: background-color 0.3s ease;
-  }
   
-  button:hover {
-    background-color: #101b11;
-  }
-  
-  button.danger {
-    background-color: #d9534f;
-  }
-  
-  button.danger:hover {
-    background-color: #c9302c;
-  }
-  
-  button.secondary {
-    background-color: #6c757d;
-  }
-  
-  button.secondary:hover {
-    background-color: #5a6268;
-  }
-  
-  .alertMessage {
-    margin: 10px 0;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  
-  .successMessage {
-    background-color: #d4edda;
-    color: #155724;
-  }
-  
-  .errorMessage {
-    background-color: #f8d7da;
-    color: #721c24;
-  }
   

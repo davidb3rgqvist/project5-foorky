@@ -1,25 +1,31 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
-import styles from "../styles/ProfilePage.module.css"; // Ensure styles are imported
+import { Spinner } from "react-bootstrap";
+import styles from "../styles/ProfilePage.module.css";
+import buttonStyles from "../styles/Button.module.css";
+
 
 const ProfilePage = () => {
-  const { profileId } = useParams(); // Grab profileId from URL
+  const { profileId } = useParams();
   const [profile, setProfile] = useState({});
   const [recipes, setRecipes] = useState([]);
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [hasMore, setHasMore] = useState(true);
+  const observerRef = useRef();
 
   useEffect(() => {
-    const fetchProfile = async () => {
+    const fetchProfileData = async () => {
       try {
         const { data: profileData } = await axios.get(`/profiles/${profileId}/`);
         setProfile(profileData);
-
-        const { data: recipeData } = await axios.get(`/profiles/${profileId}/recipes/`);
-        setRecipes(recipeData.results);
-
+  
+        const { data: recipeData } = await axios.get(`/recipes/by_profile/?profile_id=${profileId}`);
+        setRecipes(recipeData);
+  
         const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
         setIsFollowing(followers.some((f) => f.owner === profileData.owner));
       } catch (error) {
@@ -28,9 +34,47 @@ const ProfilePage = () => {
         setLoading(false);
       }
     };
-
-    fetchProfile();
+  
+    fetchProfileData();
   }, [profileId]);
+
+  // Function to fetch more recipes (infinite scroll)
+  const fetchMoreRecipes = async (page) => {
+    try {
+      const { data: recipeData } = await axios.get(`/recipes/?owner=${profile.owner}&page=${page}`);
+      setRecipes((prevRecipes) => [...prevRecipes, ...recipeData.results]);
+      setHasMore(!!recipeData.next);
+    } catch (err) {
+      console.error("Error fetching more recipes", err);
+    }
+  };
+
+  // Infinite scrolling effect for fetching more recipes
+  useEffect(() => {
+    if (!loading && hasMore) {
+      const observer = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting) {
+          setCurrentPage((prevPage) => prevPage + 1);
+        }
+      });
+
+      if (observerRef.current) {
+        observer.observe(observerRef.current);
+      }
+
+      return () => {
+        if (observerRef.current) {
+          observer.unobserve(observerRef.current);
+        }
+      };
+    }
+  }, [loading, hasMore]);
+
+  useEffect(() => {
+    if (currentPage > 1) {
+      fetchMoreRecipes(currentPage);
+    }
+  }, [currentPage]);
 
   const handleFollow = async () => {
     try {
@@ -52,7 +96,11 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return <div ref={observerRef} className={styles.loaderContainer}>
+      <Spinner animation="border" role="status">
+        <span className="sr-only">Loading...</span>
+      </Spinner>
+    </div>;
 
   return (
     <div className={styles.profilePage}>
@@ -69,11 +117,11 @@ const ProfilePage = () => {
 
         {/* Follow/Unfollow Button */}
         {isFollowing ? (
-          <button onClick={handleUnfollow} className={styles.followButton}>
+          <button onClick={handleUnfollow} className={buttonStyles.followButton}>
             Unfollow
           </button>
         ) : (
-          <button onClick={handleFollow} className={styles.followButton}>
+          <button onClick={handleFollow} className={buttonStyles.followButton}>
             Follow
           </button>
         )}
@@ -82,13 +130,15 @@ const ProfilePage = () => {
       {/* Recipes Section */}
       <div className={styles.recipesSection}>
         <h3>{profile.owner}'s Recipes</h3>
-        {recipes.length > 0 ? (
-          recipes.map((recipe) => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
-          ))
-        ) : (
-          <p>No recipes found.</p>
-        )}
+        <div className={styles.recipesGrid}>
+          {recipes.length > 0 ? (
+            recipes.map((recipe) => (
+              <RecipeCard key={recipe.id} recipe={recipe} />
+            ))
+          ) : (
+            <p>No recipes found.</p>
+          )}
+        </div>
       </div>
     </div>
   );

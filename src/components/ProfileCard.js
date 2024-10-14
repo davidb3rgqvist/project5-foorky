@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import styles from '../styles/ProfileCard.module.css';
+import buttonStyles from "../styles/Button.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
@@ -109,7 +110,7 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
         </div>
 
         {currentUser?.username === profileData.owner && (
-          <div className={styles.buttonGroup}>
+          <div className={buttonStyles.buttonGroup}>
             {isEditing ? (
               <form onSubmit={handleEditProfile} className={styles.editForm}>
                 <input
@@ -136,17 +137,17 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
                 />
                 
                 {/* Button to trigger file input */}
-                <Button onClick={() => document.getElementById("fileInput").click()} className={styles.button}>
+                <Button onClick={() => document.getElementById("fileInput").click()} className={buttonStyles.button}>
                   Upload New Image
                 </Button>
 
-                <Button type="submit" className={styles.button}>Save</Button>
-                <Button onClick={() => setIsEditing(false)} className={`${styles.button} ${styles.secondary}`}>Cancel</Button>
+                <Button type="submit" className={buttonStyles.button}>Save</Button>
+                <Button onClick={() => setIsEditing(false)} className={`${buttonStyles.button} ${buttonStyles.secondary}`}>Cancel</Button>
               </form>
             ) : (
               <>
-                <Button onClick={() => setIsEditing(true)} className={`${styles.button} me-2`}>Edit Profile</Button>
-                <Button onClick={handleDeleteProfile} className={`${styles.button} ${styles.danger}`}>Delete Profile</Button>
+                <Button onClick={() => setIsEditing(true)} className={`${buttonStyles.button} me-2`}>Edit Profile</Button>
+                <Button onClick={handleDeleteProfile} className={`${buttonStyles.button} ${buttonStyles.danger}`}>Delete Profile</Button>
               </>
             )}
           </div>

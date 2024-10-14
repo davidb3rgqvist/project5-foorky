@@ -63,20 +63,6 @@
     }
 }
 
-.CTAButton {
-    background-color: white;
-    color: #252525;
-    padding: 15px 30px;
-    font-size: 1.2rem;
-    border-radius: 30px;
-    z-index: 2;
-    position: relative;
-}
-
-.CTAButton:hover {
-    background-color: #4F6F52;
-    color: white;
-}
 
 /* Benefits Section */
 .BenefitsWrapper {
@@ -90,7 +76,7 @@
 
 .BenefitIcon {
     font-size: 2rem;
-    color: #1A4D2E;
+    color: #3e7979;
 }
 
 .BenefitHeading {
@@ -142,7 +128,7 @@
 }
 
 .SwipeDot.active {
-    background-color: #4F6F52;
+    background-color: #3e7979;
 }
 
 /* About Section */
@@ -153,7 +139,7 @@
 .AboutText {
     font-size: 1.5rem;
     line-height: 1.2;
-    color: #252525;
+    color: #3e7979;
     font-family: 'Permanent Marker', cursive;
 }
 

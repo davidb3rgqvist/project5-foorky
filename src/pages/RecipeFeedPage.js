@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
-import TopBar from "../components/TopBar"; // Import the new TopBar component
+import TopBar from "../components/TopBar";
 import { Spinner, Row, Col } from "react-bootstrap";
 import styles from "../styles/RecipeFeedPage.module.css";
 
@@ -102,7 +102,7 @@ const RecipeFeedPage = () => {
                 />
               ))
             ) : (
-              <p>No recipes found.</p>
+              <p></p>
             )}
             <div ref={observerRef} className={styles.loaderContainer}>
               {loading && (

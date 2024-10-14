@@ -3,6 +3,8 @@ import { Form, Button, Container, Alert } from "react-bootstrap";
 import { useHistory, useLocation } from "react-router-dom";
 import axios from "axios";
 import styles from "../styles/CreateRecipePage.module.css";
+import buttonStyles from "../styles/Button.module.css";
+
 
 const CreateRecipePage = () => {
   const location = useLocation();
@@ -186,17 +188,17 @@ const CreateRecipePage = () => {
             <div className={styles.imagePreviewContainer}>
               <img src={previewImage} alt="Recipe Preview" className={styles.imagePreview} />
               <div className={styles.imagePreviewButtonContainer}>
-                <Button variant="danger" onClick={handleDeleteImage}>Remove Image</Button>
+                <Button className={buttonStyles.button} onClick={handleDeleteImage}>Remove Image</Button>
               </div>
             </div>
           )}
           <div>
             <input type="file" id="image" name="image" style={{ display: "none" }} onChange={handleFileChange} />
-            <Button variant="secondary" onClick={() => document.getElementById("image").click()}>Upload Image</Button>
+            <Button className={buttonStyles.button} onClick={() => document.getElementById("image").click()}>Upload Image</Button>
           </div>
         </Form.Group>
 
-        <Button variant="primary" type="submit">{isEditMode ? "Update Recipe" : "Create Recipe"}</Button>
+        <Button className={buttonStyles.button} type="submit">{isEditMode ? "Update Recipe" : "Create Recipe"}</Button>
       </Form>
     </Container>
   );

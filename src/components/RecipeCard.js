@@ -3,6 +3,8 @@ import { useHistory } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
+import buttonStyles from "../styles/Button.module.css";
+
 
 const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -218,8 +220,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                               value={editCommentContent}
                               onChange={(e) => setEditCommentContent(e.target.value)}
                             />
-                            <button onClick={() => handleEditComment(comment.id)}>Save</button>
-                            <button onClick={() => setEditCommentId(null)}>Cancel</button>
+                            <button className={buttonStyles.Button} onClick={() => handleEditComment(comment.id)}>Save</button>
+                            <button className={buttonStyles.Button} onClick={() => setEditCommentId(null)}>Cancel</button>
                           </>
                         ) : (
                           <>
@@ -230,8 +232,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                         
                         {currentUser?.username === comment.owner && (
                           <>
-                            <button onClick={() => {setEditCommentId(comment.id); setEditCommentContent(comment.content);}}>Edit</button>
-                            <button onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                            <button className={buttonStyles.Button} onClick={() => {setEditCommentId(comment.id); setEditCommentContent(comment.content);}}>Edit</button>
+                            <button className={buttonStyles.Button} onClick={() => handleDeleteComment(comment.id)}>Delete</button>
                           </>
                         )}
                         <hr className={styles.commentDivider} />
@@ -249,7 +251,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     onClick={preventFlip}
                   />
-                  <button className="commentbutton" onClick={handleAddComment}>Add</button>
+                  <button className={buttonStyles.Button} onClick={handleAddComment}>Add</button>
                 </div>
               </div>
             )}
@@ -260,8 +262,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
               </button>
               {currentUser?.username === recipe.owner && (
                 <>
-                  <button className={styles.editButton} onClick={() => handleEdit(recipe)}>Edit</button>
-                  <button className={styles.deleteButton} onClick={confirmDelete}>Delete</button>
+                  <button className={buttonStyles.editButton} onClick={() => handleEdit(recipe)}>Edit</button>
+                  <button className={buttonStyles.deleteButton} onClick={confirmDelete}>Delete</button>
                 </>
               )}
             </div>
