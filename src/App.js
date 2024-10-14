@@ -30,7 +30,6 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
-      // Logic to validate or refresh token can go here, if needed
     }
   }, []);
 
@@ -44,12 +43,12 @@ function App() {
             <Route exact path="/" component={HomePage} />
             <Route exact path="/signin" component={SignInForm} />
             <Route exact path="/signup" component={SignUpForm} />
-            <Route path="/profiles/:id" component={ProfilePage} />
 
             {/* Protected Routes */}
             <PrivateRoute exact path="/recipe-feed" component={RecipeFeedPage} />
             <PrivateRoute exact path="/create-recipe" component={CreateRecipePage} />
             <PrivateRoute exact path="/dashboard" component={DashboardPage} />
+            <PrivateRoute exact path="/profiles/:profileId" component={ProfilePage} />
 
             {/* Catch-all for undefined routes */}
             <Route render={() => <p>Page not found!</p>} />

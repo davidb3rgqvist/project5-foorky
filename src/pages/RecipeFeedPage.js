@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
-import RightSidebar from "../components/RightSidebar";
+import TopBar from "../components/TopBar"; // Import the new TopBar component
 import { Spinner, Row, Col } from "react-bootstrap";
 import styles from "../styles/RecipeFeedPage.module.css";
 
@@ -85,35 +85,36 @@ const RecipeFeedPage = () => {
   };
 
   return (
-    <Row className={styles.FeedLayout}>
-      <Col xs={12} md={9}>
-        <div className={styles.RecipeFeed}>
-          {recipes.length > 0 ? (
-            recipes.map((recipe) => (
-              <RecipeCard
-                key={recipe.id}
-                recipe={recipe}
-                onUpdate={(recipeId) => console.log(`Update recipe with id: ${recipeId}`)}
-                onDelete={handleDelete}
-              />
-            ))
-          ) : (
-            <p>No recipes found.</p>
-          )}
-          <div ref={observerRef} className={styles.loaderContainer}>
-            {loading && (
-              <Spinner animation="border" role="status">
-                <span className="sr-only">Loading...</span>
-              </Spinner>
+    <>
+      {/* Add TopBar here */}
+      <TopBar />
+      
+      <Row className={styles.FeedLayout}>
+        <Col xs={12}>
+          <div className={styles.RecipeFeed}>
+            {recipes.length > 0 ? (
+              recipes.map((recipe) => (
+                <RecipeCard
+                  key={recipe.id}
+                  recipe={recipe}
+                  onUpdate={(recipeId) => console.log(`Update recipe with id: ${recipeId}`)}
+                  onDelete={handleDelete}
+                />
+              ))
+            ) : (
+              <p>No recipes found.</p>
             )}
+            <div ref={observerRef} className={styles.loaderContainer}>
+              {loading && (
+                <Spinner animation="border" role="status">
+                  <span className="sr-only">Loading...</span>
+                </Spinner>
+              )}
+            </div>
           </div>
-        </div>
-      </Col>
-
-      <Col xs={12} md={3} className="d-none d-md-block">
-        <RightSidebar />
-      </Col>
-    </Row>
+        </Col>
+      </Row>
+    </>
   );
 };
 

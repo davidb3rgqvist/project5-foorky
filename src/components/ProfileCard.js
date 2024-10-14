@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import styles from '../styles/ProfileCard.module.css';
 import { useCurrentUser } from "../contexts/CurrentUserContext";
-
 
 const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -13,18 +12,29 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
   const [updatedProfileData, setUpdatedProfileData] = useState({
     name: profileData.name,
     content: profileData.content,
-    image: profileData.image,
+    image: null,
   });
+
+  const [imagePreview, setImagePreview] = useState(profileData.image || "/path-to-default/default-profile.jpg");
+
+  useEffect(() => {
+    setImagePreview(profileData.image || "/path-to-default/default-profile.jpg");
+  }, [profileData.image]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    setUpdatedProfileData({ ...updatedProfileData, image: file });
+    if (file) {
+      const fileURL = URL.createObjectURL(file);
+      setImagePreview(fileURL);
+      setUpdatedProfileData({ ...updatedProfileData, image: file });
+    }
   };
 
   const handleEditProfile = async (e) => {
     e.preventDefault();
     setErrorMessage("");
     setSuccessMessage("");
+
     const formData = new FormData();
     formData.append("name", updatedProfileData.name);
     formData.append("content", updatedProfileData.content);
@@ -76,7 +86,7 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
         <div className="text-center">
           <Card.Img
             variant="top"
-            src={profileData.image || "default-profile.jpg"}
+            src={imagePreview}
             alt={`${profileData.name}'s profile`}
             className={styles.cardImage}
           />
@@ -86,6 +96,10 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
             <div>
               <strong>{profileData.followers_count}</strong>
               <p>Followers</p>
+            </div>
+            <div>
+              <strong>{profileData.following_count}</strong>
+              <p>Following</p>
             </div>
             <div>
               <strong>{profileData.recipes_count}</strong>
@@ -111,7 +125,21 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
                   onChange={(e) => setUpdatedProfileData({ ...updatedProfileData, content: e.target.value })}
                   placeholder="Bio"
                 />
-                <input type="file" className={styles.formControl} onChange={handleFileChange} />
+                
+                {/* Hidden file input */}
+                <input
+                  type="file"
+                  id="fileInput"
+                  className={styles.formControl}
+                  style={{ display: "none" }}
+                  onChange={handleFileChange}
+                />
+                
+                {/* Button to trigger file input */}
+                <Button onClick={() => document.getElementById("fileInput").click()} className={styles.button}>
+                  Upload New Image
+                </Button>
+
                 <Button type="submit" className={styles.button}>Save</Button>
                 <Button onClick={() => setIsEditing(false)} className={`${styles.button} ${styles.secondary}`}>Cancel</Button>
               </form>
