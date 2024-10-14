@@ -137,17 +137,17 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
                 />
                 
                 {/* Button to trigger file input */}
-                <Button onClick={() => document.getElementById("fileInput").click()} className={buttonStyles.button}>
+                <Button onClick={() => document.getElementById("fileInput").click()} className={buttonStyles.cardButton}>
                   Upload New Image
                 </Button>
 
-                <Button type="submit" className={buttonStyles.button}>Save</Button>
-                <Button onClick={() => setIsEditing(false)} className={`${buttonStyles.button} ${buttonStyles.secondary}`}>Cancel</Button>
+                <Button type="submit" className={buttonStyles.cardButton}>Save</Button>
+                <Button onClick={() => setIsEditing(false)} className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}>Cancel</Button>
               </form>
             ) : (
               <>
-                <Button onClick={() => setIsEditing(true)} className={`${buttonStyles.button} me-2`}>Edit Profile</Button>
-                <Button onClick={handleDeleteProfile} className={`${buttonStyles.button} ${buttonStyles.danger}`}>Delete Profile</Button>
+                <Button onClick={() => setIsEditing(true)} className={`${buttonStyles.cardButton} me-2`}>Edit Profile</Button>
+                <Button onClick={handleDeleteProfile} className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}>Delete Profile</Button>
               </>
             )}
           </div>

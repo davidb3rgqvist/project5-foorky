@@ -43,6 +43,37 @@
   background-color: #2c5555;
 }
 
+.commentButton {
+  display: inline-flex;
+  align-items: center;
+  border: solid 1px;
+  max-height: 30px;
+  color: #3e7979;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.commentButton:hover {
+  background-color: #3e7979;
+  color:#ffffff
+}
+
+.cardButton {
+  display: inline-flex;
+  align-items: center;
+  border: solid 1px;
+  max-height: 30px;
+  color: #3e7979;
+  background-color: transparent;
+  cursor: pointer;
+  justify-content: space-between;
+}
+
+.cardButton:hover {
+  background-color: #3e7979;
+  color:#ffffff
+}
+
 /* Arrow Button */
 .arrowButton {
   background: none;

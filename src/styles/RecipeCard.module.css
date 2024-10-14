@@ -33,6 +33,7 @@
 .cardFront {
   background-color: #f7f7f7;
   text-align: left;
+  cursor: pointer;
 }
 
 .cardImage {
@@ -66,8 +67,6 @@
   margin-top: 10px;
 }
 
-
-
 .cardBack {
   background-color: #fff;
   transform: rotateY(180deg);
@@ -100,10 +99,6 @@ h2, h3, p {
   font-size: 0.9em;
   color: #555;
 }
-
-/* #commentbutton {
-  color: #ff0000;
-} */
 
 .commentDivider {
   border: 0;

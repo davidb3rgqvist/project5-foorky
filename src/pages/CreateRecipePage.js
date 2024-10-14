@@ -188,17 +188,17 @@ const CreateRecipePage = () => {
             <div className={styles.imagePreviewContainer}>
               <img src={previewImage} alt="Recipe Preview" className={styles.imagePreview} />
               <div className={styles.imagePreviewButtonContainer}>
-                <Button className={buttonStyles.button} onClick={handleDeleteImage}>Remove Image</Button>
+                <Button className={buttonStyles.Button} onClick={handleDeleteImage}>Remove Image</Button>
               </div>
             </div>
           )}
           <div>
             <input type="file" id="image" name="image" style={{ display: "none" }} onChange={handleFileChange} />
-            <Button className={buttonStyles.button} onClick={() => document.getElementById("image").click()}>Upload Image</Button>
+            <Button className={buttonStyles.Button} onClick={() => document.getElementById("image").click()}>Upload Image</Button>
           </div>
         </Form.Group>
 
-        <Button className={buttonStyles.button} type="submit">{isEditMode ? "Update Recipe" : "Create Recipe"}</Button>
+        <Button className={buttonStyles.Button} type="submit">{isEditMode ? "Update Recipe" : "Create Recipe"}</Button>
       </Form>
     </Container>
   );

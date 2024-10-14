@@ -30,19 +30,6 @@
   outline: none;
 }
 
-.Button {
-  background-color: #516a52;
-  color: white;
-  border-radius: 30px;
-  padding: 10px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.Button:hover {
-  background-color: #1A4D2E;
-}
-
 /* Image Preview */
 .imagePreviewContainer {
   display: flex;

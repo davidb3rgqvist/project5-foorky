@@ -220,8 +220,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                               value={editCommentContent}
                               onChange={(e) => setEditCommentContent(e.target.value)}
                             />
-                            <button className={buttonStyles.Button} onClick={() => handleEditComment(comment.id)}>Save</button>
-                            <button className={buttonStyles.Button} onClick={() => setEditCommentId(null)}>Cancel</button>
+                            <button className={buttonStyles.commentButton} onClick={() => handleEditComment(comment.id)}>Save</button>
+                            <button className={buttonStyles.commentButton} onClick={() => setEditCommentId(null)}>Cancel</button>
                           </>
                         ) : (
                           <>
@@ -232,8 +232,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                         
                         {currentUser?.username === comment.owner && (
                           <>
-                            <button className={buttonStyles.Button} onClick={() => {setEditCommentId(comment.id); setEditCommentContent(comment.content);}}>Edit</button>
-                            <button className={buttonStyles.Button} onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                            <button className={buttonStyles.commentButton} onClick={() => {setEditCommentId(comment.id); setEditCommentContent(comment.content);}}>Edit</button>
+                            <button className={buttonStyles.commentButton} onClick={() => handleDeleteComment(comment.id)}>Delete</button>
                           </>
                         )}
                         <hr className={styles.commentDivider} />
@@ -251,19 +251,19 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     onClick={preventFlip}
                   />
-                  <button className={buttonStyles.Button} onClick={handleAddComment}>Add</button>
+                  <button className={buttonStyles.commentButton} onClick={handleAddComment}>Add</button>
                 </div>
               </div>
             )}
 
             <div className={styles.actionsBack}>
-              <button className={styles.likeButton} onClick={handleLike}>
-                {isLiked ? 'Unlike' : 'Like'} ({likes})
+              <button className={buttonStyles.cardButton} onClick={handleLike}>
+                {isLiked ? 'Unlike' : 'Like'}
               </button>
               {currentUser?.username === recipe.owner && (
                 <>
-                  <button className={buttonStyles.editButton} onClick={() => handleEdit(recipe)}>Edit</button>
-                  <button className={buttonStyles.deleteButton} onClick={confirmDelete}>Delete</button>
+                  <button className={buttonStyles.cardButton} onClick={() => handleEdit(recipe)}>Edit</button>
+                  <button className={buttonStyles.cardButton} onClick={confirmDelete}>Delete</button>
                 </>
               )}
             </div>

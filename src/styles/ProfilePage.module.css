@@ -54,20 +54,6 @@
   text-align: center;
 }
 
-/* Follow Button */
-.followButton {
-  background-color: #3e7979;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.followButton:hover {
-  background-color: #2c5555;
-}
 
 /* Recipes Section */
 .recipesSection {
