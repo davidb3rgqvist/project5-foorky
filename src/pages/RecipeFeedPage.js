@@ -2,56 +2,73 @@ import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
 import TopBar from "../components/TopBar";
+import FilterSearchCard from "../components/FilterSearchCard";
 import { Spinner, Row, Col } from "react-bootstrap";
 import styles from "../styles/RecipeFeedPage.module.css";
 
 const RecipeFeedPage = () => {
+  const [allRecipes, setAllRecipes] = useState([]); // Store the full list of recipes
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState({});
+  const [filters, setFilters] = useState({});
   const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const observerRef = useRef();
 
+  const handleSearch = (query, filters) => {
+    setSearchQuery(query);
+    setFilters(filters);
+    applyFilters(query, filters);
+  };
+
+  const applyFilters = (query, filters) => {
+    let filteredRecipes = [...allRecipes];
+
+    if (query) {
+      filteredRecipes = filteredRecipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(query.toLowerCase())
+      );
+    }
+
+    if (filters.difficulty) {
+      filteredRecipes = filteredRecipes.filter((recipe) => recipe.difficulty === filters.difficulty);
+    }
+
+    if (filters.cookTime === "quick") {
+      filteredRecipes = filteredRecipes.filter((recipe) => recipe.cook_time <= 30);
+    } else if (filters.cookTime === "long") {
+      filteredRecipes = filteredRecipes.filter((recipe) => recipe.cook_time >= 60);
+    }
+
+    if (filters.sortBy === "az") {
+      filteredRecipes.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (filters.sortBy === "latest") {
+      filteredRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+
+    setRecipes(filteredRecipes);
+  };
+
   useEffect(() => {
-    const fetchRecipes = async (page = 1) => {
+    const fetchRecipes = async () => {
       setLoading(true);
       try {
-        let endpoint = `/recipes/?page=${page}`;
-        let queryParams = [];
-
-        if (filter.difficulty) {
-          queryParams.push(`difficulty=${filter.difficulty}`);
-        }
-        if (filter.cookTime === "quick") {
-          queryParams.push("cook_time__lte=30");
-        } else if (filter.cookTime === "long") {
-          queryParams.push("cook_time__gte=60");
-        }
-        if (searchQuery) {
-          queryParams.push(`search=${searchQuery}`);
-        }
-
-        if (queryParams.length) {
-          endpoint += `&${queryParams.join("&")}`;
-        }
-
-        const { data } = await axios.get(endpoint);
-        
+        const { data } = await axios.get(`/recipes/?page=${currentPage}`);
+        setAllRecipes((prevRecipes) => [...prevRecipes, ...data.results]);
         setRecipes((prevRecipes) => [...prevRecipes, ...data.results]);
         setNextPage(data.next);
         setHasMore(!!data.next);
-      } catch (err) {
-        console.error(err);
+      } catch (error) {
+        console.error(error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchRecipes(currentPage);
-  }, [filter, searchQuery, currentPage]);
+    fetchRecipes();
+  }, [currentPage]);
 
   useEffect(() => {
     if (loading || !hasMore) return;
@@ -73,22 +90,12 @@ const RecipeFeedPage = () => {
     };
   }, [loading, hasMore]);
 
-  const handleDelete = async (recipeId) => {
-    try {
-      await axios.delete(`/recipes/${recipeId}/`);
-      setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== recipeId));
-      console.log(`Deleted recipe with id: ${recipeId}`);
-    } catch (error) {
-      console.error("Error deleting the recipe:", error);
-      alert("Failed to delete the recipe. Please try again.");
-    }
-  };
-
   return (
     <>
-      {/* Add TopBar here */}
       <TopBar />
-      
+      <div className={styles.FilterContainer}>
+        <FilterSearchCard handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
+      </div>
       <Row className={styles.FeedLayout}>
         <Col xs={12}>
           <div className={styles.RecipeFeed}>
@@ -97,12 +104,10 @@ const RecipeFeedPage = () => {
                 <RecipeCard
                   key={recipe.id}
                   recipe={recipe}
-                  onUpdate={(recipeId) => console.log(`Update recipe with id: ${recipeId}`)}
-                  onDelete={handleDelete}
                 />
               ))
             ) : (
-              <p></p>
+              <p>No recipes found.</p>
             )}
             <div ref={observerRef} className={styles.loaderContainer}>
               {loading && (

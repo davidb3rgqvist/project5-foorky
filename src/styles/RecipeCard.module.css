@@ -53,7 +53,7 @@
 
 .cardContent h2 {
   padding-bottom: 10px;
-  color: #3e7979;
+  color: #2c5555;
 }
 
 .cardContent p {
@@ -114,7 +114,6 @@ h2, h3, p {
   background-color: white;
   padding: 20px;
   font-weight: 700;
-  /* border: solid #101b11; */
   border-radius: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   text-align: center;

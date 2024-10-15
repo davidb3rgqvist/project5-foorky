@@ -2,30 +2,30 @@ import React, { useState, useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
+import FilterSearchCard from "../components/FilterSearchCard"; // Import the FilterSearchCard
 import { Spinner } from "react-bootstrap";
 import styles from "../styles/ProfilePage.module.css";
 import buttonStyles from "../styles/Button.module.css";
-
 
 const ProfilePage = () => {
   const { profileId } = useParams();
   const [profile, setProfile] = useState({});
   const [recipes, setRecipes] = useState([]);
+  const [allRecipes, setAllRecipes] = useState([]); // Store all recipes for resetting filters
+  const [filters, setFilters] = useState({}); // Add filters state
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [hasMore, setHasMore] = useState(true);
-  const observerRef = useRef();
 
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const { data: profileData } = await axios.get(`/profiles/${profileId}/`);
         setProfile(profileData);
-  
+
         const { data: recipeData } = await axios.get(`/recipes/by_profile/?profile_id=${profileId}`);
         setRecipes(recipeData);
-  
+        setAllRecipes(recipeData); // Keep all recipes to reset later
+
         const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
         setIsFollowing(followers.some((f) => f.owner === profileData.owner));
       } catch (error) {
@@ -34,48 +34,40 @@ const ProfilePage = () => {
         setLoading(false);
       }
     };
-  
+
     fetchProfileData();
   }, [profileId]);
 
-  // Function to fetch more recipes (infinite scroll)
-  const fetchMoreRecipes = async (page) => {
-    try {
-      const { data: recipeData } = await axios.get(`/recipes/?owner=${profile.owner}&page=${page}`);
-      setRecipes((prevRecipes) => [...prevRecipes, ...recipeData.results]);
-      setHasMore(!!recipeData.next);
-    } catch (err) {
-      console.error("Error fetching more recipes", err);
+  // Filter the recipes based on the search query and selected filters
+  const handleSearch = (searchQuery, filters) => {
+    let filteredRecipes = [...allRecipes];
+
+    if (searchQuery) {
+      filteredRecipes = filteredRecipes.filter(recipe =>
+        recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     }
+
+    if (filters.difficulty) {
+      filteredRecipes = filteredRecipes.filter(recipe => recipe.difficulty === filters.difficulty);
+    }
+
+    if (filters.cookTime === "quick") {
+      filteredRecipes = filteredRecipes.filter(recipe => recipe.cook_time <= 30);
+    } else if (filters.cookTime === "long") {
+      filteredRecipes = filteredRecipes.filter(recipe => recipe.cook_time >= 60);
+    }
+
+    if (filters.sortBy === "az") {
+      filteredRecipes.sort((a, b) => a.title.localeCompare(b.title));
+    } else if (filters.sortBy === "latest") {
+      filteredRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    }
+
+    setRecipes(filteredRecipes);
   };
 
-  // Infinite scrolling effect for fetching more recipes
-  useEffect(() => {
-    if (!loading && hasMore) {
-      const observer = new IntersectionObserver((entries) => {
-        if (entries[0].isIntersecting) {
-          setCurrentPage((prevPage) => prevPage + 1);
-        }
-      });
-
-      if (observerRef.current) {
-        observer.observe(observerRef.current);
-      }
-
-      return () => {
-        if (observerRef.current) {
-          observer.unobserve(observerRef.current);
-        }
-      };
-    }
-  }, [loading, hasMore]);
-
-  useEffect(() => {
-    if (currentPage > 1) {
-      fetchMoreRecipes(currentPage);
-    }
-  }, [currentPage]);
-
+  // Handle following a user
   const handleFollow = async () => {
     try {
       await axios.post(`/followers/`, { followed: profileId });
@@ -85,10 +77,11 @@ const ProfilePage = () => {
     }
   };
 
+  // Handle unfollowing a user
   const handleUnfollow = async () => {
     try {
       const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
-      const followId = followers.find((f) => f.owner === profile.owner).id;
+      const followId = followers.find(f => f.owner === profile.owner).id;
       await axios.delete(`/followers/${followId}/`);
       setIsFollowing(false);
     } catch (error) {
@@ -96,11 +89,13 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) return <div ref={observerRef} className={styles.loaderContainer}>
+  if (loading) return (
+    <div className={styles.loaderContainer}>
       <Spinner animation="border" role="status">
         <span className="sr-only">Loading...</span>
       </Spinner>
-    </div>;
+    </div>
+  );
 
   return (
     <div className={styles.profilePage}>
@@ -127,12 +122,19 @@ const ProfilePage = () => {
         )}
       </div>
 
+      {/* Filter Search Card */}
+      <FilterSearchCard
+        handleSearch={handleSearch}
+        filters={filters}
+        setFilters={setFilters}
+      />
+
       {/* Recipes Section */}
       <div className={styles.recipesSection}>
         <h3>{profile.owner}'s Recipes</h3>
         <div className={styles.recipesGrid}>
           {recipes.length > 0 ? (
-            recipes.map((recipe) => (
+            recipes.map(recipe => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))
           ) : (

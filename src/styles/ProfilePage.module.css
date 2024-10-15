@@ -32,22 +32,22 @@
   transform: scale(1.05);
 }
 
-.profileInfo h4 {
-  color: #1A4D2E;
+/* .profileInfo h4 {
+  color: rgba(252, 199, 8, 0.928);
   margin-bottom: 10px;
   font-size: 1.5rem;
-}
+} */
 
-.profileInfo p {
-  color: #4F6F52;
+/* .profileInfo p {
+  color: #2c5555;
   font-size: 1rem;
-}
+} */
 
 .profileStats {
   display: flex;
   justify-content: space-around;
   margin-bottom: 20px;
-  color: #4F6F52;
+  color: #2c5555;
 }
 
 .profileStats div {
@@ -78,14 +78,14 @@
 /* For medium screens (1024px and below) */
 @media (max-width: 1024px) {
   .recipesGrid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* For small screens (768px and below) */
 @media (max-width: 768px) {
   .recipesGrid {
-    grid-template-columns: 1fr; /* 1 column */
+    grid-template-columns: 1fr;
   }
   
   .profileCard {
