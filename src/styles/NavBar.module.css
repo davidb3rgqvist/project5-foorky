@@ -26,9 +26,6 @@
   font-weight: bold;
 }
 
-/* .NavBar .navbar-toggler {
-  border-color: rgba(255, 255, 255, 0.5);
-} */
 
 .profileToggle {
   color: #fff;
@@ -41,9 +38,6 @@
   background-color: #456464;
 }
 
-.customDropdownMenu .dropdown-item {
-  color: #ffffff;
-}
 
 .customDropdownMenu .dropdown-item:hover {
   background-color: #456464;

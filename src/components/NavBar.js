@@ -1,18 +1,17 @@
 import React, { useContext, useState } from "react";
-import { Navbar, Container, Nav, Dropdown, Form, FormControl, Button } from "react-bootstrap";
+import { Navbar, Container, Nav, Dropdown } from "react-bootstrap";
 import logo from "../assets/logo.png";
 import styles from "../styles/NavBar.module.css";
 import { NavLink, useHistory } from "react-router-dom";
 import { CurrentUserContext, SetCurrentUserContext } from "../contexts/CurrentUserContext";
 import axios from "axios";
 
-const NavBar = ({ handleSearch }) => {
+const NavBar = () => {
   const currentUser = useContext(CurrentUserContext);
   const setCurrentUser = useContext(SetCurrentUserContext);
   const history = useHistory();
 
   const [expanded, setExpanded] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSignOut = async () => {
     try {
@@ -26,12 +25,6 @@ const NavBar = ({ handleSearch }) => {
     }
   };
 
-  const handleSearchSubmit = (e) => {
-    e.preventDefault();
-    handleSearch(searchQuery);
-    setExpanded(false);
-  };
-
   const loggedInIcons = (
     <>
       <NavLink className={styles.NavLink} to="/recipe-feed" onClick={() => setExpanded(false)}>
@@ -42,11 +35,11 @@ const NavBar = ({ handleSearch }) => {
       </NavLink>
       <Dropdown alignRight>
         <Dropdown.Toggle
-          variant="success"
+          variant="success" style={{ backgroundColor: 'transparent' }}
           id="dropdown-profile"
           className={styles.profileToggle}
         >
-          <i className="fas fa-user"></i> {currentUser?.username}
+           <i className="fas fa-user"></i> {currentUser?.name || currentUser?.username}
         </Dropdown.Toggle>
 
         <Dropdown.Menu className={styles.customDropdownMenu}>
@@ -58,17 +51,6 @@ const NavBar = ({ handleSearch }) => {
           </Dropdown.Item>
         </Dropdown.Menu>
       </Dropdown>
-      {/* Search bar for logged-in users */}
-      <Form className={`d-none d-md-flex ml-3 ${styles.SearchForm}`} onSubmit={handleSearchSubmit}>
-        <FormControl
-          type="text"
-          placeholder="Search recipes..."
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-          className="mr-2"
-        />
-        <Button variant="outline-light" type="submit">Search</Button>
-      </Form>
     </>
   );
 
@@ -102,19 +84,6 @@ const NavBar = ({ handleSearch }) => {
           </Nav>
         </Navbar.Collapse>
       </Container>
-
-      {/* Mobile Search Bar */}
-      {currentUser && (
-        <Form className={`d-md-none ${styles.MobileSearchForm}`} onSubmit={handleSearchSubmit}>
-          <FormControl
-            type="text"
-            placeholder="Search recipes..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-          <Button variant="outline-light" type="submit" className="mt-2">Search</Button>
-        </Form>
-      )}
     </Navbar>
   );
 };

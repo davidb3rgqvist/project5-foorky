@@ -15,7 +15,7 @@
   display: grid;
   gap: 20px;
   padding: 20px;
-  grid-template-columns: repeat(3, 1fr); /* Default to 3 columns on large screens */
+  grid-template-columns: repeat(3, 1fr);
 }
 
 .loaderContainer {
@@ -27,13 +27,15 @@
 /* For medium screens (1024px and below) */
 @media (max-width: 1024px) {
   .recipeGrid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columns */
+    grid-template-columns: repeat(2, 1fr);
   }
 }
 
 /* For small screens (768px and below) */
 @media (max-width: 768px) {
   .recipeGrid {
-    grid-template-columns: 1fr; /* 1 column */
+    grid-template-columns: 1fr;
   }
 }
+
+

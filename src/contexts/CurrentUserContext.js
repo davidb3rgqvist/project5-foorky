@@ -11,12 +11,12 @@ export const useSetCurrentUser = () => useContext(SetCurrentUserContext);
 
 export const CurrentUserProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
+  const [loading, setLoading] = useState(true);
   const history = useHistory();
   
   const isRefreshingToken = useRef(false);
   const failedRequestsQueue = useRef([]);
 
-  // Sign out logic wrapped in useCallback
   const handleSignOut = useCallback(async () => {
     try {
       await axios.post("/dj-rest-auth/logout/");
@@ -41,14 +41,14 @@ export const CurrentUserProvider = ({ children }) => {
         console.log(err);
       }
     }
+    setLoading(false);
   };
 
   useEffect(() => {
-    handleMount(); // Run on mount
+    handleMount();
   }, []);
 
   useMemo(() => {
-    // Request Interceptor: Attach token to request
     const requestInterceptor = axiosReq.interceptors.request.use(
       (config) => {
         const token = localStorage.getItem("authToken");
@@ -60,7 +60,6 @@ export const CurrentUserProvider = ({ children }) => {
       (err) => Promise.reject(err)
     );
 
-    // Response Interceptor: Handle token refresh on 401 errors
     const responseInterceptor = axiosRes.interceptors.response.use(
       (response) => response,
       async (err) => {
@@ -86,7 +85,7 @@ export const CurrentUserProvider = ({ children }) => {
               originalRequest.headers.Authorization = `Bearer ${newToken}`;
               return axiosRes(originalRequest);
             } catch (refreshErr) {
-              handleSignOut(); // Now using the memoized handleSignOut
+              handleSignOut();
               failedRequestsQueue.current.forEach((req) => req.onFailure(refreshErr));
               failedRequestsQueue.current = [];
             }
@@ -107,12 +106,15 @@ export const CurrentUserProvider = ({ children }) => {
       }
     );
 
-    // Cleanup interceptors when the component unmounts
     return () => {
       axiosReq.interceptors.request.eject(requestInterceptor);
       axiosRes.interceptors.response.eject(responseInterceptor);
     };
-  }, [handleSignOut]); // Removed `history` from dependencies
+  }, [handleSignOut]);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <CurrentUserContext.Provider value={currentUser}>

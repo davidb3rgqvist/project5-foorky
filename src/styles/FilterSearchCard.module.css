@@ -1,0 +1,59 @@
+.FilterSearchCard {
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 400px;
+  }
+  
+  .FilterSearchCard:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .CardBody {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .Filters {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 15px;
+  }
+  
+  .FormGroup {
+    flex: 1;
+  }
+  
+  .SearchInput {
+    border-radius: 30px;
+    padding: 10px 15px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    margin-bottom: 15px;
+  }
+  
+  .SearchInput:focus {
+    border-color: #7fb9b9;
+    box-shadow: 0 0 5px rgba(127, 185, 185, 0.5);
+  }
+  
+  .Button {
+    background-color: #4f6f52;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    width: 100%;
+    transition: background-color 0.3s ease;
+  }
+  
+  .Button:hover {
+    background-color: #3e7979;
+  }
+  
