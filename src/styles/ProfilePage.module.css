@@ -8,10 +8,6 @@
   transition: box-shadow 0.3s ease;
 }
 
-.profilePage {
-  padding: 20px;
-}
-
 /* Profile Information */
 .profileInfo {
   text-align: center;
@@ -32,16 +28,10 @@
   transform: scale(1.05);
 }
 
-/* .profileInfo h4 {
-  color: rgba(252, 199, 8, 0.928);
+.profileInfo h4 {
   margin-bottom: 10px;
   font-size: 1.5rem;
-} */
-
-/* .profileInfo p {
-  color: #2c5555;
-  font-size: 1rem;
-} */
+}
 
 .profileStats {
   display: flex;
@@ -63,7 +53,6 @@
 .recipesGrid {
   display: grid;
   gap: 20px;
-  padding: 20px;
   grid-template-columns: repeat(3, 1fr);
 }
 

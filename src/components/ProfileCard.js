@@ -5,10 +5,10 @@ import styles from '../styles/ProfileCard.module.css';
 import buttonStyles from "../styles/Button.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 
-const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
+const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMessage }) => {
   const [errorMessage, setErrorMessage] = useState("");
-  const currentUser = useCurrentUser();
   const [successMessage, setSuccessMessage] = useState("");
+  const currentUser = useCurrentUser();
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProfileData, setUpdatedProfileData] = useState({
     name: profileData.name,
@@ -34,7 +34,6 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
   const handleEditProfile = async (e) => {
     e.preventDefault();
     setErrorMessage("");
-    setSuccessMessage("");
 
     const formData = new FormData();
     formData.append("name", updatedProfileData.name);
@@ -54,6 +53,9 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
       setSuccessMessage("Profile updated successfully!");
       onProfileUpdate(response.data);
       setIsEditing(false);
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
     } catch (error) {
       console.error("Error updating profile", error);
       setErrorMessage("Failed to update profile. Please try again.");
@@ -63,7 +65,6 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
   const handleDeleteProfile = async () => {
     if (!window.confirm("Are you sure you want to delete your profile?")) return;
     setErrorMessage("");
-    setSuccessMessage("");
 
     try {
       const token = localStorage.getItem("authToken");
@@ -72,6 +73,9 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
       });
       setSuccessMessage("Profile deleted successfully.");
       onProfileDelete();
+      setTimeout(() => {
+        setSuccessMessage("");
+      }, 3000);
     } catch (error) {
       console.error("Error deleting profile", error);
       setErrorMessage("Failed to delete profile.");
@@ -81,8 +85,10 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete }) => {
   return (
     <div className={styles.cardContainer}>
       <Card.Body className={styles.cardBody}>
-        {errorMessage && <Alert className={styles.errorMessage}>{errorMessage}</Alert>}
-        {successMessage && <Alert className={styles.successMessage}>{successMessage}</Alert>}
+        {/* Display error message if any */}
+        {errorMessage && <Alert variant="danger" className={styles.errorMessage}>{errorMessage}</Alert>}
+        {/* Display success message if any */}
+        {successMessage && <Alert variant="success" className={styles.successMessage}>{successMessage}</Alert>}
 
         <div className="text-center">
           <Card.Img

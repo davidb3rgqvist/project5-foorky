@@ -2,9 +2,9 @@ import axios from "axios";
 import { useHistory } from "react-router-dom";
 import React, { useEffect, useRef, useState } from "react";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
+import { Alert } from "react-bootstrap";
 import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
-
 
 const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [isFlipped, setIsFlipped] = useState(false);
@@ -17,6 +17,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [newComment, setNewComment] = useState("");
   const [editCommentId, setEditCommentId] = useState(null);
   const [editCommentContent, setEditCommentContent] = useState("");
+  const [alertMessage, setAlertMessage] = useState(null); 
+  const [alertVariant, setAlertVariant] = useState("success"); 
   const history = useHistory();
 
   const currentUser = useCurrentUser();
@@ -25,119 +27,140 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const handleFlip = () => setIsFlipped(!isFlipped);
   const preventFlip = (e) => e.stopPropagation();
 
-  // Close the flipped card when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
         setIsFlipped(false);
       }
     };
-    
+
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFlipped]);
 
-  const handleLike = async (event) => {
-    event.preventDefault();
+  const showAlert = (message, variant) => {
+    setAlertMessage(message);
+    setAlertVariant(variant);
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 3000);
+  };
 
-    // Check if user is logged in
-    // if (!currentUser) {
-    //   alert("You need to be logged in to like recipes!");
-    //   return;
-    // }
+  const handleLike = async () => {
+    try {
+      const response = await axios.post(
+        "/likes/",
+        { recipe: recipe.id },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        }
+      );
 
-    const token = localStorage.getItem("authToken");
-
-    // if (!token) {
-    //   alert("You need to be logged in to like recipes!");
-    //   return;
-    // }
-
-    // try {
-      if (!isLiked) {
-        // Send POST request to the likes endpoint
-        await axios.post("/likes/", { recipe: recipe.id }, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+      if (response.status === 201 || response.status === 200) {
+        setLikes(likes + 1);
+        setIsLiked(true);
+        showAlert("Recipe liked successfully!", "success");
       }
-      else {
-        await axios.delete(`/likes/${recipe.id}/`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+    } catch (error) {
+      console.error("Error liking the recipe:", error.response?.data || error.message);
+      showAlert("Error liking the recipe. Please try again.", "danger");
+    }
+  };
+
+  const handleUnlike = async () => {
+    try {
+      const response = await axios.delete(`/likes/${recipe.id}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+
+      if (response.status === 204) {
+        setLikes(likes - 1);
+        setIsLiked(false);
+        showAlert("Recipe unliked successfully.", "success");
       }
-    
-      // Toggle like status and update like count
-      setIsLiked(!isLiked);
-      setLikes(isLiked ? likes - 1 : likes + 1);
-    // } catch (error) {
-    //   console.error("Error updating like status:", error);
-    //   alert("Failed to like the recipe. Please try again.");
-    // }
+    } catch (error) {
+      console.error("Error unliking the recipe", error.response?.data || error.message);
+      showAlert("Error unliking the recipe. Please try again.", "danger");
+    }
+  };
+
+  const handleToggleLike = () => {
+    if (isLiked) {
+      handleUnlike();
+    } else {
+      handleLike();
+    }
   };
 
   const [comments, setComments] = useState([]);
   const fetchComments = async () => {
     try {
       const { data } = await axios.get("/comments/");
-      
-      const filteredComments = data.results.filter(comment => comment.recipe === recipe.id);
-      
+
+      const filteredComments = data.results.filter(
+        (comment) => comment.recipe === recipe.id
+      );
+
       setComments(filteredComments);
     } catch (err) {
       console.error("Error fetching comments:", err);
+      showAlert("Failed to fetch comments.", "danger");
     }
   };
-  
+
   useEffect(() => {
-    
-  
     if (recipe.id) {
       fetchComments();
     }
   }, [recipe.id]);
-  
+
   const handleAddComment = async (event) => {
     preventFlip(event);
-  
-    // if (!currentUser) {
-    //   alert("You need to be logged in to comment!");
-    //   return;
-    // }
-  
+
+    if (!currentUser) {
+      showAlert("You need to be logged in to comment.", "warning");
+      return;
+    }
+
     const token = localStorage.getItem("authToken");
-  
+
     if (newComment.trim()) {
       try {
-
         await axios.post(
           `/comments/`,
           { recipe: recipe.id, content: newComment },
-          // { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
         setNewComment("");
-  
         fetchComments();
+        showAlert("Comment added successfully!", "success");
       } catch (error) {
         console.error("Error adding comment:", error);
-        alert("Failed to add comment. Please try again.");
+        showAlert("Failed to add comment. Please try again.", "danger");
       }
     }
   };
+
   const handleEditComment = async (commentId) => {
     const token = localStorage.getItem("authToken");
     try {
       await axios.put(
         `/comments/${commentId}/`,
-        { content: editCommentContent , recipe: recipe.id },
-        // { headers: { Authorization: `Bearer ${token}` } }
+        { content: editCommentContent, recipe: recipe.id },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setEditCommentId(null);
       setEditCommentContent("");
       fetchComments();
+      showAlert("Comment updated successfully!", "success");
     } catch (error) {
       console.error("Error editing comment:", error);
-      alert("Failed to edit comment. Please try again.");
+      showAlert("Failed to edit comment. Please try again.", "danger");
     }
   };
 
@@ -145,12 +168,13 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     const token = localStorage.getItem("authToken");
     try {
       await axios.delete(`/comments/${commentId}/`, {
-        // headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${token}` },
       });
       fetchComments();
+      showAlert("Comment deleted successfully.", "success");
     } catch (error) {
       console.error("Error deleting comment:", error);
-      alert("Failed to delete comment. Please try again.");
+      showAlert("Failed to delete comment. Please try again.", "danger");
     }
   };
 
@@ -166,14 +190,42 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     setShowDeleteConfirm(true);
   };
 
-  const handleDelete = (event) => {
+  const handleDelete = async (event) => {
     preventFlip(event);
-    onDelete(recipe.id);
-    setShowDeleteConfirm(false);
+    
+    try {
+      await axios.delete(`/recipes/${recipe.id}/`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+        },
+      });
+  
+      setShowDeleteConfirm(false);
+      
+      if (onDelete) {
+        onDelete(recipe.id);
+      }
+  
+    } catch (error) {
+      console.error("Error deleting recipe:", error.response?.data || error.message);
+      showAlert("Failed to delete the recipe. Please try again.", "danger");
+    }
   };
+  
 
   return (
     <div ref={cardRef} className={`${styles.cardContainer}`} onClick={handleFlip}>
+      {/* Alert Section */}
+      {alertMessage && (
+        <Alert
+          variant={alertVariant}
+          onClose={() => setAlertMessage(null)}
+          dismissible
+        >
+          {alertMessage}
+        </Alert>
+      )}
+
       <div className={`${styles.card} ${isFlipped ? styles.isFlipped : ""}`}>
         {/* Front Side */}
         <div className={styles.cardFront}>
@@ -220,20 +272,45 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                               value={editCommentContent}
                               onChange={(e) => setEditCommentContent(e.target.value)}
                             />
-                            <button className={buttonStyles.commentButton} onClick={() => handleEditComment(comment.id)}>Save</button>
-                            <button className={buttonStyles.commentButton} onClick={() => setEditCommentId(null)}>Cancel</button>
+                            <button
+                              className={buttonStyles.commentButton}
+                              onClick={() => handleEditComment(comment.id)}
+                            >
+                              Save
+                            </button>
+                            <button
+                              className={buttonStyles.commentButton}
+                              onClick={() => setEditCommentId(null)}
+                            >
+                              Cancel
+                            </button>
                           </>
                         ) : (
                           <>
                             <p>{comment.content}</p>
-                            <p className={styles.commentAuthor}><em>— Chef: {comment.owner}</em></p>
+                            <p className={styles.commentAuthor}>
+                              <em>— Chef: {comment.owner}</em>
+                            </p>
                           </>
                         )}
-                        
+
                         {currentUser?.username === comment.owner && (
                           <>
-                            <button className={buttonStyles.commentButton} onClick={() => {setEditCommentId(comment.id); setEditCommentContent(comment.content);}}>Edit</button>
-                            <button className={buttonStyles.commentButton} onClick={() => handleDeleteComment(comment.id)}>Delete</button>
+                            <button
+                              className={buttonStyles.commentButton}
+                              onClick={() => {
+                                setEditCommentId(comment.id);
+                                setEditCommentContent(comment.content);
+                              }}
+                            >
+                              Edit
+                            </button>
+                            <button
+                              className={buttonStyles.commentButton}
+                              onClick={() => handleDeleteComment(comment.id)}
+                            >
+                              Delete
+                            </button>
                           </>
                         )}
                         <hr className={styles.commentDivider} />
@@ -251,19 +328,37 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                     onChange={(e) => setNewComment(e.target.value)}
                     onClick={preventFlip}
                   />
-                  <button className={buttonStyles.commentButton} onClick={handleAddComment}>Add</button>
+                  <button
+                    className={buttonStyles.commentButton}
+                    onClick={handleAddComment}
+                  >
+                    Add
+                  </button>
                 </div>
               </div>
             )}
 
             <div className={styles.actionsBack}>
-              <button className={buttonStyles.cardButton} onClick={handleLike}>
-                {isLiked ? 'Unlike' : 'Like'}
+              <button
+                className={buttonStyles.cardButton}
+                onClick={handleToggleLike}
+              >
+                {isLiked ? "Unlike" : "Like"}
               </button>
               {currentUser?.username === recipe.owner && (
                 <>
-                  <button className={buttonStyles.cardButton} onClick={() => handleEdit(recipe)}>Edit</button>
-                  <button className={buttonStyles.cardButton} onClick={confirmDelete}>Delete</button>
+                  <button
+                    className={buttonStyles.cardButton}
+                    onClick={() => handleEdit(recipe)}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={buttonStyles.cardButton}
+                    onClick={confirmDelete}
+                  >
+                    Delete
+                  </button>
                 </>
               )}
             </div>

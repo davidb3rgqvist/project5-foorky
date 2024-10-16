@@ -3,11 +3,11 @@ import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
 import TopBar from "../components/TopBar";
 import FilterSearchCard from "../components/FilterSearchCard";
-import { Spinner, Row, Col } from "react-bootstrap";
+import { Spinner, Row, Col, Alert } from "react-bootstrap";
 import styles from "../styles/RecipeFeedPage.module.css";
 
 const RecipeFeedPage = () => {
-  const [allRecipes, setAllRecipes] = useState([]); // Store the full list of recipes
+  const [allRecipes, setAllRecipes] = useState([]);
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({});
@@ -15,6 +15,7 @@ const RecipeFeedPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [nextPage, setNextPage] = useState(null);
   const [hasMore, setHasMore] = useState(true);
+  const [alertMessage, setAlertMessage] = useState(null);
   const observerRef = useRef();
 
   const handleSearch = (query, filters) => {
@@ -90,12 +91,29 @@ const RecipeFeedPage = () => {
     };
   }, [loading, hasMore]);
 
+  const handleDeleteRecipe = (recipeId) => {
+    setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== recipeId));
+
+    setAlertMessage("Recipe deleted successfully!");
+    setTimeout(() => {
+      setAlertMessage(null);
+    }, 3000);
+  };
+
   return (
     <>
       <TopBar />
       <div className={styles.FilterContainer}>
         <FilterSearchCard handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
       </div>
+      
+      {/* Alert Section */}
+      {alertMessage && (
+        <Alert variant="success" onClose={() => setAlertMessage(null)} dismissible>
+          {alertMessage}
+        </Alert>
+      )}
+
       <Row className={styles.FeedLayout}>
         <Col xs={12}>
           <div className={styles.RecipeFeed}>
@@ -104,6 +122,7 @@ const RecipeFeedPage = () => {
                 <RecipeCard
                   key={recipe.id}
                   recipe={recipe}
+                  onDelete={handleDeleteRecipe}
                 />
               ))
             ) : (

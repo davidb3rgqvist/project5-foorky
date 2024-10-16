@@ -1,20 +1,25 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
-import FilterSearchCard from "../components/FilterSearchCard"; // Import the FilterSearchCard
-import { Spinner } from "react-bootstrap";
+import FilterSearchCard from "../components/FilterSearchCard";
+import { Spinner, Alert } from "react-bootstrap"; // Import Alert component
 import styles from "../styles/ProfilePage.module.css";
 import buttonStyles from "../styles/Button.module.css";
+import { useCurrentUser } from "../contexts/CurrentUserContext";
 
 const ProfilePage = () => {
   const { profileId } = useParams();
+  const currentUser = useCurrentUser();
   const [profile, setProfile] = useState({});
   const [recipes, setRecipes] = useState([]);
-  const [allRecipes, setAllRecipes] = useState([]); // Store all recipes for resetting filters
-  const [filters, setFilters] = useState({}); // Add filters state
+  const [allRecipes, setAllRecipes] = useState([]);
+  const [filters, setFilters] = useState({});
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [followId, setFollowId] = useState(null);
+  const [alertMessage, setAlertMessage] = useState(null); // Alert message state
+  const [alertVariant, setAlertVariant] = useState("success"); // Alert variant state
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -24,10 +29,17 @@ const ProfilePage = () => {
 
         const { data: recipeData } = await axios.get(`/recipes/by_profile/?profile_id=${profileId}`);
         setRecipes(recipeData);
-        setAllRecipes(recipeData); // Keep all recipes to reset later
+        setAllRecipes(recipeData);
 
         const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
-        setIsFollowing(followers.some((f) => f.owner === profileData.owner));
+        const followRecord = followers.find(f => f.owner === currentUser?.username);
+        if (followRecord) {
+          setIsFollowing(true);
+          setFollowId(followRecord.id);
+        } else {
+          setIsFollowing(false);
+          setFollowId(null);
+        }
       } catch (error) {
         console.error("Error fetching profile data", error);
       } finally {
@@ -36,9 +48,8 @@ const ProfilePage = () => {
     };
 
     fetchProfileData();
-  }, [profileId]);
+  }, [profileId, currentUser]);
 
-  // Filter the recipes based on the search query and selected filters
   const handleSearch = (searchQuery, filters) => {
     let filteredRecipes = [...allRecipes];
 
@@ -67,25 +78,73 @@ const ProfilePage = () => {
     setRecipes(filteredRecipes);
   };
 
-  // Handle following a user
   const handleFollow = async () => {
+    if (isFollowing) {
+      console.log("Already following this user");
+      return;
+    }
+
     try {
-      await axios.post(`/followers/`, { followed: profileId });
+      const response = await axios.post(
+        `/followers/`, 
+        { followed: profileId },
+        { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+      );
       setIsFollowing(true);
+      setFollowId(response.data.id);
+      setProfile(prevProfile => ({
+        ...prevProfile,
+        followers_count: prevProfile.followers_count + 1,
+      }));
+      setAlertMessage("You are now following this profile!");
+      setAlertVariant("success");
     } catch (error) {
-      console.error("Error following the profile", error);
+      console.error("Error following the profile:", error);
+      setAlertMessage("Failed to follow the profile.");
+      setAlertVariant("danger");
+    } finally {
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 3000);
     }
   };
 
-  // Handle unfollowing a user
   const handleUnfollow = async () => {
+    if (!isFollowing) {
+      console.log("Not following this user yet");
+      return;
+    }
+
     try {
-      const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
-      const followId = followers.find(f => f.owner === profile.owner).id;
-      await axios.delete(`/followers/${followId}/`);
-      setIsFollowing(false);
+      if (followId) {
+        await axios.delete(`/followers/${followId}/`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+        });
+        setIsFollowing(false);
+        setFollowId(null);
+        setProfile(prevProfile => ({
+          ...prevProfile,
+          followers_count: prevProfile.followers_count - 1,
+        }));
+        setAlertMessage("You have unfollowed this profile.");
+        setAlertVariant("warning");
+      }
     } catch (error) {
-      console.error("Error unfollowing the profile", error);
+      console.error("Error unfollowing the profile:", error);
+      setAlertMessage("Failed to unfollow the profile.");
+      setAlertVariant("danger");
+    } finally {
+      setTimeout(() => {
+        setAlertMessage(null);
+      }, 3000);
+    }
+  };
+
+  const handleToggleFollow = () => {
+    if (isFollowing) {
+      handleUnfollow();
+    } else {
+      handleFollow();
     }
   };
 
@@ -99,6 +158,13 @@ const ProfilePage = () => {
 
   return (
     <div className={styles.profilePage}>
+      {/* Alert Section */}
+      {alertMessage && (
+        <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
+          {alertMessage}
+        </Alert>
+      )}
+
       {/* Profile Card Section */}
       <div className={styles.profileCard}>
         <img src={profile.image} alt={profile.owner} className={styles.profileImage} />
@@ -111,15 +177,9 @@ const ProfilePage = () => {
         </div>
 
         {/* Follow/Unfollow Button */}
-        {isFollowing ? (
-          <button onClick={handleUnfollow} className={buttonStyles.followButton}>
-            Unfollow
-          </button>
-        ) : (
-          <button onClick={handleFollow} className={buttonStyles.followButton}>
-            Follow
-          </button>
-        )}
+        <button onClick={handleToggleFollow} className={buttonStyles.followButton}>
+          {isFollowing ? "Unfollow" : "Follow"}
+        </button>
       </div>
 
       {/* Filter Search Card */}
@@ -131,7 +191,7 @@ const ProfilePage = () => {
 
       {/* Recipes Section */}
       <div className={styles.recipesSection}>
-        <h3>{profile.owner}'s Recipes</h3>
+        <h3>{profile.name || profile.owner}'s Recipes</h3>
         <div className={styles.recipesGrid}>
           {recipes.length > 0 ? (
             recipes.map(recipe => (

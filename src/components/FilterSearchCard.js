@@ -3,6 +3,7 @@ import { Card, Button, Form, FormControl, Collapse } from "react-bootstrap";
 import styles from "../styles/FilterSearchCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
+
 const FilterSearchCard = ({ handleSearch, filters, setFilters }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
