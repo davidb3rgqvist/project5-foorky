@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import RecipeCard from "../components/RecipeCard";
 import FilterSearchCard from "../components/FilterSearchCard";
-import { Spinner, Alert } from "react-bootstrap"; // Import Alert component
+import { Spinner, Alert } from "react-bootstrap";
 import styles from "../styles/ProfilePage.module.css";
 import buttonStyles from "../styles/Button.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
@@ -18,8 +18,8 @@ const ProfilePage = () => {
   const [isFollowing, setIsFollowing] = useState(false);
   const [loading, setLoading] = useState(true);
   const [followId, setFollowId] = useState(null);
-  const [alertMessage, setAlertMessage] = useState(null); // Alert message state
-  const [alertVariant, setAlertVariant] = useState("success"); // Alert variant state
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertVariant, setAlertVariant] = useState("success");
 
   useEffect(() => {
     const fetchProfileData = async () => {
@@ -151,7 +151,7 @@ const ProfilePage = () => {
   if (loading) return (
     <div className={styles.loaderContainer}>
       <Spinner animation="border" role="status">
-        <span className="sr-only">Loading...</span>
+        <span className="sr-only"></span>
       </Spinner>
     </div>
   );

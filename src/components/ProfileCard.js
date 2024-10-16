@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import axios from "axios";
 import styles from '../styles/ProfileCard.module.css';
+import { useHistory } from "react-router-dom";
 import buttonStyles from "../styles/Button.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 
@@ -9,6 +10,7 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const currentUser = useCurrentUser();
+  const history = useHistory();
   const [isEditing, setIsEditing] = useState(false);
   const [updatedProfileData, setUpdatedProfileData] = useState({
     name: profileData.name,
@@ -68,7 +70,7 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
 
     try {
       const token = localStorage.getItem("authToken");
-      await axios.delete(`/profiles/${profileData.id}/`, {
+      await axios.delete(`/profiles/${profileData.id}/delete/`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setSuccessMessage("Profile deleted successfully.");
@@ -76,6 +78,7 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
+      history.push("/");
     } catch (error) {
       console.error("Error deleting profile", error);
       setErrorMessage("Failed to delete profile.");

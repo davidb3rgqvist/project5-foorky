@@ -15,7 +15,6 @@ const DashboardPage = () => {
   const [profileData, setProfileData] = useState({});
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({});
-  const [searchQuery, setSearchQuery] = useState("");
   const [alertMessage, setAlertMessage] = useState(null);
 
   useEffect(() => {
@@ -25,9 +24,11 @@ const DashboardPage = () => {
       try {
         setLoading(true);
 
+        // Fetch profile data
         const { data: profile } = await axios.get(`/profiles/${currentUser.profile_id}/`);
         setProfileData(profile);
 
+        // Fetch the user's own recipes
         const { data: recipes } = await axios.get("/recipes/");
         const filteredRecipes = recipes.results.filter(
           (recipe) => recipe.owner === currentUser.username
@@ -35,6 +36,7 @@ const DashboardPage = () => {
         setUserRecipes(filteredRecipes);
         setAllUserRecipes(filteredRecipes);
 
+        // Fetch the user's liked recipes
         await fetchLikedRecipes();
       } catch (error) {
         console.error("Error fetching user data", error);
@@ -43,13 +45,14 @@ const DashboardPage = () => {
       }
     };
 
+    // Fetch liked recipes by the logged-in user from ranked-liked-recipes endpoint
     const fetchLikedRecipes = async () => {
       try {
-        const { data: likes } = await axios.get("/likes/list/", {
+        const { data: likedRecipesData } = await axios.get("/ranked-liked-recipes/", {
           headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
         });
 
-        setLikedRecipes(likes.results);
+        setLikedRecipes(likedRecipesData);
       } catch (error) {
         console.error("Error fetching liked recipes", error);
       }
@@ -121,7 +124,6 @@ const DashboardPage = () => {
         </div>
       )}
 
-      {/* Content displayed after loading */}
       {!loading && (
         <>
           {/* ProfileCard Section */}
@@ -137,12 +139,12 @@ const DashboardPage = () => {
             <FilterSearchCard handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
           </div>
 
-           {/* Success Alert for recipe deletion */}
-            {alertMessage && (
-              <Alert variant="success" onClose={() => setAlertMessage(null)} dismissible>
-                {alertMessage}
-              </Alert>
-            )}
+          {/* Success Alert for recipe deletion */}
+          {alertMessage && (
+            <Alert variant="success" onClose={() => setAlertMessage(null)} dismissible>
+              {alertMessage}
+            </Alert>
+          )}
 
           {/* User's Created Recipes */}
           <div className={styles.RecipesSection}>
@@ -167,7 +169,7 @@ const DashboardPage = () => {
                   <RecipeCard key={recipe.id} recipe={recipe} />
                 ))
               ) : (
-                <p>No recipe found</p>
+                <p>No liked recipes found.</p>
               )}
             </div>
           </div>

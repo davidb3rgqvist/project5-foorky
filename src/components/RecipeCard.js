@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { Alert } from "react-bootstrap";
 import styles from "../styles/RecipeCard.module.css";
@@ -27,17 +27,6 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const handleFlip = () => setIsFlipped(!isFlipped);
   const preventFlip = (e) => e.stopPropagation();
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
-        setIsFlipped(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isFlipped]);
-
   const showAlert = (message, variant) => {
     setAlertMessage(message);
     setAlertVariant(variant);
@@ -61,7 +50,6 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       if (response.status === 201 || response.status === 200) {
         setLikes(likes + 1);
         setIsLiked(true);
-        showAlert("Recipe liked successfully!", "success");
       }
     } catch (error) {
       console.error("Error liking the recipe:", error.response?.data || error.message);
@@ -80,7 +68,6 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       if (response.status === 204) {
         setLikes(likes - 1);
         setIsLiked(false);
-        showAlert("Recipe unliked successfully.", "success");
       }
     } catch (error) {
       console.error("Error unliking the recipe", error.response?.data || error.message);
@@ -97,26 +84,36 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   };
 
   const [comments, setComments] = useState([]);
-  const fetchComments = async () => {
+
+  const fetchComments = useCallback(async () => {
     try {
       const { data } = await axios.get("/comments/");
-
       const filteredComments = data.results.filter(
         (comment) => comment.recipe === recipe.id
       );
-
       setComments(filteredComments);
     } catch (err) {
       console.error("Error fetching comments:", err);
       showAlert("Failed to fetch comments.", "danger");
     }
-  };
+  }, [recipe.id]);
 
   useEffect(() => {
     if (recipe.id) {
       fetchComments();
     }
-  }, [recipe.id]);
+  }, [recipe.id, fetchComments]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
+        setIsFlipped(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [isFlipped]);
 
   const handleAddComment = async (event) => {
     preventFlip(event);
@@ -211,7 +208,6 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       showAlert("Failed to delete the recipe. Please try again.", "danger");
     }
   };
-  
 
   return (
     <div ref={cardRef} className={`${styles.cardContainer}`} onClick={handleFlip}>

@@ -11,15 +11,12 @@ const RecipeFeedPage = () => {
   const [recipes, setRecipes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filters, setFilters] = useState({});
-  const [searchQuery, setSearchQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [nextPage, setNextPage] = useState(null);
   const [hasMore, setHasMore] = useState(true);
   const [alertMessage, setAlertMessage] = useState(null);
   const observerRef = useRef();
 
   const handleSearch = (query, filters) => {
-    setSearchQuery(query);
     setFilters(filters);
     applyFilters(query, filters);
   };
@@ -59,7 +56,6 @@ const RecipeFeedPage = () => {
         const { data } = await axios.get(`/recipes/?page=${currentPage}`);
         setAllRecipes((prevRecipes) => [...prevRecipes, ...data.results]);
         setRecipes((prevRecipes) => [...prevRecipes, ...data.results]);
-        setNextPage(data.next);
         setHasMore(!!data.next);
       } catch (error) {
         console.error(error);
@@ -80,13 +76,14 @@ const RecipeFeedPage = () => {
       }
     });
 
-    if (observerRef.current) {
-      observer.observe(observerRef.current);
+    const currentObserverRef = observerRef.current;
+    if (currentObserverRef) {
+      observer.observe(currentObserverRef);
     }
 
     return () => {
-      if (observerRef.current) {
-        observer.unobserve(observerRef.current);
+      if (currentObserverRef) {
+        observer.unobserve(currentObserverRef);
       }
     };
   }, [loading, hasMore]);
@@ -106,7 +103,7 @@ const RecipeFeedPage = () => {
       <div className={styles.FilterContainer}>
         <FilterSearchCard handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
       </div>
-      
+
       {/* Alert Section */}
       {alertMessage && (
         <Alert variant="success" onClose={() => setAlertMessage(null)} dismissible>
@@ -126,12 +123,12 @@ const RecipeFeedPage = () => {
                 />
               ))
             ) : (
-              <p>No recipes found.</p>
+              <p></p>
             )}
             <div ref={observerRef} className={styles.loaderContainer}>
               {loading && (
                 <Spinner animation="border" role="status">
-                  <span className="sr-only">Loading...</span>
+                  <span className="sr-only"></span>
                 </Spinner>
               )}
             </div>
