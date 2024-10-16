@@ -105,7 +105,7 @@ const DashboardPage = () => {
   };
 
   const handleProfileDelete = () => {
-    window.location.href = "/login";
+    window.location.href = "/";
   };
 
   if (!currentUser) {

@@ -32,7 +32,9 @@ const ProfilePage = () => {
         setAllRecipes(recipeData);
 
         const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
-        const followRecord = followers.find(f => f.owner === currentUser?.username);
+  
+        const followRecord = followers.results.find(f => f.owner === currentUser?.username);
+        console.log(followRecord)
         if (followRecord) {
           setIsFollowing(true);
           setFollowId(followRecord.id);
