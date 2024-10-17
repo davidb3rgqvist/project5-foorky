@@ -12,36 +12,45 @@ const ProfileCard = ({
   onProfileDelete,
   setAlertMessage,
 }) => {
+  // State for handling success and error messages
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  // Get current logged-in user
   const currentUser = useCurrentUser();
   const history = useHistory();
+
+  // State to control editing mode
   const [isEditing, setIsEditing] = useState(false);
+
+  // State for handling updated profile data
   const [updatedProfileData, setUpdatedProfileData] = useState({
     name: profileData.name,
     content: profileData.content,
     image: null,
   });
 
+  // State for handling image preview
   const [imagePreview, setImagePreview] = useState(
-    profileData.image || "/path-to-default/default-profile.jpg",
+    profileData.image || "/path-to-default/default-profile.jpg"
   );
 
+  // Update the image preview when the profile image changes
   useEffect(() => {
-    setImagePreview(
-      profileData.image || "/path-to-default/default-profile.jpg",
-    );
+    setImagePreview(profileData.image || "/path-to-default/default-profile.jpg");
   }, [profileData.image]);
 
+  // Handle file input changes and update the image preview
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setImagePreview(fileURL);
+      setImagePreview(fileURL);  // Show preview of selected image
       setUpdatedProfileData({ ...updatedProfileData, image: file });
     }
   };
 
+  // Handle profile editing and form submission
   const handleEditProfile = async (e) => {
     e.preventDefault();
     setErrorMessage("");
@@ -63,13 +72,13 @@ const ProfileCard = ({
             Authorization: `Bearer ${token}`,
             "Content-Type": "multipart/form-data",
           },
-        },
+        }
       );
-      setSuccessMessage("Profile updated successfully!");
-      onProfileUpdate(response.data);
+      setSuccessMessage("Profile updated successfully!");  // Success message
+      onProfileUpdate(response.data);  // Update profile in parent component
       setIsEditing(false);
       setTimeout(() => {
-        setSuccessMessage("");
+        setSuccessMessage("");  // Clear success message after 3 seconds
       }, 3000);
     } catch (error) {
       console.error("Error updating profile", error);
@@ -77,9 +86,9 @@ const ProfileCard = ({
     }
   };
 
+  // Handle profile deletion
   const handleDeleteProfile = async () => {
-    if (!window.confirm("Are you sure you want to delete your profile?"))
-      return;
+    if (!window.confirm("Are you sure you want to delete your profile?")) return;
     setErrorMessage("");
 
     try {
@@ -88,11 +97,11 @@ const ProfileCard = ({
         headers: { Authorization: `Bearer ${token}` },
       });
       setSuccessMessage("Profile deleted successfully.");
-      onProfileDelete();
+      onProfileDelete();  // Notify parent of profile deletion
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
-      history.push("/");
+      history.push("/");  // Redirect to home after deletion
     } catch (error) {
       console.error("Error deleting profile", error);
       setErrorMessage("Failed to delete profile.");
@@ -102,19 +111,19 @@ const ProfileCard = ({
   return (
     <div className={styles.cardContainer}>
       <Card.Body className={styles.cardBody}>
-        {/* Display error message if any */}
+        {/* Display error or success messages */}
         {errorMessage && (
           <Alert variant="danger" className={styles.errorMessage}>
             {errorMessage}
           </Alert>
         )}
-        {/* Display success message if any */}
         {successMessage && (
           <Alert variant="success" className={styles.successMessage}>
             {successMessage}
           </Alert>
         )}
 
+        {/* Profile information */}
         <div className="text-center">
           <Card.Img
             variant="top"
@@ -128,6 +137,8 @@ const ProfileCard = ({
           <Card.Text className={styles.cardText}>
             {profileData.content || "No bio available"}
           </Card.Text>
+
+          {/* Display profile statistics */}
           <div className={styles.cardStats}>
             <div>
               <strong>{profileData.followers_count}</strong>
@@ -144,6 +155,7 @@ const ProfileCard = ({
           </div>
         </div>
 
+        {/* Allow profile owner to edit or delete the profile */}
         {currentUser?.username === profileData.owner && (
           <div className={buttonStyles.buttonGroup}>
             {isEditing ? (

@@ -1,4 +1,4 @@
-/* Common Form Styles */
+/* Layout for form rows with center alignment and background color */
 .Row {
   display: flex;
   align-items: center;
@@ -8,6 +8,7 @@
   padding-top: 0;
 }
 
+/* Header text styling for forms */
 .Header {
   font-size: 2rem;
   color: #3e7979;
@@ -15,6 +16,7 @@
   margin-bottom: 20px;
 }
 
+/* Input fields styling with rounded corners */
 .Input {
   border-radius: 30px;
   padding: 10px 20px;
@@ -23,11 +25,13 @@
   transition: border 0.3s ease;
 }
 
+/* Focused input field styling */
 .Input:focus {
   border-color: #4F6F52;
   outline: none;
 }
 
+/* Container styling for sign-in/sign-up sections */
 .SignInCol, .SignUpCol {
   background-color: #E8DFCA;
   border-radius: 20px;
@@ -35,12 +39,14 @@
   padding: 30px;
 }
 
+/* Image in the form layout */
 .FillerImage {
   width: 100%;
   height: auto;
   box-shadow: none;
 }
 
+/* Link styling for sign-up/sign-in prompts */
 .Link {
   text-align: center;
   font-size: 1rem;
@@ -52,6 +58,7 @@
   color: #3e7979;
 }
 
+/* Responsive adjustments for smaller screens */
 @media (max-width: 768px) {
   .SignInCol, .SignUpCol {
     border-radius: 0;

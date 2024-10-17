@@ -1,3 +1,4 @@
+/* Profile card styling with shadow and hover effect */
 .profileCard {
   background-color: #ffffff;
   border-radius: 20px;
@@ -8,7 +9,7 @@
   transition: box-shadow 0.3s ease;
 }
 
-/* Profile Information */
+/* Profile info and image styling */
 .profileInfo {
   text-align: center;
   margin-bottom: 20px;
@@ -24,15 +25,18 @@
   transition: transform 0.3s ease;
 }
 
+/* Image hover effect */
 .profileImage:hover {
   transform: scale(1.05);
 }
 
+/* Profile title */
 .profileInfo h4 {
   margin-bottom: 10px;
   font-size: 1.5rem;
 }
 
+/* Profile stats layout */
 .profileStats {
   display: flex;
   justify-content: space-around;
@@ -44,8 +48,7 @@
   text-align: center;
 }
 
-
-/* Recipes Section */
+/* Recipes section and grid layout */
 .recipesSection {
   margin-top: 20px;
 }
@@ -56,22 +59,21 @@
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Loader container */
 .loaderContainer {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-/* Responsive Adjustments */
-
-/* For medium screens (1024px and below) */
+/* Responsive adjustments for medium screens */
 @media (max-width: 1024px) {
   .recipesGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* For small screens (768px and below) */
+/* Responsive adjustments for small screens */
 @media (max-width: 768px) {
   .recipesGrid {
     grid-template-columns: 1fr;

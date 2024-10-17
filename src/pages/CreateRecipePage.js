@@ -8,8 +8,9 @@ import buttonStyles from "../styles/Button.module.css";
 const CreateRecipePage = () => {
   const location = useLocation();
   const recipeToEdit = location.state?.recipe;
-  const isEditMode = !!recipeToEdit;
+  const isEditMode = !!recipeToEdit; // Determine if it's in edit mode
 
+  // State to manage form data, error/success messages, and image preview
   const [formData, setFormData] = useState({
     title: "",
     short_description: "",
@@ -19,12 +20,12 @@ const CreateRecipePage = () => {
     difficulty: "Easy",
     image: null,
   });
-
   const [errorMessage, setErrorMessage] = useState(null);
   const [successMessage, setSuccessMessage] = useState(null);
   const [previewImage, setPreviewImage] = useState(null);
   const history = useHistory();
 
+  // If in edit mode, pre-populate the form with the recipe data
   useEffect(() => {
     if (isEditMode) {
       setFormData({
@@ -34,15 +35,17 @@ const CreateRecipePage = () => {
         steps: recipeToEdit.steps,
         cook_time: recipeToEdit.cook_time,
         difficulty: recipeToEdit.difficulty,
-        image: null,
+        image: null, // Don't pre-load the image
       });
-      setPreviewImage(null);
+      setPreviewImage(null); // Reset preview image
     }
   }, [isEditMode, recipeToEdit]);
 
+  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
 
+    // Limit the short description to 80 characters
     const updatedValue =
       name === "short_description" && value.length > 80
         ? value.slice(0, 77) + "..."
@@ -54,6 +57,7 @@ const CreateRecipePage = () => {
     }));
   };
 
+  // Handle image file selection and set preview
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -61,22 +65,26 @@ const CreateRecipePage = () => {
         ...prevFormData,
         image: file,
       }));
+
+      // Create a file reader to display the image preview
       const reader = new FileReader();
       reader.onloadend = () => {
-        setPreviewImage(reader.result);
+        setPreviewImage(reader.result); // Set the image preview
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(file); // Convert the image file to data URL
     }
   };
 
+  // Handle deleting the selected image
   const handleDeleteImage = () => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      image: null,
+      image: null, // Remove the image from form data
     }));
-    setPreviewImage(null);
+    setPreviewImage(null); // Reset the preview image
   };
 
+  // Clear the form after submission
   const clearForm = () => {
     setFormData({
       title: "",
@@ -87,13 +95,15 @@ const CreateRecipePage = () => {
       difficulty: "Easy",
       image: null,
     });
-    setPreviewImage(null);
+    setPreviewImage(null); // Clear the preview image
   };
 
+  // Handle form submission for creating or editing a recipe
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("authToken");
 
+    // Validate form fields
     if (
       !formData.title ||
       !formData.short_description ||
@@ -107,6 +117,7 @@ const CreateRecipePage = () => {
       return;
     }
 
+    // Prepare the form data for submission
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("title", formData.title);
     formDataToSubmit.append("short_description", formData.short_description);
@@ -114,10 +125,11 @@ const CreateRecipePage = () => {
     formDataToSubmit.append("steps", formData.steps);
     formDataToSubmit.append("cook_time", formData.cook_time);
     formDataToSubmit.append("difficulty", formData.difficulty);
-    if (formData.image) formDataToSubmit.append("image", formData.image);
+    if (formData.image) formDataToSubmit.append("image", formData.image); // Include image if available
 
     try {
       if (isEditMode) {
+        // Update the existing recipe
         await axios.put(`/recipes/${recipeToEdit.id}/`, formDataToSubmit, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -126,7 +138,7 @@ const CreateRecipePage = () => {
         });
         setSuccessMessage("Recipe updated successfully!");
       } else {
-        // Otherwise, create a new recipe
+        // Create a new recipe
         await axios.post("/recipes/", formDataToSubmit, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -138,7 +150,7 @@ const CreateRecipePage = () => {
       setErrorMessage(null);
       clearForm();
       setTimeout(() => {
-        history.push("/recipe-feed");
+        history.push("/recipe-feed"); // Redirect to the recipe feed
       }, 2000);
     } catch (error) {
       setErrorMessage("Failed to save recipe. Please try again.");
@@ -149,6 +161,7 @@ const CreateRecipePage = () => {
   return (
     <Container className={styles.CreateRecipeContainer}>
       <h1>{isEditMode ? "Edit Recipe" : "Create a New Recipe"}</h1>
+      {/* Display error or success messages */}
       {errorMessage && <Alert variant="danger">{errorMessage}</Alert>}
       {successMessage && <Alert variant="success">{successMessage}</Alert>}
 

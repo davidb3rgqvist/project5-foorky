@@ -16,11 +16,13 @@ const RecipeFeedPage = () => {
   const [alertMessage, setAlertMessage] = useState(null);
   const observerRef = useRef();
 
+  // Handle the search and filter functionality
   const handleSearch = (query, filters) => {
     setFilters(filters);
     applyFilters(query, filters);
   };
 
+  // Apply filters and search query to the list of all recipes
   const applyFilters = (query, filters) => {
     let filteredRecipes = [...allRecipes];
 
@@ -57,6 +59,7 @@ const RecipeFeedPage = () => {
     setRecipes(filteredRecipes);
   };
 
+  // Fetch recipes when the component mounts and when the page changes
   useEffect(() => {
     const fetchRecipes = async () => {
       setLoading(true);
@@ -75,6 +78,7 @@ const RecipeFeedPage = () => {
     fetchRecipes();
   }, [currentPage]);
 
+  // Set up infinite scrolling: Load more recipes when the user scrolls to the bottom
   useEffect(() => {
     if (loading || !hasMore) return;
 
@@ -96,6 +100,7 @@ const RecipeFeedPage = () => {
     };
   }, [loading, hasMore]);
 
+  // Handle recipe deletion
   const handleDeleteRecipe = (recipeId) => {
     setRecipes((prevRecipes) =>
       prevRecipes.filter((recipe) => recipe.id !== recipeId),

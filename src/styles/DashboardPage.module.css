@@ -1,36 +1,37 @@
+/* Spacing for Recipes Section */
 .RecipesSection {
   margin-top: 20px;
 }
 
+/* Spacing for Liked Recipes Section */
 .LikedRecipesSection {
   margin-top: 20px;
 }
 
-/* Recipe grid layout */
+/* Recipe Grid Layout - displays recipes in a grid */
 .recipeGrid {
   display: grid;
   gap: 20px;
   grid-template-columns: repeat(3, 1fr);
 }
 
+/* Loader Container - centers the loading spinner */
 .loaderContainer {
   display: flex;
   justify-content: center;
   margin-top: 20px;
 }
 
-/* For medium screens (1024px and below) */
+/* Responsive grid layout for medium screens (1024px and below) */
 @media (max-width: 1024px) {
   .recipeGrid {
     grid-template-columns: repeat(2, 1fr);
   }
 }
 
-/* For small screens (768px and below) */
+/* Responsive grid layout for small screens (768px and below) */
 @media (max-width: 768px) {
   .recipeGrid {
     grid-template-columns: 1fr;
   }
 }
-
-

@@ -1,4 +1,4 @@
-/* Hero Section with Transparent Layer */
+/* Hero Section with a background image and transparent overlay */
 .Hero {
     background-image: url('../assets/foorky-hero.jpg');
     background-size: cover;
@@ -12,6 +12,7 @@
     position: relative;
 }
 
+/* Semi-transparent overlay for the Hero section */
 .Hero::before {
     content: '';
     position: absolute;
@@ -23,12 +24,14 @@
     border-radius: 30px;
 }
 
+/* Container for text content inside Hero */
 .HeroTextContainer {
     position: relative;
     z-index: 2;
     text-align: center;
 }
 
+/* Large, bold text in the Hero section */
 .HeroText {
     font-size: 3rem;
     font-weight: bold;
@@ -37,7 +40,7 @@
     z-index: 2;
 }
 
-/* Adjust HeroText for smaller screens */
+/* Responsive font size adjustments for HeroText */
 @media (max-width: 1200px) {
     .HeroText {
         font-size: 2.5rem;
@@ -63,12 +66,12 @@
     }
 }
 
-
-/* Benefits Section */
+/* Benefits Section styling */
 .BenefitsWrapper {
     padding: 40px 0;
 }
 
+/* Each column in the Benefits section */
 .BenefitColumn {
     text-align: center;
     padding: 20px;
@@ -89,16 +92,15 @@
     margin-top: 10px;
 }
 
-/* Add styles for larger screens */
+/* Layout for Benefits section on larger screens */
 @media (min-width: 768px) {
-    /* Adjust layout for non-swipe mode (if necessary) */
     .BenefitsWrapper {
         display: flex;
         justify-content: space-between;
     }
 }
 
-/* Adjust layout for mobile - swipe section */
+/* Mobile layout - Benefits section becomes swipeable */
 @media (max-width: 768px) {
     .BenefitsWrapper {
         display: flex;
@@ -112,6 +114,7 @@
     }
 }
 
+/* Swipe dots for mobile navigation in the Benefits section */
 .SwipeDots {
     text-align: center;
     margin-top: 20px;
@@ -127,11 +130,12 @@
     cursor: pointer;
 }
 
+/* Active state for swipe dots */
 .SwipeDot.active {
     background-color: #3e7979;
 }
 
-/* About Section */
+/* About section styling */
 .AboutWrapper {
     padding: 40px 0;
 }
@@ -143,7 +147,7 @@
     font-family: 'Permanent Marker', cursive;
 }
 
-/* Footer Section */
+/* Footer section styling */
 .FooterWrapper {
     padding: 40px;
     color: rgb(25, 25, 25);

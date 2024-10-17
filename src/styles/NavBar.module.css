@@ -1,8 +1,10 @@
+/* Navigation bar background and border */
 .NavBar {
   background-color: #7fb9b9;
   border: 1px solid #5c8989;
 }
 
+/* Links in the navigation bar */
 .NavBar a {
   color: #ffffff !important;
   font-size: 1.2rem;
@@ -10,6 +12,7 @@
   vertical-align: middle;
 }
 
+/* Icons in the navigation bar */
 .NavBar i {
   color: #ffffff;
   font-size: 1rem;
@@ -17,16 +20,18 @@
   vertical-align: middle;
 }
 
+/* Hover effect for links */
 .NavBar a:hover {
   text-decoration: underline;
 }
 
+/* Active link styling */
 .NavBar .Active {
   text-decoration: underline;
   font-weight: bold;
 }
 
-
+/* Profile dropdown toggle styling */
 .profileToggle {
   color: #fff;
   background-color: #7fb9b9;
@@ -34,11 +39,12 @@
   border: none;
 }
 
+/* Custom dropdown menu background */
 .customDropdownMenu {
   background-color: #456464;
 }
 
-
+/* Hover effect for dropdown items */
 .customDropdownMenu .dropdown-item:hover {
   background-color: #456464;
 }

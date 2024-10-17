@@ -68,6 +68,7 @@ const DashboardPage = () => {
     fetchUserData();
   }, [currentUser]);
 
+  // Handle search and filtering logic
   const handleSearch = (searchQuery, filters) => {
     let filteredRecipes = [...allUserRecipes];
 
@@ -103,7 +104,8 @@ const DashboardPage = () => {
 
     setUserRecipes(filteredRecipes);
   };
-
+  
+  // Handle recipe deletion 
   const handleDeleteRecipe = (recipeId) => {
     setUserRecipes((prevRecipes) =>
       prevRecipes.filter((recipe) => recipe.id !== recipeId),

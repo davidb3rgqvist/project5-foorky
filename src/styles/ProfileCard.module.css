@@ -1,65 +1,69 @@
+/* Container for the card, with shadow and rounded corners */
 .cardContainer {
-    max-width: 350px;
-    margin: 20px auto;
-    width: 100%;
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    background-color: #fff;
-  }
-  
-  .cardBody {
-    padding: 20px;
-    text-align: center;
-  }
-  
-  .cardImage {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin: 0 auto 20px auto;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .cardTitle {
-    font-size: 1.5rem;
-    color: #2c5555;
-    margin-bottom: 10px;
-  }
-  
-  .cardText {
-    color: #252525;
-    margin-bottom: 15px;
-    font-size: 1rem;
-  }
-  
-  .cardStats {
-    margin-top: 15px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 1.1rem;
-    color: #2c5555;
-  }
-  
-  .cardStats div {
-    text-align: center;
-    flex: 1;
-  }
-  
-  .editForm {
-    margin-top: 20px;
-  }
-  
-  .formControl {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 15px;
-    border-radius: 5px;
-    border: 1px solid #ccc;
-    font-size: 1rem;
-  }
-  
+  max-width: 350px;
+  margin: 20px auto;
+  width: 100%;
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #fff;
+}
 
-  
-  
-  
+/* Styling for the card body */
+.cardBody {
+  padding: 20px;
+  text-align: center;
+}
+
+/* Circular image with shadow and spacing */
+.cardImage {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 20px auto;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Styling for the card title */
+.cardTitle {
+  font-size: 1.5rem;
+  color: #2c5555;
+  margin-bottom: 10px;
+}
+
+/* Text inside the card */
+.cardText {
+  color: #252525;
+  margin-bottom: 15px;
+  font-size: 1rem;
+}
+
+/* Flex layout for the stats section */
+.cardStats {
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 1.1rem;
+  color: #2c5555;
+}
+
+/* Individual stat blocks within cardStats */
+.cardStats div {
+  text-align: center;
+  flex: 1;
+}
+
+/* Form styling for editing a profile */
+.editForm {
+  margin-top: 20px;
+}
+
+/* Form control input field */
+.formControl {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 1rem;
+}

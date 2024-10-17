@@ -10,12 +10,15 @@ import {
 import axios from "axios";
 
 const NavBar = () => {
+  // Context to manage current user state
   const currentUser = useContext(CurrentUserContext);
   const setCurrentUser = useContext(SetCurrentUserContext);
   const history = useHistory();
 
+  // State to control the navbar's expanded/collapsed state
   const [expanded, setExpanded] = useState(false);
 
+  // Function to handle user sign out
   const handleSignOut = async () => {
     try {
       await axios.post("/dj-rest-auth/logout/");
@@ -29,6 +32,7 @@ const NavBar = () => {
     }
   };
 
+  // Links and options for logged-in users
   const loggedInIcons = (
     <>
       <NavLink
@@ -72,6 +76,7 @@ const NavBar = () => {
     </>
   );
 
+  // Links and options for logged-out users
   const loggedOutIcons = (
     <>
       <NavLink
@@ -118,6 +123,7 @@ const NavBar = () => {
         />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="ml-auto text-left">
+            {/* Display different icons based on whether the user is logged in or out */}
             {currentUser ? loggedInIcons : loggedOutIcons}
           </Nav>
         </Navbar.Collapse>

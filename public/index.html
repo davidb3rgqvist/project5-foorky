@@ -1,58 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
+    <!-- Define the character encoding for the document -->
     <meta charset="utf-8" />
+
+    <!-- Link to the favicon for the webpage -->
     <link rel="icon" href="%PUBLIC_URL%/favicon.png" />
+
+    <!-- Ensure the website is responsive on mobile devices -->
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- Set the theme color for supported browsers -->
     <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
+
+    <!-- Description for search engines and social media sharing -->
+    <meta name="description" content="Web site created using create-react-app" />
+
+    <!-- Apple icon for mobile devices -->
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <!--
-      manifest.json provides metadata used when your web app is installed on a
-      user's mobile device or desktop. See https://developers.google.com/web/fundamentals/web-app-manifest/
-    -->
+
+    <!-- Bootstrap CSS for styling the website using Bootstrap classes -->
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css"
       integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l"
       crossorigin="anonymous"
     />
+
+    <!-- Web app manifest to support adding the site to mobile homescreens -->
     <link
       rel="manifest"
       href="%PUBLIC_URL%/manifest.json"
       crossorigin="use-credentials"
     />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Vollkorn:ital,wght@0,400..900;1,400..900&family=Permanent+Marker&display=swap" rel="stylesheet">
 
-    <script src="https://kit.fontawesome.com/3ed2cfcb7f.js" crossorigin="anonymous"></script>
-    <!--
-      Notice the use of %PUBLIC_URL% in the tags above.
-      It will be replaced with the URL of the `public` folder during the build.
-      Only files inside the `public` folder can be referenced from the HTML.
+    <!-- Preconnect to Google's font service to improve load performance -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 
-      Unlike "/favicon.ico" or "favicon.ico", "%PUBLIC_URL%/favicon.ico" will
-      work correctly both with client-side routing and a non-root public URL.
-      Learn how to configure a non-root public URL by running `npm run build`.
-    -->
+    <!-- Google fonts used in the app (Roboto, Vollkorn, Permanent Marker) -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900&family=Vollkorn:ital,wght@0,400..900;1,400..900&family=Permanent+Marker&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome icons for usage throughout the website -->
+    <script
+      src="https://kit.fontawesome.com/3ed2cfcb7f.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <!-- Title of the webpage -->
     <title>Foorky</title>
   </head>
+
   <body>
+    <!-- Warning message for users without JavaScript enabled -->
     <noscript>You need to enable JavaScript to run this app.</noscript>
+
+    <!-- Root div where the React app will be injected -->
     <div id="root"></div>
+
     <!--
-      This HTML file is a template.
-      If you open it directly in the browser, you will see an empty page.
+      This is a template HTML file for React.
 
-      You can add webfonts, meta tags, or analytics to this file.
-      The build step will place the bundled scripts into the <body> tag.
+      JavaScript code will be injected into the <div id="root"></div> by React.
+      It won't display anything if you open this file directly in the browser.
 
-      To begin the development, run `npm start` or `yarn start`.
-      To create a production bundle, use `npm run build` or `yarn build`.
+      To start development, run `npm start` or `yarn start`.
+      For production, run `npm run build` or `yarn build`.
     -->
   </body>
 </html>

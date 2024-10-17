@@ -1,3 +1,4 @@
+/* Card container for the filter and search section */
 .FilterSearchCard {
   background-color: #ffffff;
   border-radius: 20px;
@@ -6,41 +7,45 @@
   padding: 15px;
 }
 
+/* Header section of the filter with controls aligned */
 .FilterHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Style for arrow and clear buttons inside the filter header */
 .FilterHeader .arrowButton, 
 .FilterHeader .ClearButton {
   display: inline-block;
   margin-right: 10px;
 }
 
+/* Clear button styling */
 .ClearButton {
   background-color: #f5f5f5;
   color: #333;
   border: 1px solid #ddd;
 }
 
+/* Spacing for search input and filters */
 .SearchInput, .Filters {
   margin-top: 15px;
 }
 
-/* Default filter layout */
+/* Filter layout - flexible horizontal arrangement */
 .Filters {
   display: flex;
   justify-content: space-between;
 }
 
-/* Flex for the form-group items in filters */
+/* Each filter form-group gets flex space */
 .Filters .form-group {
   flex: 1;
   margin-right: 10px;
 }
 
-/* Remove right margin for the last filter element */
+/* Remove right margin from the last filter item */
 .Filters .form-group:last-child {
   margin-right: 0;
 }
@@ -52,12 +57,12 @@
 
 /* Mobile styles */
 @media (max-width: 768px) {
+  /* Adjust filter header layout for mobile */
   .FilterHeader {
     flex-direction: row;
     justify-content: space-between;
     width: 100%;
   }
-  
 
   /* Stack filters vertically on mobile */
   .Filters {
@@ -65,22 +70,23 @@
     gap: 10px;
   }
 
-  /* Remove the right margin from form-groups since they are stacked */
+  /* Remove margin on stacked filter form-groups */
   .Filters .form-group {
     margin-right: 0;
   }
 
+  /* Full-width search input for mobile */
   .SearchInput {
     width: 100%;
   }
 
-  /* Adjust the button width for mobile */
+  /* Full-width button for mobile */
   .Button {
     width: 100%;
     margin-top: 15px;
   }
 
-  /* Align the Clear and Arrow buttons */
+  /* Adjust button alignment and margins */
   .FilterHeader .arrowButton,
   .FilterHeader .ClearButton {
     width: auto;

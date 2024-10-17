@@ -1,70 +1,236 @@
-# Getting Started with Create React App
+# Foorky 2.0 - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Foorky 2.0** is an advanced full-stack web application designed to help users manage and share their favorite recipes. This frontend serves as the user interface for interacting with the Foorky backend API, enabling users to browse, create, and manage recipes, follow other users, like recipes, and leave comments.
 
-## Available Scripts
+[Deployed app](https://foorky-fe-79ffc00345fc.herokuapp.com/)
+[Repository](https://github.com/davidb3rgqvist/project5-foorky)
 
-In the project directory, you can run:
+![Responsive-test](src/assets/doc/responsive-test.png)
 
-### `npm start`
+## Table of Contents
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- [Project Overview](#project-overview)
+- [UX Design](#ux-design)
+- [Key Features](#key-features)
+- [Future Features](#Future-features)
+- [Technology Stack](#technology-stack)
+- [Installation](#installation)
+- [Usage](#usage)
+- [API Integration](#api-integration)
+- [Responsive Design](#responsive-design)
+- [Testing](#testing)
+- [Deployment](#deployment)
+- [Credits](#credits)
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Project Overview
 
-### `npm test`
+The frontend of **Foorky 2.0** is built using **React.js** and **React Bootstrap**, following best practices in component-based architecture. This frontend is designed to be scalable, modular, and efficient, making use of reusable components and ensuring an excellent user experience across multiple devices.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The frontend connects to the **Foorky 2.0** backend, which is a Django REST API, using secure authentication mechanisms and performs all operations like recipe creation, management, and user interactions.
 
-### `npm run build`
+## UX Design
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## UX - Five Planes
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Strategy:
+Foorky 2.0 is a full-stack recipe management platform designed to make storing and discovering culinary recipes seamless for both amateur cooks and professional chefs. The platform focuses on delivering a user-friendly experience while fostering community engagement through collaboration, interaction, and recipe sharing.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+**User Goals:**
+- **Recipe Organization**: Users want an efficient and intuitive system for storing, categorizing, and retrieving their recipes.
+- **Easy Access and Management**: Users seek a simple way to access and manage their recipes anytime, with convenient tools for updates and edits.
+- **Community and Collaboration**: Users want to share recipes, get feedback, and interact with other users in the culinary community.
 
-### `npm run eject`
+**Owner Goals:**
+- **User Engagement**: Create an engaging, feature-rich platform that retains users and keeps them coming back to explore and contribute.
+- **Community Growth**: Foster an environment where users can build a community around their culinary interests, collaborating through recipes and discussions.
+- **Platform Expansion**: Ensure steady platform growth by delivering value and satisfaction, attracting new users, and maintaining a loyal user base.
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### Scope:
+**Core Features:**
+- **Recipe Management**: Users can add, update, categorize, and delete recipes in their personal collection.
+- **Social Features**: Provide options to follow other users, like recipes, and leave comments.
+- **Search and Filter**: Allow users to find recipes based on keywords, categories, difficulty, or cooking time.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+**Additional Features:**
+- **Recipe Sharing**: Enable users to share their favorite recipes with friends and other users.
+- **Customization**: Users can add personal notes, like, and save favorite recipes for quick access in the dashboard.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Structure:
+**Core Pages:**
+- **Recipe Dashboard**: A hub for users to view and manage their recipe collections, with quick access to their created recipes, and liked recipes.
+- **Recipe Entry Form**: A structured, user-friendly form for adding new recipes, with fields for title, ingredients, instructions, and images.
+- **Search and Filter**: Advanced search and filter options help users navigate recipes by various categories (e.g., difficulty, cook time, rating).
+- **Recipe Details**: A detailed view of a recipe, including ingredients, steps, user comments, and the option to like or share.
+- **Profile Pages**: Each user has a profile displaying their created recipes, follower count, and other user information.
+  
+**Key Interactions:**
+- **Create Recipe Button**: Allows users to initiate the process of adding a new recipe.
+- **Edit/Delete Recipe**: Users can easily edit or delete recipes from a recipe card.
+- **Follow Users**: Users can follow other culinary enthusiasts.
+- **Like and Comment on Recipes**: Social interaction features to engage with content from other users.
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+### Skeleton:
+- **Create Recipe Flow**: A clear, step-by-step process with easy navigation for adding a new recipe, including fields for title, ingredients, steps, and an image.
+- **Dashboard Layout**: A responsive grid layout that allows users to easily navigate between their created and liked recipes.
+- **Search Bar and Filters**: At the top of the recipe dashboard, a search bar allows for quick lookups, while advanced filters enable recipe sorting by category, cooking time, and more.
+- **Recipe Cards**: Each recipe is presented as a card with a title, image on the front. When flipped user find the instruction and interaction buttons (like, comment, etc.) for intuitive engagement.
+- **Like/Comment Actions**: Each recipe card features buttons to like, comment the recipe.
 
-## Learn More
+### Surface:
+- **Modern UI Design**: The overall visual design uses clean, flat design principles with an emphasis on readability, intuitive interactions, and an aesthetically pleasing user experience.
+- **Color Scheme**: The color palette features earthy tones like green, white, and beige, creating a calming, inviting atmosphere.
+- **Typography**: Roboto and Vollkorn fonts are used to combine modern and classic aesthetics, enhancing readability and creating a professional yet friendly feel.
+  
+**Key Visual Components:**
+- **Hero Section**: A large hero section on the homepage welcoming users and featuring a call-to-action to sign-up.
+- **Buttons and CTAs**: Rounded buttons with hover effects guide users through key actions like creating, liking, and sharing recipes.
+- **Mobile Responsiveness**: The entire interface is designed to scale and adapt fluidly across devices, ensuring a smooth experience on desktops, tablets, and mobile devices.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Key Features
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+- **User Authentication**: Secure login, logout, and registration using JWT tokens.
+- **Recipe Management**: Full CRUD (Create, Read, Update, Delete) functionality for managing user recipes.
+- **Comments and Likes**: Users can comment on recipes and like them.
+- **Followers and Following**: Users can follow other users to view their recipes and grow their network of culinary enthusiasts.
+- **Responsive Design**: The application works smoothly on various devices, from desktops to mobile phones.
+- **Search and Filtering**: Users can search for recipes by keyword and filter them based on difficulty, cook time, and other parameters.
+- **Profile Management**: Users can update their profiles, upload profile pictures, and view profiles of other users.
 
-### Code Splitting
+## Future Features
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+The Foorky 2.0 frontend has a robust set of features, but there are several enhancements that could be added in future iterations to improve user experience and engagement:
 
-### Analyzing the Bundle Size
+- **Notification System for Followers**: Implement a feature where users receive notifications when someone they follow creates a new recipe. This would help drive engagement and keep users updated on their favorite chefs' latest creations.
+- **Recipe Rating System**: Allow users to rate recipes on a scale (e.g., 1 to 5 stars), providing more granular feedback in addition to likes.
+- **Social Sharing Options**: Add buttons that allow users to easily share their favorite recipes on social media platforms such as Facebook, Twitter, and Instagram.
+- **Recipe Video Integration**: Enable users to upload short video clips along with their recipes, offering step-by-step instructions in a visual format.
+- **Dark Mode**: Introduce a dark mode option to enhance user accessibility and allow for a more comfortable viewing experience, especially at night.
+- **Saved Recipes Feature**: Allow users to bookmark or "save" their favorite recipes to a personal collection for easy access later.
+- **Advanced Search Filters**: Expand the filtering options to include more parameters such as dietary preferences (vegan, gluten-free, etc.), cuisine type, and preparation time.
+- **In-app Messaging**: Create a feature where users can message each other to share tips, collaborate on recipes, or discuss culinary ideas.
+- **Weekly Recipe Suggestions**: Based on user preferences and previous interactions, the app could suggest new recipes weekly, tailoring suggestions to user tastes and cooking habits.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Technology Stack
 
-### Making a Progressive Web App
+- **React.js**: Main framework for building the frontend interface.
+- **React Bootstrap**: For UI components and styling.
+- **Axios**: For handling API requests.
+- **React Router**: For managing client-side routing.
+- **CSS Modules**: For scoped and maintainable styling.
+- **Font Awesome**: For icons and UI enhancements.
+- **Context API**: For global state management, including user authentication and profile data.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Installation
 
-### Advanced Configuration
+### 1. Clone the Repository
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+git clone https://github.com/yourusername/foorky-2.0-frontend.git
+cd foorky-2.0-frontend
 
-### Deployment
+### 2. Install Dependencies
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Ensure you have Node.js installed, then install the required dependencies:
 
-### `npm run build` fails to minify
+npm install
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### 3. Set Up Environment Variables
+
+Create a `.env` file in the root directory and add the following environment variables:
+
+REACT_APP_BACKEND_URL=https://your-backend-url
+REACT_APP_CLOUDINARY_URL=cloudinary://your-cloudinary-api-key
+REACT_APP_AUTH_TOKEN_KEY=my-app-auth
+
+### 4. Run the Development Server
+
+Once the installation is complete, you can start the app:
+
+npm start
+
+## Usage
+
+- **Login or Sign up**: Users need to sign in or register to create recipes, follow other users, and leave comments.
+- **Create Recipes**: After logging in, users can create and manage their own recipes, including adding ingredients, steps, and images.
+- **Search and Filter**: Use the search bar and filtering options to find recipes based on keywords, difficulty level, or cook time.
+- **View Profiles**: Users can view their own profiles or visit other users' profiles to see their recipes and follow them.
+- **Like and Comment*: Interact with the community by liking recipes and leaving comments.
+
+## API Integration
+
+The frontend communicates with the backend via the Foorky 2.0 API. All data is fetched using `axios` with secure JWT token authentication. Key API endpoints include:
+
+- **Authentication**: `/dj-rest-auth/login/`, `/dj-rest-auth/logout/`, `/dj-rest-auth/registration/`
+- **Recipes**: `/recipes/` (GET, POST, PUT, DELETE)
+- **Profiles**: `/profiles/` (GET, PUT)
+- **Likes**: `/likes/` (POST, DELETE)
+- **Followers**: `/followers/` (POST, DELETE)
+
+The backend uses Django REST Framework, and more details about the endpoints can be found in the backend README.
+
+## Responsive Design
+
+The frontend is designed with responsiveness in mind, ensuring it works seamlessly across:
+
+- **Desktop**: Full-width views with multi-column layouts.
+- **Tablet**: Adjusts to two-column layouts.
+- **Mobile**: Single-column layout with full access to all features.
+
+CSS media queries are used to adapt layouts for different screen sizes.
+
+## Testing
+
+### Manual Testing
+
+Manual testing was performed to ensure all components work as expected. Some of the key tests include:
+
+- **Login/Logout**: Ensure users can log in, and the authentication state is preserved across sessions.
+- **Recipe Creation**: Verify that users can create, edit, and delete recipes.
+- **Profile Updates**: Ensure users can update their profile information, including uploading profile images.
+- **Recipe Search and Filters**: Test that the search and filtering functionalities return the expected results.
+
+For a detailed list of tests and their results, see the Manual Testing Table.
+
+| **Test ID** | **Feature/Component**         | **Test Description**                                                    | **Steps to Perform**                                                                                                                                          | **Expected Outcome**                                                                                                           | **Status**   |
+|-------------|-------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|--------------|
+| **T1**      | Navigation Bar                | Verify navigation links and sign-out functionality                      | 1. Click on each navigation link.<br>2. Verify the active link is highlighted.<br>3. Test the sign-out button when logged in.                                  | Navigation works correctly, active link is highlighted, and user is signed out when "Sign Out" is clicked.                    | Pass         |
+| **T2**      | Login/Sign-up Page            | Validate login and sign-up functionality                                | 1. Enter valid credentials for login.<br>2. Enter invalid credentials for login.<br>3. Repeat similar tests for sign-up.                                       | Valid credentials successfully log in, invalid credentials show error messages, sign-up creates a new account.                 | Pass         |
+| **T3**      | Profile Page                  | Check profile update functionality                                      | 1. Navigate to the profile page.<br>2. Edit user details (e.g., name, image) and save.<br>3. Verify the changes.                                               | Profile is updated with the new details and reflected on the page.                                                             | Pass         |
+| **T4**      | Recipe Creation Page          | Test creating a new recipe                                               | 1. Fill in the recipe form with valid data.<br>2. Submit the form.<br>3. Check the recipe feed for the new recipe.                                              | Recipe is successfully created and appears in the recipe feed.                                                                | Pass         |
+| **T5**      | Recipe Deletion               | Test deleting a recipe                                                   | 1. Create a test recipe.<br>2. Click delete on the test recipe.<br>3. Verify it is removed from the recipe feed.                                                | Recipe is successfully deleted from the feed and no longer displayed.                                                         | Pass         |
+| **T6**      | Recipe Filter/Search          | Validate filtering and searching recipes                                 | 1. Enter a keyword in the search bar.<br>2. Apply filters (e.g., cook time, difficulty).<br>3. Verify results update accordingly.                              | Search results reflect the keyword, filters are applied correctly, and only matching recipes are displayed.                   | Pass         |
+| **T7**      | Liked Recipes                 | Verify the "like" and "unlike" functionality on recipes                  | 1. Navigate to a recipe.<br>2. Click the "Like" button.<br>3. Refresh the page and verify the like is persisted.<br>4. Unlike the recipe and refresh the page. | The recipe is correctly liked, persisted after refresh, and unliked when the "Unlike" button is clicked.                      | Pass         |
+| **T8**      | Follow/Unfollow Users         | Test following/unfollowing other users                                   | 1. Navigate to another user's profile.<br>2. Click the "Follow" button.<br>3. Check that the follower count increases.<br>4. Unfollow and check again.         | User is successfully followed/unfollowed, and follower count is updated accordingly.                                           | Pass         |
+| **T9**      | Form Validation               | Validate form error messages and field requirements                      | 1. Try submitting forms (login, sign-up, recipe creation) with empty fields.<br>2. Check for error messages.<br>3. Enter invalid data in form fields.          | Error messages are shown for empty or invalid fields, and form submission is blocked if requirements are not met.             | Pass         |
+| **T10**     | Responsive Design             | Test responsiveness across multiple screen sizes (mobile, tablet, desktop)| 1. Resize the browser window.<br>2. Check if the layout adjusts correctly (e.g., navigation bar, recipe grid).                                                  | The layout adapts to different screen sizes (e.g., grid becomes 1 column on small screens), and no elements are misaligned.   | Pass         |
+| **T11**     | Image Upload                  | Verify image upload functionality during recipe or profile creation      | 1. Open the recipe creation form or profile page.<br>2. Upload an image.<br>3. Check if the image is displayed as a preview and uploaded successfully.         | Image is previewed correctly, and it uploads without errors.                                                                 | Pass         |
+| **T12**     | Alerts and Notifications      | Check success/error messages for actions (e.g., creating recipes, following) | 1. Perform an action (e.g., create a recipe, follow a user).<br>2. Observe the success or error message displayed.<br>3. Dismiss the alert.                    | The correct success or error message is displayed and can be dismissed after the action is performed.                         | Pass         |
+| **T13**     | Pagination                    | Validate the pagination mechanism on recipe feed                         | 1. Scroll down the recipe feed.<br>2. Check that more recipes load automatically when scrolling reaches the bottom.                                             | More recipes are loaded as the user scrolls, and no excessive delays occur.                                                   | Pass         |
+
+## Deployment
+
+The frontend can be deployed to platforms like Netlify, Vercel, or any static hosting service that supports React.
+
+### Steps to Deploy to Netlify
+
+1. **Connect the GitHub repository**: In your Netlify account, create a new project and link it to your GitHub repo.
+2. **Set build command**: Set the build command to `npm run build`.
+3. **Set environment variables**: Add the same environment variables from your `.env` file in the Netlify dashboard.
+4. **Deploy**: Once everything is set up, trigger a deploy.
+
+### Steps to Deploy to Vercel
+
+1. **Connect the GitHub repository**: In your Vercel account, create a new project and link it to your GitHub repo.
+2. **Set build command**: Set the build command to `npm run build`.
+3. **Set environment variables**: Add the same environment variables from your `.env` file in the Vercel dashboard.
+4. **Deploy**: Trigger a deploy, and Vercel will handle the rest.
+
+## Credits
+
+- **React**: For providing the core structure of this web app.
+- **React Bootstrap**: For creating a clean and responsive UI.
+- **Django REST Framework**: For the backend API.
+- **Cloudinary**: For handling image uploads and hosting.
+- **Netlify/Vercel**: For deployment support.
+- **Font Awesome**: For icons used throughout the app.
+
+This project is open-source and developed with the help of various tutorials, community contributions, and collaborative efforts. Special thanks to mentors and online resources that helped bring Foorky 2.0 to life.

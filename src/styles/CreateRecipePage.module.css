@@ -1,4 +1,4 @@
-/* Create Recipe Form Styles */
+/* Create Recipe Form Container - main form layout */
 .CreateRecipeContainer {
   max-width: 600px;
   margin: 0 auto;
@@ -8,15 +8,18 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Form Group - spacing between form fields */
 .FormGroup {
   margin-bottom: 15px;
 }
 
+/* Form Label - styling for labels */
 .FormLabel {
   color: #1A4D2E;
   font-weight: bold;
 }
 
+/* Form Control - styling for form input fields */
 .FormControl {
   padding: 10px 15px;
   border-radius: 30px;
@@ -25,12 +28,13 @@
   transition: border 0.3s ease;
 }
 
+/* Form Control focus effect - change border color when input is focused */
 .FormControl:focus {
   border-color: #4F6F52;
   outline: none;
 }
 
-/* Image Preview */
+/* Image Preview Section - for previewing uploaded images */
 .imagePreviewContainer {
   display: flex;
   flex-direction: column;
@@ -39,6 +43,7 @@
   margin-top: 15px;
 }
 
+/* Image Preview - styles for the previewed image */
 .imagePreview {
   width: 100%;
   max-width: 400px;
@@ -48,17 +53,18 @@
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
 }
 
+/* Container for buttons below the image preview */
 .imagePreviewButtonContainer {
   margin-top: 10px;
 }
 
-/* Responsive Design */
+/* Responsive Design - adjustments for mobile view */
 @media (max-width: 768px) {
   .CreateRecipeContainer {
-    padding: 20px;
+    padding: 20px; /* Reduce padding on smaller screens */
   }
 
   .FormControl {
-    padding: 8px 15px;
+    padding: 8px 15px; /* Smaller padding for inputs on mobile */
   }
 }

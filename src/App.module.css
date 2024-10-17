@@ -1,4 +1,4 @@
-
+/* General app styling */
 .App {
   font-family: "Roboto", sans-serif;
   background-color: #F5EFE6;
@@ -8,28 +8,32 @@
   padding-bottom: 20px;
 }
 
+/* Main content section with padding for spacing */
 .Main {
   padding-top: 80px;
 }
 
+/* Universal box-sizing for consistent layout */
 * {
   box-sizing: border-box;
 }
 
+/* Headings with color styling */
 h1, h2, h3, h4, h5, h6 {
-  /* font-family: 'Vollkorn', serif; */
   color: #2c5555;
 }
 
+/* Stronger font-weight for main heading */
 h1 {
   font-weight: 700;
 }
 
+/* Lighter font-weight for sub-headings */
 h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
 
-
+/* Content container with shadow, padding, and rounded corners */
 .Content {
   background-color: #ffffff;
   padding: 30px;
@@ -39,6 +43,7 @@ h2, h3, h4, h5, h6 {
   margin: auto;
 }
 
+/* Responsive content width for medium screens */
 @media (min-width: 768px) {
   .Content {
     max-width: 500px;
@@ -46,6 +51,7 @@ h2, h3, h4, h5, h6 {
   }
 }
 
+/* Image filler styling */
 .FillerImage {
   object-fit: cover;
   height: 100%;
@@ -53,6 +59,7 @@ h2, h3, h4, h5, h6 {
   border-radius: 15px;
 }
 
+/* Image styling with a maximum height, full width, and rounded corners */
 .Image {
   max-height: 40vh;
   max-width: 100%;
@@ -60,6 +67,7 @@ h2, h3, h4, h5, h6 {
   border-radius: 10px;
 }
 
+/* Link styling with hover effect */
 a {
   color: #555555;
   transition: color 0.3s ease-in-out;
@@ -69,10 +77,12 @@ a:hover {
   text-decoration: underline;
 }
 
+/* Hides file input element */
 input[type="file"] {
   display: none;
 }
 
+/* Icon styling */
 i {
   color: #cfced3;
   font-size: 1.6rem;
@@ -80,33 +90,32 @@ i {
   vertical-align: middle;
 }
 
-/* i:hover {
-  cursor: pointer;
-} */
-
-
+/* Alert message container styling */
 .alertMessage {
   margin: 10px 0;
   padding: 10px;
   border-radius: 5px;
 }
 
+/* Success message styling */
 .successMessage {
   background-color: #d4edda;
   color: #155724;
 }
 
+/* Error message styling */
 .errorMessage {
   background-color: #f8d7da;
   color: #721c24;
 }
 
-
+/* Figure element styling for images */
 figure {
   text-align: center;
   display: inline-block;
 }
 
+/* Scrollbar styling for WebKit browsers */
 *::-webkit-scrollbar {
   width: 5px;
 }

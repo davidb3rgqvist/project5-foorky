@@ -24,17 +24,20 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        // Fetch profile data
         const { data: profileData } = await axios.get(
           `/profiles/${profileId}/`,
         );
         setProfile(profileData);
 
+        // Fetch recipes created by the profile owner
         const { data: recipeData } = await axios.get(
           `/recipes/by_profile/?profile_id=${profileId}`,
         );
         setRecipes(recipeData);
         setAllRecipes(recipeData);
 
+        // Fetch followers to check if the current user is following this profile
         const { data: followers } = await axios.get(
           `/followers/?followed=${profileId}`,
         );
@@ -60,6 +63,7 @@ const ProfilePage = () => {
     fetchProfileData();
   }, [profileId, currentUser]);
 
+  // Handle search and filter logic for recipes
   const handleSearch = (searchQuery, filters) => {
     let filteredRecipes = [...allRecipes];
 
@@ -96,6 +100,7 @@ const ProfilePage = () => {
     setRecipes(filteredRecipes);
   };
 
+  // Follow the profile
   const handleFollow = async () => {
     if (isFollowing) {
       console.log("Already following this user");
@@ -131,6 +136,7 @@ const ProfilePage = () => {
     }
   };
 
+  // Unfollow the profile
   const handleUnfollow = async () => {
     if (!isFollowing) {
       console.log("Not following this user yet");
@@ -164,6 +170,7 @@ const ProfilePage = () => {
     }
   };
 
+  // Toggle between follow and unfollow
   const handleToggleFollow = () => {
     if (isFollowing) {
       handleUnfollow();
