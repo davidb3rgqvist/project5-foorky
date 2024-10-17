@@ -28,8 +28,8 @@ const ProfileCard = ({
     name: profileData.name || "",
     content: profileData.content || "",
     image: null,
-    email: profileData.email || "",
-    age: profileData.age || "",
+    email: profileData.email || "",  // Email is optional
+    age: profileData.age || "",      // Age is optional
   });
 
   // State for handling image preview
@@ -47,7 +47,7 @@ const ProfileCard = ({
     const file = e.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setImagePreview(fileURL); // Show preview of selected image
+      setImagePreview(fileURL);  // Show preview of selected image
       setUpdatedProfileData({ ...updatedProfileData, image: file });
     }
   };
@@ -255,9 +255,8 @@ const ProfileCard = ({
                 </Button>
                 <Button
                   onClick={() => setIsEditing(false)}
-                  className={
-                    `${buttonStyles.cardButton} ${buttonStyles.cancelButton}`
-                  }>
+                  className={`${buttonStyles.cardButton} ${buttonStyles.cancelButton}`}
+                >
                   Cancel
                 </Button>
               </form>
@@ -271,9 +270,8 @@ const ProfileCard = ({
                 </Button>
                 <Button
                   onClick={handleDeleteProfile}
-                  className={
-                    `${buttonStyles.cardButton} ${buttonStyles.cardButton}`
-                  }>
+                  className={`${buttonStyles.cardButton} ${buttonStyles.cancelButton}`}
+                >
                   Delete Profile
                 </Button>
               </>
