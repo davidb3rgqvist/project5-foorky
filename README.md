@@ -2,8 +2,13 @@
 
 **Foorky 2.0** is an advanced full-stack web application designed to help users manage and share their favorite recipes. This frontend serves as the user interface for interacting with the Foorky backend API, enabling users to browse, create, and manage recipes, follow other users, like recipes, and leave comments.
 
-[Deployed app](https://foorky-fe-79ffc00345fc.herokuapp.com/)
-[Repository](https://github.com/davidb3rgqvist/project5-foorky)
+[Deployed app](https://foorky-fe-79ffc00345fc.herokuapp.com)
+
+[Deployed backend api](https://project5-api-a299de19cbb3.herokuapp.com)
+
+[Repository Frontend](https://github.com/davidb3rgqvist/project5-foorky)
+
+[Repository Backend](https://github.com/davidb3rgqvist/project5_api)
 
 ![Responsive-test](src/assets/doc/responsive-test.png)
 
@@ -74,15 +79,19 @@ Foorky 2.0 is a full-stack recipe management platform designed to make storing a
 - **Recipe Cards**: Each recipe is presented as a card with a title, image on the front. When flipped user find the instruction and interaction buttons (like, comment, etc.) for intuitive engagement.
 - **Like/Comment Actions**: Each recipe card features buttons to like, comment the recipe.
 
+![Wireframe](src/assets/doc/wireframe.png)
+
 ### Surface:
 - **Modern UI Design**: The overall visual design uses clean, flat design principles with an emphasis on readability, intuitive interactions, and an aesthetically pleasing user experience.
 - **Color Scheme**: The color palette features earthy tones like green, white, and beige, creating a calming, inviting atmosphere.
 - **Typography**: Roboto and Vollkorn fonts are used to combine modern and classic aesthetics, enhancing readability and creating a professional yet friendly feel.
-  
+
 **Key Visual Components:**
 - **Hero Section**: A large hero section on the homepage welcoming users and featuring a call-to-action to sign-up.
 - **Buttons and CTAs**: Rounded buttons with hover effects guide users through key actions like creating, liking, and sharing recipes.
 - **Mobile Responsiveness**: The entire interface is designed to scale and adapt fluidly across devices, ensuring a smooth experience on desktops, tablets, and mobile devices.
+
+![Visual ID](src/assets/doc/foorky_2_0_VI.png)
 
 ## Key Features
 
@@ -176,16 +185,41 @@ CSS media queries are used to adapt layouts for different screen sizes.
 
 ## Testing
 
+Testing was an integral part of the website development process. We performed comprehensive tests across various devices and screen sizes to ensure a seamless user experience. This included functional testing to verify proper functionality of all features, as well as responsive testing to guarantee optimal display on different devices. Additionally, we performed several manual tests.
+
+- ![Responsiveness overview](src/assets/doc/responsive-test.png)
+- ![Manual testing table](testing.md)
+- ![HTML validation](src/assets/doc/html_validation.png)
+- ![Lighthouse Performance Test](src/assets/doc/lighthouse-test.png)
+
+### Known Issues
+
+#### 1. PostCSS Vulnerability
+- **Details**: There is a known issue with the PostCSS package causing vulnerabilities related to parsing errors.
+- **Impact**: This could potentially lead to performance issues or security vulnerabilities.
+- **Workaround**: We are unable to update to the latest version due to breaking changes, but we are monitoring for any patches or updates.
+
+#### 2. Resolve URL Loader
+- **Details**: The Resolve URL Loader package uses vulnerable versions of PostCSS.
+- **Impact**: It might cause minor performance and functionality issues when resolving URLs.
+- **Workaround**: We are leaving this as is until it becomes compatible with newer dependencies.
+
+#### 3. Yargs Parser Vulnerability
+- **Details**: Yargs Parser has a prototype pollution vulnerability.
+- **Impact**: This is a potential security issue.
+- **Workaround**: We're waiting for a stable version that resolves this issue without causing breaking changes in our project.
+
+#### 4. Outdated ESLint
+- **Details**: Our project uses an older version of ESLint, which is no longer officially supported.
+- **Impact**: Some newer JavaScript features may not be fully supported.
+- **Workaround**: We are planning to upgrade once all breaking dependencies are resolved.
+
+#### How to Address These Issues
+For each of the vulnerabilities, the project maintainers are monitoring updates to the libraries in use. Manual patches and safe fallbacks have been implemented where possible.
+
 ### Manual Testing
 
 Manual testing was performed to ensure all components work as expected. Some of the key tests include:
-
-- **Login/Logout**: Ensure users can log in, and the authentication state is preserved across sessions.
-- **Recipe Creation**: Verify that users can create, edit, and delete recipes.
-- **Profile Updates**: Ensure users can update their profile information, including uploading profile images.
-- **Recipe Search and Filters**: Test that the search and filtering functionalities return the expected results.
-
-For a detailed list of tests and their results, see the Manual Testing Table.
 
 | **Test ID** | **Feature/Component**         | **Test Description**                                                    | **Steps to Perform**                                                                                                                                          | **Expected Outcome**                                                                                                           | **Status**   |
 |-------------|-------------------------------|-------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|--------------|

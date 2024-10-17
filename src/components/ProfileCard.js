@@ -25,9 +25,11 @@ const ProfileCard = ({
 
   // State for handling updated profile data
   const [updatedProfileData, setUpdatedProfileData] = useState({
-    name: profileData.name,
-    content: profileData.content,
+    name: profileData.name || "",
+    content: profileData.content || "",
     image: null,
+    email: profileData.email || "",
+    age: profileData.age || "",
   });
 
   // State for handling image preview
@@ -45,9 +47,16 @@ const ProfileCard = ({
     const file = e.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setImagePreview(fileURL);  // Show preview of selected image
+      setImagePreview(fileURL); // Show preview of selected image
       setUpdatedProfileData({ ...updatedProfileData, image: file });
     }
+  };
+
+  // Validate email format
+  const validateEmail = (email) => {
+    if (email.trim() === "") return true;
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
   // Handle profile editing and form submission
@@ -55,9 +64,25 @@ const ProfileCard = ({
     e.preventDefault();
     setErrorMessage("");
 
+    // Validate email
+    if (!validateEmail(updatedProfileData.email)) {
+      setErrorMessage("Please enter a valid email.");
+      return;
+    }
+
+    // Validate age (allow empty age)
+    const age = Number(updatedProfileData.age);
+    if (updatedProfileData.age && (isNaN(age) || age <= 0 || age > 120)) {
+      setErrorMessage("Please enter a valid age between 1 and 120.");
+      return;
+    }
+
     const formData = new FormData();
     formData.append("name", updatedProfileData.name);
     formData.append("content", updatedProfileData.content);
+    formData.append("email", updatedProfileData.email);
+    formData.append("age", updatedProfileData.age);
+
     if (updatedProfileData.image) {
       formData.append("image", updatedProfileData.image);
     }
@@ -74,11 +99,11 @@ const ProfileCard = ({
           },
         }
       );
-      setSuccessMessage("Profile updated successfully!");  // Success message
-      onProfileUpdate(response.data);  // Update profile in parent component
+      setSuccessMessage("Profile updated successfully!");
+      onProfileUpdate(response.data);
       setIsEditing(false);
       setTimeout(() => {
-        setSuccessMessage("");  // Clear success message after 3 seconds
+        setSuccessMessage("");
       }, 3000);
     } catch (error) {
       console.error("Error updating profile", error);
@@ -97,11 +122,11 @@ const ProfileCard = ({
         headers: { Authorization: `Bearer ${token}` },
       });
       setSuccessMessage("Profile deleted successfully.");
-      onProfileDelete();  // Notify parent of profile deletion
+      onProfileDelete();
       setTimeout(() => {
         setSuccessMessage("");
       }, 3000);
-      history.push("/");  // Redirect to home after deletion
+      history.push("/");
     } catch (error) {
       console.error("Error deleting profile", error);
       setErrorMessage("Failed to delete profile.");
@@ -183,6 +208,30 @@ const ProfileCard = ({
                   }
                   placeholder="Bio"
                 />
+                <input
+                  type="email"
+                  className={styles.formControl}
+                  value={updatedProfileData.email}
+                  onChange={(e) =>
+                    setUpdatedProfileData({
+                      ...updatedProfileData,
+                      email: e.target.value,
+                    })
+                  }
+                  placeholder="Email (optional)"
+                />
+                <input
+                  type="number"
+                  className={styles.formControl}
+                  value={updatedProfileData.age}
+                  onChange={(e) =>
+                    setUpdatedProfileData({
+                      ...updatedProfileData,
+                      age: e.target.value,
+                    })
+                  }
+                  placeholder="Age (optional)"
+                />
 
                 {/* Hidden file input */}
                 <input
@@ -206,8 +255,9 @@ const ProfileCard = ({
                 </Button>
                 <Button
                   onClick={() => setIsEditing(false)}
-                  className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}
-                >
+                  className={
+                    `${buttonStyles.cardButton} ${buttonStyles.cancelButton}`
+                  }>
                   Cancel
                 </Button>
               </form>
@@ -221,8 +271,9 @@ const ProfileCard = ({
                 </Button>
                 <Button
                   onClick={handleDeleteProfile}
-                  className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}
-                >
+                  className={
+                    `${buttonStyles.cardButton} ${buttonStyles.cardButton}`
+                  }>
                   Delete Profile
                 </Button>
               </>
