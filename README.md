@@ -30,8 +30,6 @@ The frontend connects to the **Foorky 2.0** backend, which is a Django REST API,
 
 ## UX Design
 
-## UX - Five Planes
-
 ### Strategy:
 Foorky 2.0 is a full-stack recipe management platform designed to make storing and discovering culinary recipes seamless for both amateur cooks and professional chefs. The platform focuses on delivering a user-friendly experience while fostering community engagement through collaboration, interaction, and recipe sharing.
 
@@ -124,8 +122,7 @@ The Foorky 2.0 frontend has a robust set of features, but there are several enha
 
 ### 1. Clone the Repository
 
-git clone https://github.com/yourusername/foorky-2.0-frontend.git
-cd foorky-2.0-frontend
+git clone https://github.com/davidb3rgqvist/project5-foorky
 
 ### 2. Install Dependencies
 
@@ -230,7 +227,8 @@ The frontend can be deployed to platforms like Netlify, Vercel, or any static ho
 - **React Bootstrap**: For creating a clean and responsive UI.
 - **Django REST Framework**: For the backend API.
 - **Cloudinary**: For handling image uploads and hosting.
-- **Netlify/Vercel**: For deployment support.
 - **Font Awesome**: For icons used throughout the app.
+- **Code Institute's "Moments" project**: The project was inspired by Code Institute's **"Moments"** walkthrough, which served as a reference and guide for building this application.
+
 
 This project is open-source and developed with the help of various tutorials, community contributions, and collaborative efforts. Special thanks to mentors and online resources that helped bring Foorky 2.0 to life.
