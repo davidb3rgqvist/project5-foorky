@@ -24,17 +24,25 @@ const ProfilePage = () => {
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
-        const { data: profileData } = await axios.get(`/profiles/${profileId}/`);
+        const { data: profileData } = await axios.get(
+          `/profiles/${profileId}/`,
+        );
         setProfile(profileData);
 
-        const { data: recipeData } = await axios.get(`/recipes/by_profile/?profile_id=${profileId}`);
+        const { data: recipeData } = await axios.get(
+          `/recipes/by_profile/?profile_id=${profileId}`,
+        );
         setRecipes(recipeData);
         setAllRecipes(recipeData);
 
-        const { data: followers } = await axios.get(`/followers/?followed=${profileId}`);
-  
-        const followRecord = followers.results.find(f => f.owner === currentUser?.username);
-        console.log(followRecord)
+        const { data: followers } = await axios.get(
+          `/followers/?followed=${profileId}`,
+        );
+
+        const followRecord = followers.results.find(
+          (f) => f.owner === currentUser?.username,
+        );
+        console.log(followRecord);
         if (followRecord) {
           setIsFollowing(true);
           setFollowId(followRecord.id);
@@ -56,25 +64,33 @@ const ProfilePage = () => {
     let filteredRecipes = [...allRecipes];
 
     if (searchQuery) {
-      filteredRecipes = filteredRecipes.filter(recipe =>
-        recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
+      filteredRecipes = filteredRecipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
     if (filters.difficulty) {
-      filteredRecipes = filteredRecipes.filter(recipe => recipe.difficulty === filters.difficulty);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.difficulty === filters.difficulty,
+      );
     }
 
     if (filters.cookTime === "quick") {
-      filteredRecipes = filteredRecipes.filter(recipe => recipe.cook_time <= 30);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.cook_time <= 30,
+      );
     } else if (filters.cookTime === "long") {
-      filteredRecipes = filteredRecipes.filter(recipe => recipe.cook_time >= 60);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.cook_time >= 60,
+      );
     }
 
     if (filters.sortBy === "az") {
       filteredRecipes.sort((a, b) => a.title.localeCompare(b.title));
     } else if (filters.sortBy === "latest") {
-      filteredRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      filteredRecipes.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
     }
 
     setRecipes(filteredRecipes);
@@ -88,13 +104,17 @@ const ProfilePage = () => {
 
     try {
       const response = await axios.post(
-        `/followers/`, 
+        `/followers/`,
         { followed: profileId },
-        { headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
+        },
       );
       setIsFollowing(true);
       setFollowId(response.data.id);
-      setProfile(prevProfile => ({
+      setProfile((prevProfile) => ({
         ...prevProfile,
         followers_count: prevProfile.followers_count + 1,
       }));
@@ -120,11 +140,13 @@ const ProfilePage = () => {
     try {
       if (followId) {
         await axios.delete(`/followers/${followId}/`, {
-          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` }
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+          },
         });
         setIsFollowing(false);
         setFollowId(null);
-        setProfile(prevProfile => ({
+        setProfile((prevProfile) => ({
           ...prevProfile,
           followers_count: prevProfile.followers_count - 1,
         }));
@@ -150,26 +172,35 @@ const ProfilePage = () => {
     }
   };
 
-  if (loading) return (
-    <div className={styles.loaderContainer}>
-      <Spinner animation="border" role="status">
-        <span className="sr-only"></span>
-      </Spinner>
-    </div>
-  );
+  if (loading)
+    return (
+      <div className={styles.loaderContainer}>
+        <Spinner animation="border" role="status">
+          <span className="sr-only"></span>
+        </Spinner>
+      </div>
+    );
 
   return (
     <div className={styles.profilePage}>
       {/* Alert Section */}
       {alertMessage && (
-        <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
+        <Alert
+          variant={alertVariant}
+          onClose={() => setAlertMessage(null)}
+          dismissible
+        >
           {alertMessage}
         </Alert>
       )}
 
       {/* Profile Card Section */}
       <div className={styles.profileCard}>
-        <img src={profile.image} alt={profile.owner} className={styles.profileImage} />
+        <img
+          src={profile.image}
+          alt={profile.owner}
+          className={styles.profileImage}
+        />
         <h4>{profile.name || profile.owner}</h4>
         <p>{profile.content || "No bio available"}</p>
         <div className={styles.profileStats}>
@@ -179,7 +210,10 @@ const ProfilePage = () => {
         </div>
 
         {/* Follow/Unfollow Button */}
-        <button onClick={handleToggleFollow} className={buttonStyles.followButton}>
+        <button
+          onClick={handleToggleFollow}
+          className={buttonStyles.followButton}
+        >
           {isFollowing ? "Unfollow" : "Follow"}
         </button>
       </div>
@@ -196,7 +230,7 @@ const ProfilePage = () => {
         <h3>{profile.name || profile.owner}'s Recipes</h3>
         <div className={styles.recipesGrid}>
           {recipes.length > 0 ? (
-            recipes.map(recipe => (
+            recipes.map((recipe) => (
               <RecipeCard key={recipe.id} recipe={recipe} />
             ))
           ) : (

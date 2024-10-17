@@ -6,7 +6,6 @@ import styles from "../styles/TopBar.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import buttonStyles from "../styles/Button.module.css";
 
-
 const TopBar = () => {
   const [profiles, setProfiles] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
@@ -19,7 +18,7 @@ const TopBar = () => {
       try {
         const { data } = await axios.get(`/profiles/?page=${currentPage}`);
         const filteredProfiles = data.results.filter(
-          (profile) => profile.owner !== currentUser?.username
+          (profile) => profile.owner !== currentUser?.username,
         );
         setProfiles(filteredProfiles);
         setTotalPages(Math.ceil(data.count / 5));

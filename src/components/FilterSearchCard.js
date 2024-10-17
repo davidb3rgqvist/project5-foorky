@@ -3,7 +3,6 @@ import { Card, Button, Form, FormControl, Collapse } from "react-bootstrap";
 import styles from "../styles/FilterSearchCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
-
 const FilterSearchCard = ({ handleSearch, filters, setFilters }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [isExpanded, setIsExpanded] = useState(false);
@@ -32,10 +31,25 @@ const FilterSearchCard = ({ handleSearch, filters, setFilters }) => {
       <Card.Body>
         {/* Filter Header with Expand Button */}
         <div className={styles.FilterHeader}>
-          <Button className={buttonStyles.arrowButton} variant="white" onClick={() => setIsExpanded(!isExpanded)} aria-controls="filter-options" aria-expanded={isExpanded}>
-            Filter Recipes {isExpanded ? <i className="fas fa-chevron-up"></i> : <i className="fas fa-chevron-down"></i>}
+          <Button
+            className={buttonStyles.arrowButton}
+            variant="white"
+            onClick={() => setIsExpanded(!isExpanded)}
+            aria-controls="filter-options"
+            aria-expanded={isExpanded}
+          >
+            Filter Recipes{" "}
+            {isExpanded ? (
+              <i className="fas fa-chevron-up"></i>
+            ) : (
+              <i className="fas fa-chevron-down"></i>
+            )}
           </Button>
-          <Button variant="white" onClick={handleClearFilters} className={buttonStyles.ClearButton}>
+          <Button
+            variant="white"
+            onClick={handleClearFilters}
+            className={buttonStyles.ClearButton}
+          >
             Clear Filters
           </Button>
         </div>

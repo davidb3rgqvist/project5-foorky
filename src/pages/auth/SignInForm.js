@@ -31,13 +31,13 @@ function SignInForm() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
     try {
       const { data } = await axios.post("/dj-rest-auth/login/", signInData);
-  
+
       localStorage.setItem("authToken", data.access_token);
       localStorage.setItem("refreshToken", data.refresh_token);
-  
+
       setCurrentUser(data.user);
       history.push("/recipe-feed");
     } catch (err) {
@@ -92,10 +92,7 @@ function SignInForm() {
               </Alert>
             ))}
 
-            <Button
-              className={`${buttonStyles.Wide}`}
-              type="submit"
-            >
+            <Button className={`${buttonStyles.Wide}`} type="submit">
               Sign in
             </Button>
             {errors.non_field_errors?.map((message, idx) => (

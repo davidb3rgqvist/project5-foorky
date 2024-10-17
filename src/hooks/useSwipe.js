@@ -30,7 +30,7 @@ export const useSwipe = (length) => {
         setActiveIndex((prevIndex) => prevIndex - 1);
       }
     },
-    [activeIndex, length, isSwipeEnabled]
+    [activeIndex, length, isSwipeEnabled],
   );
 
   useEffect(() => {

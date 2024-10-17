@@ -5,7 +5,6 @@ import axios from "axios";
 import styles from "../styles/CreateRecipePage.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
-
 const CreateRecipePage = () => {
   const location = useLocation();
   const recipeToEdit = location.state?.recipe;
@@ -27,7 +26,6 @@ const CreateRecipePage = () => {
   const history = useHistory();
 
   useEffect(() => {
-
     if (isEditMode) {
       setFormData({
         title: recipeToEdit.title,
@@ -44,11 +42,12 @@ const CreateRecipePage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-  
-    const updatedValue = name === "short_description" && value.length > 80
-      ? value.slice(0, 77) + "..."
-      : value;
-  
+
+    const updatedValue =
+      name === "short_description" && value.length > 80
+        ? value.slice(0, 77) + "..."
+        : value;
+
     setFormData((prevFormData) => ({
       ...prevFormData,
       [name]: updatedValue,
@@ -94,12 +93,20 @@ const CreateRecipePage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const token = localStorage.getItem("authToken");
-    
-    if (!formData.title || !formData.short_description || !formData.ingredients || !formData.steps || (!formData.image && !isEditMode)) {
-      setErrorMessage("Please fill in all the fields. An image is optional when editing.");
+
+    if (
+      !formData.title ||
+      !formData.short_description ||
+      !formData.ingredients ||
+      !formData.steps ||
+      (!formData.image && !isEditMode)
+    ) {
+      setErrorMessage(
+        "Please fill in all the fields. An image is optional when editing.",
+      );
       return;
     }
-    
+
     const formDataToSubmit = new FormData();
     formDataToSubmit.append("title", formData.title);
     formDataToSubmit.append("short_description", formData.short_description);
@@ -111,7 +118,6 @@ const CreateRecipePage = () => {
 
     try {
       if (isEditMode) {
-
         await axios.put(`/recipes/${recipeToEdit.id}/`, formDataToSubmit, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -149,32 +155,68 @@ const CreateRecipePage = () => {
       <Form onSubmit={handleSubmit}>
         <Form.Group controlId="title">
           <Form.Label>Title</Form.Label>
-          <Form.Control type="text" placeholder="Enter recipe title" name="title" value={formData.title} onChange={handleChange} />
+          <Form.Control
+            type="text"
+            placeholder="Enter recipe title"
+            name="title"
+            value={formData.title}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Form.Group controlId="short_description">
           <Form.Label>Short Description (max 80 characters)</Form.Label>
-          <Form.Control type="text" placeholder="Enter a short description" name="short_description" value={formData.short_description} onChange={handleChange} />
+          <Form.Control
+            type="text"
+            placeholder="Enter a short description"
+            name="short_description"
+            value={formData.short_description}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Form.Group controlId="ingredients">
           <Form.Label>Ingredients</Form.Label>
-          <Form.Control as="textarea" rows={3} placeholder="Enter ingredients (comma separated)" name="ingredients" value={formData.ingredients} onChange={handleChange} />
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Enter ingredients (comma separated)"
+            name="ingredients"
+            value={formData.ingredients}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Form.Group controlId="steps">
           <Form.Label>Steps</Form.Label>
-          <Form.Control as="textarea" rows={3} placeholder="Enter cooking steps" name="steps" value={formData.steps} onChange={handleChange} />
+          <Form.Control
+            as="textarea"
+            rows={3}
+            placeholder="Enter cooking steps"
+            name="steps"
+            value={formData.steps}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Form.Group controlId="cook_time">
           <Form.Label>Cook Time (in minutes)</Form.Label>
-          <Form.Control type="number" name="cook_time" value={formData.cook_time} onChange={handleChange} />
+          <Form.Control
+            type="number"
+            name="cook_time"
+            value={formData.cook_time}
+            onChange={handleChange}
+          />
         </Form.Group>
 
         <Form.Group controlId="difficulty">
           <Form.Label>Difficulty</Form.Label>
-          <Form.Control as="select" name="difficulty" value={formData.difficulty} onChange={handleChange}>
+          <Form.Control
+            as="select"
+            name="difficulty"
+            value={formData.difficulty}
+            onChange={handleChange}
+          >
             <option value="Easy">Easy</option>
             <option value="Medium">Medium</option>
             <option value="Hard">Hard</option>
@@ -186,19 +228,41 @@ const CreateRecipePage = () => {
           <Form.Label>Upload Image</Form.Label>
           {previewImage && (
             <div className={styles.imagePreviewContainer}>
-              <img src={previewImage} alt="Recipe Preview" className={styles.imagePreview} />
+              <img
+                src={previewImage}
+                alt="Recipe Preview"
+                className={styles.imagePreview}
+              />
               <div className={styles.imagePreviewButtonContainer}>
-                <Button className={buttonStyles.Button} onClick={handleDeleteImage}>Remove Image</Button>
+                <Button
+                  className={buttonStyles.Button}
+                  onClick={handleDeleteImage}
+                >
+                  Remove Image
+                </Button>
               </div>
             </div>
           )}
           <div>
-            <input type="file" id="image" name="image" style={{ display: "none" }} onChange={handleFileChange} />
-            <Button className={buttonStyles.Button} onClick={() => document.getElementById("image").click()}>Upload Image</Button>
+            <input
+              type="file"
+              id="image"
+              name="image"
+              style={{ display: "none" }}
+              onChange={handleFileChange}
+            />
+            <Button
+              className={buttonStyles.Button}
+              onClick={() => document.getElementById("image").click()}
+            >
+              Upload Image
+            </Button>
           </div>
         </Form.Group>
 
-        <Button className={buttonStyles.Button} type="submit">{isEditMode ? "Update Recipe" : "Create Recipe"}</Button>
+        <Button className={buttonStyles.Button} type="submit">
+          {isEditMode ? "Update Recipe" : "Create Recipe"}
+        </Button>
       </Form>
     </Container>
   );

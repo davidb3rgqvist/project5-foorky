@@ -26,24 +26,32 @@ const RecipeFeedPage = () => {
 
     if (query) {
       filteredRecipes = filteredRecipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(query.toLowerCase())
+        recipe.title.toLowerCase().includes(query.toLowerCase()),
       );
     }
 
     if (filters.difficulty) {
-      filteredRecipes = filteredRecipes.filter((recipe) => recipe.difficulty === filters.difficulty);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.difficulty === filters.difficulty,
+      );
     }
 
     if (filters.cookTime === "quick") {
-      filteredRecipes = filteredRecipes.filter((recipe) => recipe.cook_time <= 30);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.cook_time <= 30,
+      );
     } else if (filters.cookTime === "long") {
-      filteredRecipes = filteredRecipes.filter((recipe) => recipe.cook_time >= 60);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.cook_time >= 60,
+      );
     }
 
     if (filters.sortBy === "az") {
       filteredRecipes.sort((a, b) => a.title.localeCompare(b.title));
     } else if (filters.sortBy === "latest") {
-      filteredRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      filteredRecipes.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
     }
 
     setRecipes(filteredRecipes);
@@ -89,7 +97,9 @@ const RecipeFeedPage = () => {
   }, [loading, hasMore]);
 
   const handleDeleteRecipe = (recipeId) => {
-    setRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== recipeId));
+    setRecipes((prevRecipes) =>
+      prevRecipes.filter((recipe) => recipe.id !== recipeId),
+    );
 
     setAlertMessage("Recipe deleted successfully!");
     setTimeout(() => {
@@ -101,12 +111,20 @@ const RecipeFeedPage = () => {
     <>
       <TopBar />
       <div className={styles.FilterContainer}>
-        <FilterSearchCard handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
+        <FilterSearchCard
+          handleSearch={handleSearch}
+          filters={filters}
+          setFilters={setFilters}
+        />
       </div>
 
       {/* Alert Section */}
       {alertMessage && (
-        <Alert variant="success" onClose={() => setAlertMessage(null)} dismissible>
+        <Alert
+          variant="success"
+          onClose={() => setAlertMessage(null)}
+          dismissible
+        >
           {alertMessage}
         </Alert>
       )}

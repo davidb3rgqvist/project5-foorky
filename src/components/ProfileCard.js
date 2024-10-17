@@ -1,12 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { Card, Button, Alert } from "react-bootstrap";
 import axios from "axios";
-import styles from '../styles/ProfileCard.module.css';
+import styles from "../styles/ProfileCard.module.css";
 import { useHistory } from "react-router-dom";
 import buttonStyles from "../styles/Button.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 
-const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMessage }) => {
+const ProfileCard = ({
+  profileData,
+  onProfileUpdate,
+  onProfileDelete,
+  setAlertMessage,
+}) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const currentUser = useCurrentUser();
@@ -18,10 +23,14 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
     image: null,
   });
 
-  const [imagePreview, setImagePreview] = useState(profileData.image || "/path-to-default/default-profile.jpg");
+  const [imagePreview, setImagePreview] = useState(
+    profileData.image || "/path-to-default/default-profile.jpg",
+  );
 
   useEffect(() => {
-    setImagePreview(profileData.image || "/path-to-default/default-profile.jpg");
+    setImagePreview(
+      profileData.image || "/path-to-default/default-profile.jpg",
+    );
   }, [profileData.image]);
 
   const handleFileChange = (e) => {
@@ -46,12 +55,16 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
 
     try {
       const token = localStorage.getItem("authToken");
-      const response = await axios.put(`/profiles/${profileData.id}/`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "multipart/form-data",
+      const response = await axios.put(
+        `/profiles/${profileData.id}/`,
+        formData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data",
+          },
         },
-      });
+      );
       setSuccessMessage("Profile updated successfully!");
       onProfileUpdate(response.data);
       setIsEditing(false);
@@ -65,7 +78,8 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
   };
 
   const handleDeleteProfile = async () => {
-    if (!window.confirm("Are you sure you want to delete your profile?")) return;
+    if (!window.confirm("Are you sure you want to delete your profile?"))
+      return;
     setErrorMessage("");
 
     try {
@@ -89,9 +103,17 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
     <div className={styles.cardContainer}>
       <Card.Body className={styles.cardBody}>
         {/* Display error message if any */}
-        {errorMessage && <Alert variant="danger" className={styles.errorMessage}>{errorMessage}</Alert>}
+        {errorMessage && (
+          <Alert variant="danger" className={styles.errorMessage}>
+            {errorMessage}
+          </Alert>
+        )}
         {/* Display success message if any */}
-        {successMessage && <Alert variant="success" className={styles.successMessage}>{successMessage}</Alert>}
+        {successMessage && (
+          <Alert variant="success" className={styles.successMessage}>
+            {successMessage}
+          </Alert>
+        )}
 
         <div className="text-center">
           <Card.Img
@@ -100,8 +122,12 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
             alt={`${profileData.name}'s profile`}
             className={styles.cardImage}
           />
-          <Card.Title className={styles.cardTitle}>{profileData.name}</Card.Title>
-          <Card.Text className={styles.cardText}>{profileData.content || "No bio available"}</Card.Text>
+          <Card.Title className={styles.cardTitle}>
+            {profileData.name}
+          </Card.Title>
+          <Card.Text className={styles.cardText}>
+            {profileData.content || "No bio available"}
+          </Card.Text>
           <div className={styles.cardStats}>
             <div>
               <strong>{profileData.followers_count}</strong>
@@ -126,16 +152,26 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
                   type="text"
                   className={styles.formControl}
                   value={updatedProfileData.name}
-                  onChange={(e) => setUpdatedProfileData({ ...updatedProfileData, name: e.target.value })}
+                  onChange={(e) =>
+                    setUpdatedProfileData({
+                      ...updatedProfileData,
+                      name: e.target.value,
+                    })
+                  }
                   placeholder="Name"
                 />
                 <textarea
                   className={styles.formControl}
                   value={updatedProfileData.content}
-                  onChange={(e) => setUpdatedProfileData({ ...updatedProfileData, content: e.target.value })}
+                  onChange={(e) =>
+                    setUpdatedProfileData({
+                      ...updatedProfileData,
+                      content: e.target.value,
+                    })
+                  }
                   placeholder="Bio"
                 />
-                
+
                 {/* Hidden file input */}
                 <input
                   type="file"
@@ -144,19 +180,39 @@ const ProfileCard = ({ profileData, onProfileUpdate, onProfileDelete, setAlertMe
                   style={{ display: "none" }}
                   onChange={handleFileChange}
                 />
-                
+
                 {/* Button to trigger file input */}
-                <Button onClick={() => document.getElementById("fileInput").click()} className={buttonStyles.cardButton}>
+                <Button
+                  onClick={() => document.getElementById("fileInput").click()}
+                  className={buttonStyles.cardButton}
+                >
                   Upload New Image
                 </Button>
 
-                <Button type="submit" className={buttonStyles.cardButton}>Save</Button>
-                <Button onClick={() => setIsEditing(false)} className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}>Cancel</Button>
+                <Button type="submit" className={buttonStyles.cardButton}>
+                  Save
+                </Button>
+                <Button
+                  onClick={() => setIsEditing(false)}
+                  className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}
+                >
+                  Cancel
+                </Button>
               </form>
             ) : (
               <>
-                <Button onClick={() => setIsEditing(true)} className={`${buttonStyles.cardButton} me-2`}>Edit Profile</Button>
-                <Button onClick={handleDeleteProfile} className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}>Delete Profile</Button>
+                <Button
+                  onClick={() => setIsEditing(true)}
+                  className={`${buttonStyles.cardButton} me-2`}
+                >
+                  Edit Profile
+                </Button>
+                <Button
+                  onClick={handleDeleteProfile}
+                  className={`${buttonStyles.cardButton} ${buttonStyles.cardButton}`}
+                >
+                  Delete Profile
+                </Button>
               </>
             )}
           </div>

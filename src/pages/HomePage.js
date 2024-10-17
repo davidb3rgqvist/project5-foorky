@@ -5,9 +5,7 @@ import styles from "../styles/Homepage.module.css";
 import buttonStyles from "../styles/Button.module.css";
 import { useSwipe } from "../hooks/useSwipe";
 
-
 function HomePage() {
-
   const benefits = [
     {
       icon: "fas fa-utensils",
@@ -36,8 +34,8 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <h1 className={styles.HeroText}>
-                Foorky connects you with a global community of culinary enthusiasts. 
-                Join us and find your next favorite recipe!
+                Foorky connects you with a global community of culinary
+                enthusiasts. Join us and find your next favorite recipe!
               </h1>
               <Link to="/signup" className={buttonStyles.CTAButton}>
                 Get Started
@@ -47,8 +45,8 @@ function HomePage() {
         </Container>
       </div>
 
-       {/* Benefits Section */}
-       <Container className={styles.BenefitsWrapper}>
+      {/* Benefits Section */}
+      <Container className={styles.BenefitsWrapper}>
         {benefits.map((benefit, index) => (
           <Col
             key={index}
@@ -79,8 +77,8 @@ function HomePage() {
           <Row>
             <Col className="text-center">
               <div className={styles.AboutText}>
-              Find new exciting dishes every day – 
-              from beginners to seasoned chefs!
+                Find new exciting dishes every day – from beginners to seasoned
+                chefs!
               </div>
             </Col>
           </Row>

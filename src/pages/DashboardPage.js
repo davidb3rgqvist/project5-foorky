@@ -25,13 +25,15 @@ const DashboardPage = () => {
         setLoading(true);
 
         // Fetch profile data
-        const { data: profile } = await axios.get(`/profiles/${currentUser.profile_id}/`);
+        const { data: profile } = await axios.get(
+          `/profiles/${currentUser.profile_id}/`,
+        );
         setProfileData(profile);
 
         // Fetch the user's own recipes
         const { data: recipes } = await axios.get("/recipes/");
         const filteredRecipes = recipes.results.filter(
-          (recipe) => recipe.owner === currentUser.username
+          (recipe) => recipe.owner === currentUser.username,
         );
         setUserRecipes(filteredRecipes);
         setAllUserRecipes(filteredRecipes);
@@ -48,9 +50,14 @@ const DashboardPage = () => {
     // Fetch liked recipes by the logged-in user from ranked-liked-recipes endpoint
     const fetchLikedRecipes = async () => {
       try {
-        const { data: likedRecipesData } = await axios.get("/ranked-liked-recipes/", {
-          headers: { Authorization: `Bearer ${localStorage.getItem("authToken")}` },
-        });
+        const { data: likedRecipesData } = await axios.get(
+          "/ranked-liked-recipes/",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("authToken")}`,
+            },
+          },
+        );
 
         setLikedRecipes(likedRecipesData);
       } catch (error) {
@@ -66,33 +73,41 @@ const DashboardPage = () => {
 
     if (searchQuery) {
       filteredRecipes = filteredRecipes.filter((recipe) =>
-        recipe.title.toLowerCase().includes(searchQuery.toLowerCase())
+        recipe.title.toLowerCase().includes(searchQuery.toLowerCase()),
       );
     }
 
     if (filters.difficulty) {
       filteredRecipes = filteredRecipes.filter(
-        (recipe) => recipe.difficulty === filters.difficulty
+        (recipe) => recipe.difficulty === filters.difficulty,
       );
     }
 
     if (filters.cookTime === "quick") {
-      filteredRecipes = filteredRecipes.filter((recipe) => recipe.cook_time <= 30);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.cook_time <= 30,
+      );
     } else if (filters.cookTime === "long") {
-      filteredRecipes = filteredRecipes.filter((recipe) => recipe.cook_time >= 60);
+      filteredRecipes = filteredRecipes.filter(
+        (recipe) => recipe.cook_time >= 60,
+      );
     }
 
     if (filters.sortBy === "az") {
       filteredRecipes.sort((a, b) => a.title.localeCompare(b.title));
     } else if (filters.sortBy === "latest") {
-      filteredRecipes.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+      filteredRecipes.sort(
+        (a, b) => new Date(b.created_at) - new Date(a.created_at),
+      );
     }
 
     setUserRecipes(filteredRecipes);
   };
 
   const handleDeleteRecipe = (recipeId) => {
-    setUserRecipes((prevRecipes) => prevRecipes.filter((recipe) => recipe.id !== recipeId));
+    setUserRecipes((prevRecipes) =>
+      prevRecipes.filter((recipe) => recipe.id !== recipeId),
+    );
 
     setAlertMessage("Recipe deleted successfully!");
     setTimeout(() => {
@@ -114,7 +129,6 @@ const DashboardPage = () => {
 
   return (
     <div className={styles.Dashboard}>
-
       {/* Loading Spinner */}
       {loading && (
         <div className={styles.loaderContainer}>
@@ -136,12 +150,20 @@ const DashboardPage = () => {
 
           {/* FilterSearchCard Section */}
           <div className={styles.FilterContainer}>
-            <FilterSearchCard handleSearch={handleSearch} filters={filters} setFilters={setFilters} />
+            <FilterSearchCard
+              handleSearch={handleSearch}
+              filters={filters}
+              setFilters={setFilters}
+            />
           </div>
 
           {/* Success Alert for recipe deletion */}
           {alertMessage && (
-            <Alert variant="success" onClose={() => setAlertMessage(null)} dismissible>
+            <Alert
+              variant="success"
+              onClose={() => setAlertMessage(null)}
+              dismissible
+            >
               {alertMessage}
             </Alert>
           )}
@@ -152,7 +174,11 @@ const DashboardPage = () => {
             <div className={styles.recipeGrid}>
               {userRecipes.length > 0 ? (
                 userRecipes.map((recipe) => (
-                  <RecipeCard key={recipe.id} recipe={recipe} onDelete={handleDeleteRecipe} />
+                  <RecipeCard
+                    key={recipe.id}
+                    recipe={recipe}
+                    onDelete={handleDeleteRecipe}
+                  />
                 ))
               ) : (
                 <p>No recipes found.</p>

@@ -8,7 +8,10 @@ import SignInForm from "./pages/auth/SignInForm";
 import HomePage from "./pages/HomePage";
 import RecipeFeedPage from "./pages/RecipeFeedPage";
 import CreateRecipePage from "./pages/CreateRecipePage";
-import { CurrentUserProvider, useCurrentUser } from "./contexts/CurrentUserContext";
+import {
+  CurrentUserProvider,
+  useCurrentUser,
+} from "./contexts/CurrentUserContext";
 import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import { useEffect } from "react";
@@ -45,10 +48,22 @@ function App() {
             <Route exact path="/signup" component={SignUpForm} />
 
             {/* Protected Routes */}
-            <PrivateRoute exact path="/recipe-feed" component={RecipeFeedPage} />
-            <PrivateRoute exact path="/create-recipe" component={CreateRecipePage} />
+            <PrivateRoute
+              exact
+              path="/recipe-feed"
+              component={RecipeFeedPage}
+            />
+            <PrivateRoute
+              exact
+              path="/create-recipe"
+              component={CreateRecipePage}
+            />
             <PrivateRoute exact path="/dashboard" component={DashboardPage} />
-            <PrivateRoute exact path="/profiles/:profileId" component={ProfilePage} />
+            <PrivateRoute
+              exact
+              path="/profiles/:profileId"
+              component={ProfilePage}
+            />
 
             {/* Catch-all for undefined routes */}
             <Route render={() => <p>Page not found!</p>} />

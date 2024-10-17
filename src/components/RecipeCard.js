@@ -17,8 +17,8 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [newComment, setNewComment] = useState("");
   const [editCommentId, setEditCommentId] = useState(null);
   const [editCommentContent, setEditCommentContent] = useState("");
-  const [alertMessage, setAlertMessage] = useState(null); 
-  const [alertVariant, setAlertVariant] = useState("success"); 
+  const [alertMessage, setAlertMessage] = useState(null);
+  const [alertVariant, setAlertVariant] = useState("success");
   const history = useHistory();
 
   const currentUser = useCurrentUser();
@@ -44,7 +44,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
-        }
+        },
       );
 
       if (response.status === 201 || response.status === 200) {
@@ -52,7 +52,10 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
         setIsLiked(true);
       }
     } catch (error) {
-      console.error("Error liking the recipe:", error.response?.data || error.message);
+      console.error(
+        "Error liking the recipe:",
+        error.response?.data || error.message,
+      );
       showAlert("Error liking the recipe. Please try again.", "danger");
     }
   };
@@ -70,7 +73,10 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
         setIsLiked(false);
       }
     } catch (error) {
-      console.error("Error unliking the recipe", error.response?.data || error.message);
+      console.error(
+        "Error unliking the recipe",
+        error.response?.data || error.message,
+      );
       showAlert("Error unliking the recipe. Please try again.", "danger");
     }
   };
@@ -89,7 +95,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     try {
       const { data } = await axios.get("/comments/");
       const filteredComments = data.results.filter(
-        (comment) => comment.recipe === recipe.id
+        (comment) => comment.recipe === recipe.id,
       );
       setComments(filteredComments);
     } catch (err) {
@@ -106,7 +112,11 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
+      if (
+        cardRef.current &&
+        !cardRef.current.contains(event.target) &&
+        isFlipped
+      ) {
         setIsFlipped(false);
       }
     };
@@ -130,7 +140,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
         await axios.post(
           `/comments/`,
           { recipe: recipe.id, content: newComment },
-          { headers: { Authorization: `Bearer ${token}` } }
+          { headers: { Authorization: `Bearer ${token}` } },
         );
 
         setNewComment("");
@@ -149,7 +159,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       await axios.put(
         `/comments/${commentId}/`,
         { content: editCommentContent, recipe: recipe.id },
-        { headers: { Authorization: `Bearer ${token}` } }
+        { headers: { Authorization: `Bearer ${token}` } },
       );
       setEditCommentId(null);
       setEditCommentContent("");
@@ -189,28 +199,34 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
 
   const handleDelete = async (event) => {
     preventFlip(event);
-    
+
     try {
       await axios.delete(`/recipes/${recipe.id}/`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
-  
+
       setShowDeleteConfirm(false);
-      
+
       if (onDelete) {
         onDelete(recipe.id);
       }
-  
     } catch (error) {
-      console.error("Error deleting recipe:", error.response?.data || error.message);
+      console.error(
+        "Error deleting recipe:",
+        error.response?.data || error.message,
+      );
       showAlert("Failed to delete the recipe. Please try again.", "danger");
     }
   };
 
   return (
-    <div ref={cardRef} className={`${styles.cardContainer}`} onClick={handleFlip}>
+    <div
+      ref={cardRef}
+      className={`${styles.cardContainer}`}
+      onClick={handleFlip}
+    >
       {/* Alert Section */}
       {alertMessage && (
         <Alert
@@ -225,15 +241,27 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       <div className={`${styles.card} ${isFlipped ? styles.isFlipped : ""}`}>
         {/* Front Side */}
         <div className={styles.cardFront}>
-          <img src={recipe.image} alt={recipe.title} className={styles.cardImage} />
+          <img
+            src={recipe.image}
+            alt={recipe.title}
+            className={styles.cardImage}
+          />
           <div className={styles.cardContent}>
             <h2 className={styles.recipeTitle}>{recipe.title}</h2>
-            <p className={styles.shortDescription}>{recipe.short_description}</p>
+            <p className={styles.shortDescription}>
+              {recipe.short_description}
+            </p>
 
             <div className={styles.cardFooter}>
-              <p><i className="fas fa-clock"></i> {recipe.cook_time} mins</p>
-              <p><i className="fas fa-tachometer-alt"></i> {recipe.difficulty}</p>
-              <p><i className="fas fa-heart"></i> {likes}</p>
+              <p>
+                <i className="fas fa-clock"></i> {recipe.cook_time} mins
+              </p>
+              <p>
+                <i className="fas fa-tachometer-alt"></i> {recipe.difficulty}
+              </p>
+              <p>
+                <i className="fas fa-heart"></i> {likes}
+              </p>
             </div>
           </div>
         </div>
@@ -266,7 +294,9 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
                             <input
                               type="text"
                               value={editCommentContent}
-                              onChange={(e) => setEditCommentContent(e.target.value)}
+                              onChange={(e) =>
+                                setEditCommentContent(e.target.value)
+                              }
                             />
                             <button
                               className={buttonStyles.commentButton}
