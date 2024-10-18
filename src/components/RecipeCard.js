@@ -7,7 +7,6 @@ import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
 const RecipeCard = ({ recipe, onDelete }) => {
-  // State variables for handling card flip, likes, comments, and visibility toggles
   const [isFlipped, setIsFlipped] = useState(false);
   const [likes, setLikes] = useState(recipe.likes_count || 0);
   const [isLiked, setIsLiked] = useState(recipe.is_liked);
@@ -38,7 +37,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }, 3000);
   };
 
-  // Handle like functionality by making a POST request
+  // Handle like functionality
   const handleLike = async () => {
     try {
       const response = await axios.post(
@@ -55,12 +54,10 @@ const RecipeCard = ({ recipe, onDelete }) => {
         setIsLiked(true);
       }
     } catch (error) {
-      console.error("Error liking the recipe:", error);
       showAlert("Error liking the recipe. Please try again.", "danger");
     }
   };
 
-  // Handle unlike functionality by making a DELETE request
   const handleUnlike = async () => {
     try {
       const response = await axios.delete(`/likes/${recipe.id}/`, {
@@ -73,12 +70,10 @@ const RecipeCard = ({ recipe, onDelete }) => {
         setIsLiked(false);
       }
     } catch (error) {
-      console.error("Error unliking the recipe:", error);
       showAlert("Error unliking the recipe. Please try again.", "danger");
     }
   };
 
-  // Toggle the like or unlike state
   const handleToggleLike = (e) => {
     preventFlip(e);
     if (isLiked) {
@@ -88,7 +83,6 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
-  // Fetch comments related to the recipe
   const fetchComments = useCallback(async () => {
     try {
       const { data } = await axios.get("/comments/");
@@ -97,19 +91,16 @@ const RecipeCard = ({ recipe, onDelete }) => {
       );
       setComments(filteredComments);
     } catch (error) {
-      console.error("Error fetching comments:", error);
       showAlert("Failed to fetch comments.", "danger");
     }
   }, [recipe.id]);
 
-  // Load comments when the component mounts
   useEffect(() => {
     if (recipe.id) {
       fetchComments();
     }
   }, [recipe.id, fetchComments]);
 
-  // Close the card when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
@@ -120,7 +111,6 @@ const RecipeCard = ({ recipe, onDelete }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFlipped]);
 
-  // Handle adding a new comment
   const handleAddComment = async (event) => {
     preventFlip(event);
 
@@ -143,25 +133,21 @@ const RecipeCard = ({ recipe, onDelete }) => {
         fetchComments();
         showAlert("Comment added successfully!", "success");
       } catch (error) {
-        console.error("Error adding comment:", error);
         showAlert("Failed to add comment. Please try again.", "danger");
       }
     }
   };
 
-  // Handle editing the recipe
   const handleEdit = (event) => {
     preventFlip(event);
     window.location.href = `/edit-recipe/${recipe.id}`;
   };
 
-  // Confirm deletion of the recipe
   const confirmDelete = (event) => {
     preventFlip(event);
     setShowDeleteConfirm(true);
   };
 
-  // Delete the recipe
   const handleDelete = async (event) => {
     preventFlip(event);
 
@@ -178,15 +164,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
         onDelete(recipe.id);
       }
     } catch (error) {
-      console.error("Error deleting recipe:", error);
       showAlert("Failed to delete the recipe. Please try again.", "danger");
-    }
-  };
-
-  // Handle flipping the card only if the event target is not a form element
-  const handleKeyDownFlip = (e) => {
-    if (e.target.tagName !== "TEXTAREA" && e.target.tagName !== "BUTTON" && (e.key === "Enter" || e.key === " ")) {
-      handleFlip();
     }
   };
 
@@ -197,9 +175,13 @@ const RecipeCard = ({ recipe, onDelete }) => {
       onClick={handleFlip}
       role="button"
       tabIndex={0}
-      onKeyDown={handleKeyDownFlip} // Use the new function here
+      onKeyDown={(e) => {
+        // Check if the comment field is focused, if not, allow flip
+        if (document.activeElement !== document.querySelector(`.${styles.commentInput}`)) {
+          if (e.key === "Enter" || e.key === " ") handleFlip();
+        }
+      }}
     >
-      {/* Alert Section */}
       {alertMessage && (
         <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
           {alertMessage}
@@ -207,7 +189,6 @@ const RecipeCard = ({ recipe, onDelete }) => {
       )}
 
       <div className={`${styles.card} ${isFlipped ? styles.isFlipped : ""}`}>
-        {/* Front Side */}
         <div className={styles.cardFront}>
           <img
             src={recipe.image}
@@ -234,10 +215,8 @@ const RecipeCard = ({ recipe, onDelete }) => {
           </div>
         </div>
 
-        {/* Back Side */}
         <div className={styles.cardBack}>
           <div className={styles.cardBackContent}>
-            {/* Toggle Ingredients */}
             <button
               className={styles.toggleButton}
               onClick={(e) => {
@@ -249,7 +228,6 @@ const RecipeCard = ({ recipe, onDelete }) => {
             </button>
             {showIngredients && <p>{recipe.ingredients}</p>}
 
-            {/* Toggle Steps */}
             <button
               className={styles.toggleButton}
               onClick={(e) => {
@@ -261,7 +239,6 @@ const RecipeCard = ({ recipe, onDelete }) => {
             </button>
             {showSteps && <p>{recipe.steps}</p>}
 
-            {/* Toggle Comments */}
             <button
               className={styles.toggleButton}
               onClick={(e) => {
@@ -275,87 +252,91 @@ const RecipeCard = ({ recipe, onDelete }) => {
               <div className={styles.commentsSection}>
                 {comments.length > 0 ? (
                   comments.map((comment) => (
-                    <div key={comment.id} className={styles.comment}>
-                      <p><strong>{comment.user.username}:</strong> {comment.content}</p>
+                    <div key={comment.id} className={styles.commentItem}>
+                      <p>{comment.content}</p>
+                      <p className={styles.commentAuthor}>
+                        <em>— Chef: {comment.owner}</em>
+                      </p>
                     </div>
                   ))
                 ) : (
-                  <p>No comments yet. Be the first to comment!</p>
+                  <p>No comments yet.</p>
                 )}
-                <textarea
-                  value={newComment}
-                  onChange={(e) => setNewComment(e.target.value)}
-                  placeholder="Add a comment..."
-                  className={styles.commentInput}
-                  onFocus={preventFlip} // Prevent flip on focus
-                />
-                <button
-                  className={buttonStyles.button}
-                  onClick={handleAddComment}
-                >
-                  Add Comment
-                </button>
+                <div className={styles.addComment}>
+                  <textarea
+                    className={styles.commentInput}
+                    value={newComment}
+                    onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Add a comment..."
+                    onClick={preventFlip}
+                  />
+                  <button
+                    className={buttonStyles.cardButton}
+                    onClick={handleAddComment}
+                  >
+                    Add Comment
+                  </button>
+                </div>
               </div>
             )}
-            {/* Edit and Delete buttons */}
-            {currentUser && (
-              <div className={styles.buttonGroup}>
-                <button className={buttonStyles.button} onClick={handleEdit}>
-                  Edit
-                </button>
-                <button
-                  className={buttonStyles.button}
-                  onClick={confirmDelete}
-                >
-                  Delete
-                </button>
-                <button
-                  className={buttonStyles.button}
-                  onClick={handleToggleLike}
-                >
-                  {isLiked ? "Unlike" : "Like"}
-                </button>
-              </div>
-            )}
+
+            <div className={styles.actionsBack}>
+              <button
+                className={buttonStyles.cardButton}
+                onClick={handleToggleLike}
+              >
+                {isLiked ? "Unlike" : "Like"}
+              </button>
+              {currentUser?.username === recipe.owner && (
+                <>
+                  <button
+                    className={buttonStyles.cardButton}
+                    onClick={handleEdit}
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className={buttonStyles.cardButton}
+                    onClick={confirmDelete}
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
+            </div>
+
+            <div className={styles.chefName}>
+              <p>Created by: {recipe.owner}</p>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Confirm Delete Modal */}
       {showDeleteConfirm && (
-        <div className={styles.confirmDeleteModal}>
+        <div className={styles.deleteConfirmModal}>
           <p>Are you sure you want to delete this recipe?</p>
-          <button
-            className={buttonStyles.button}
-            onClick={handleDelete}
-          >
-            Yes, Delete
-          </button>
-          <button
-            className={buttonStyles.button}
-            onClick={() => setShowDeleteConfirm(false)}
-          >
-            Cancel
-          </button>
+          <button onClick={handleDelete}>Yes</button>
+          <button onClick={() => setShowDeleteConfirm(false)}>No</button>
         </div>
       )}
     </div>
   );
 };
 
-// PropTypes for validation
+// Prop Types for Type Checking
 RecipeCard.propTypes = {
   recipe: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    short_description: PropTypes.string.isRequired,
-    ingredients: PropTypes.string.isRequired,
-    steps: PropTypes.string.isRequired,
-    image: PropTypes.string.isRequired,
-    likes_count: PropTypes.number,
-    is_liked: PropTypes.bool,
+    short_description: PropTypes.string,
     cook_time: PropTypes.number,
     difficulty: PropTypes.string,
+    ingredients: PropTypes.string,
+    steps: PropTypes.string,
+    image: PropTypes.string,
+    likes_count: PropTypes.number,
+    is_liked: PropTypes.bool,
+    owner: PropTypes.string.isRequired,
   }).isRequired,
   onDelete: PropTypes.func,
 };
