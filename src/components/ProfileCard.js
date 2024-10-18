@@ -218,7 +218,7 @@ const ProfileCard = ({
                       email: e.target.value,
                     })
                   }
-                  placeholder="Email (optional)"
+                  placeholder="Email mandatory"
                 />
                 <input
                   type="number"

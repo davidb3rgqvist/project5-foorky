@@ -58,6 +58,10 @@ Foorky 2.0 is a full-stack recipe management platform designed to make storing a
 - **Recipe Sharing**: Enable users to share their favorite recipes with friends and other users.
 - **Customization**: Users can add personal notes, like, and save favorite recipes for quick access in the dashboard.
 
+![comments1](src/assets/doc/comments1.png)
+![comments2](src/assets/doc/comments2.png)
+![comments3](src/assets/doc/comments3.png)
+
 ### Structure:
 **Core Pages:**
 - **Recipe Dashboard**: A hub for users to view and manage their recipe collections, with quick access to their created recipes, and liked recipes.
