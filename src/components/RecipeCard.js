@@ -1,12 +1,13 @@
+import React, { useState, useEffect, useRef, useCallback } from "react";
+import PropTypes from "prop-types";
+import { Alert } from "react-bootstrap";
 import axios from "axios";
 import { useHistory } from "react-router-dom";
-import React, { useEffect, useRef, useState, useCallback } from "react";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
-import { Alert } from "react-bootstrap";
 import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
-const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
+const RecipeCard = ({ recipe, onDelete }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [likes, setLikes] = useState(recipe.likes_count || 0);
   const [isLiked, setIsLiked] = useState(recipe.is_liked);
@@ -19,9 +20,10 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
   const [editCommentContent, setEditCommentContent] = useState("");
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertVariant, setAlertVariant] = useState("success");
-  const history = useHistory();
+  const [comments, setComments] = useState([]);
 
   const currentUser = useCurrentUser();
+  const history = useHistory();
   const cardRef = useRef(null);
 
   const handleFlip = () => setIsFlipped(!isFlipped);
@@ -44,18 +46,14 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("authToken")}`,
           },
-        },
+        }
       );
-
       if (response.status === 201 || response.status === 200) {
         setLikes(likes + 1);
         setIsLiked(true);
       }
     } catch (error) {
-      console.error(
-        "Error liking the recipe:",
-        error.response?.data || error.message,
-      );
+      console.error("Error liking the recipe:", error);
       showAlert("Error liking the recipe. Please try again.", "danger");
     }
   };
@@ -67,16 +65,12 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
           Authorization: `Bearer ${localStorage.getItem("authToken")}`,
         },
       });
-
       if (response.status === 204) {
         setLikes(likes - 1);
         setIsLiked(false);
       }
     } catch (error) {
-      console.error(
-        "Error unliking the recipe",
-        error.response?.data || error.message,
-      );
+      console.error("Error unliking the recipe:", error);
       showAlert("Error unliking the recipe. Please try again.", "danger");
     }
   };
@@ -89,17 +83,15 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
     }
   };
 
-  const [comments, setComments] = useState([]);
-
   const fetchComments = useCallback(async () => {
     try {
       const { data } = await axios.get("/comments/");
       const filteredComments = data.results.filter(
-        (comment) => comment.recipe === recipe.id,
+        (comment) => comment.recipe === recipe.id
       );
       setComments(filteredComments);
-    } catch (err) {
-      console.error("Error fetching comments:", err);
+    } catch (error) {
+      console.error("Error fetching comments:", error);
       showAlert("Failed to fetch comments.", "danger");
     }
   }, [recipe.id]);
@@ -112,15 +104,10 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
 
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        cardRef.current &&
-        !cardRef.current.contains(event.target) &&
-        isFlipped
-      ) {
+      if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
         setIsFlipped(false);
       }
     };
-
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFlipped]);
@@ -140,7 +127,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
         await axios.post(
           `/comments/`,
           { recipe: recipe.id, content: newComment },
-          { headers: { Authorization: `Bearer ${token}` } },
+          { headers: { Authorization: `Bearer ${token}` } }
         );
 
         setNewComment("");
@@ -159,7 +146,7 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       await axios.put(
         `/comments/${commentId}/`,
         { content: editCommentContent, recipe: recipe.id },
-        { headers: { Authorization: `Bearer ${token}` } },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
       setEditCommentId(null);
       setEditCommentContent("");
@@ -213,27 +200,16 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
         onDelete(recipe.id);
       }
     } catch (error) {
-      console.error(
-        "Error deleting recipe:",
-        error.response?.data || error.message,
-      );
+      console.error("Error deleting recipe:", error);
       showAlert("Failed to delete the recipe. Please try again.", "danger");
     }
   };
 
   return (
-    <div
-      ref={cardRef}
-      className={`${styles.cardContainer}`}
-      onClick={handleFlip}
-    >
+    <div ref={cardRef} className={`${styles.cardContainer}`} onClick={handleFlip}>
       {/* Alert Section */}
       {alertMessage && (
-        <Alert
-          variant={alertVariant}
-          onClose={() => setAlertMessage(null)}
-          dismissible
-        >
+        <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
           {alertMessage}
         </Alert>
       )}
@@ -406,6 +382,25 @@ const RecipeCard = ({ recipe, onUpdate, onDelete, onAddComment }) => {
       )}
     </div>
   );
+};
+
+RecipeCard.propTypes = {
+  recipe: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    short_description: PropTypes.string,
+    cook_time: PropTypes.number,
+    difficulty: PropTypes.string,
+    ingredients: PropTypes.string,
+    steps: PropTypes.string,
+    image: PropTypes.string,
+    likes_count: PropTypes.number,
+    is_liked: PropTypes.bool,
+    owner: PropTypes.string.isRequired,
+  }).isRequired,
+  onUpdate: PropTypes.func,
+  onDelete: PropTypes.func,
+  onAddComment: PropTypes.func,
 };
 
 export default RecipeCard;

@@ -2,10 +2,13 @@ import { createContext, useContext, useEffect, useMemo, useState, useRef, useCal
 import axios from "axios";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
 import { useHistory } from "react-router";
+import PropTypes from "prop-types";
 
+// Create contexts for current user and setting current user
 export const CurrentUserContext = createContext();
 export const SetCurrentUserContext = createContext();
 
+// Custom hooks to use the contexts
 export const useCurrentUser = () => useContext(CurrentUserContext);
 export const useSetCurrentUser = () => useContext(SetCurrentUserContext);
 
@@ -123,4 +126,8 @@ export const CurrentUserProvider = ({ children }) => {
       </SetCurrentUserContext.Provider>
     </CurrentUserContext.Provider>
   );
+};
+
+CurrentUserProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

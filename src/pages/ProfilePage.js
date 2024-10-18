@@ -234,7 +234,7 @@ const ProfilePage = () => {
 
       {/* Recipes Section */}
       <div className={styles.recipesSection}>
-        <h3>{profile.name || profile.owner}'s Recipes</h3>
+        <h3>{profile.name || profile.owner}&apos;s Recipes</h3>
         <div className={styles.recipesGrid}>
           {recipes.length > 0 ? (
             recipes.map((recipe) => (

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
+import PropTypes from "prop-types";
 import { Card, Button, Alert } from "react-bootstrap";
 import axios from "axios";
-import styles from "../styles/ProfileCard.module.css";
 import { useHistory } from "react-router-dom";
-import buttonStyles from "../styles/Button.module.css";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
+import styles from "../styles/ProfileCard.module.css";
+import buttonStyles from "../styles/Button.module.css";
 
 const ProfileCard = ({
   profileData,
   onProfileUpdate,
   onProfileDelete,
-  setAlertMessage,
 }) => {
   // State for handling success and error messages
   const [errorMessage, setErrorMessage] = useState("");
@@ -28,8 +28,8 @@ const ProfileCard = ({
     name: profileData.name || "",
     content: profileData.content || "",
     image: null,
-    email: profileData.email || "",  // Email is optional
-    age: profileData.age || "",      // Age is optional
+    email: profileData.email || "", // Email is optional
+    age: profileData.age || "", // Age is optional
   });
 
   // State for handling image preview
@@ -47,14 +47,14 @@ const ProfileCard = ({
     const file = e.target.files[0];
     if (file) {
       const fileURL = URL.createObjectURL(file);
-      setImagePreview(fileURL);  // Show preview of selected image
+      setImagePreview(fileURL); // Show preview of selected image
       setUpdatedProfileData({ ...updatedProfileData, image: file });
     }
   };
 
   // Validate email format
   const validateEmail = (email) => {
-    if (email.trim() === "") return true;
+    if (email.trim() === "") return true; // Optional
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
@@ -218,7 +218,7 @@ const ProfileCard = ({
                       email: e.target.value,
                     })
                   }
-                  placeholder="Email mandatory"
+                  placeholder="Email (optional)"
                 />
                 <input
                   type="number"
@@ -281,6 +281,24 @@ const ProfileCard = ({
       </Card.Body>
     </div>
   );
+};
+
+ProfileCard.propTypes = {
+  profileData: PropTypes.shape({
+    id: PropTypes.string.isRequired,
+    name: PropTypes.string.isRequired,
+    content: PropTypes.string,
+    email: PropTypes.string,
+    age: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+    image: PropTypes.string,
+    followers_count: PropTypes.number,
+    following_count: PropTypes.number,
+    recipes_count: PropTypes.number,
+    owner: PropTypes.string.isRequired,
+  }).isRequired,
+  onProfileUpdate: PropTypes.func.isRequired,
+  onProfileDelete: PropTypes.func.isRequired,
+  setAlertMessage: PropTypes.func,
 };
 
 export default ProfileCard;

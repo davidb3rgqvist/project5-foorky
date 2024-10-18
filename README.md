@@ -223,7 +223,6 @@ CSS media queries are used to adapt layouts for different screen sizes.
 Testing was an integral part of the website development process. We performed comprehensive tests across various devices and screen sizes to ensure a seamless user experience. This included functional testing to verify proper functionality of all features, as well as responsive testing to guarantee optimal display on different devices. Additionally, we performed several manual tests.
 
 - ![Responsiveness overview](src/assets/doc/responsive-test.png)
-- ![Manual testing table](testing.md)
 - ![HTML validation](src/assets/doc/html_validation.png)
 - ![Lighthouse Performance Test](src/assets/doc/lighthouse-test.png)
 

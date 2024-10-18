@@ -104,7 +104,8 @@ function SignInForm() {
         </Container>
         <Container className={`mt-3 ${appStyles.Content}`}>
           <Link className={styles.Link} to="/signup">
-            Don't have an account? <span>Sign up now!</span>
+          <p>Sign in to access your account&#39;s features.</p>
+          <span>Sign up now!</span>
           </Link>
         </Container>
       </Col>

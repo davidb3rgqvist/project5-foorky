@@ -1,6 +1,7 @@
 import styles from "./App.module.css";
 import NavBar from "./components/NavBar";
 import Container from "react-bootstrap/Container";
+import PropTypes from "prop-types";
 import { Route, Switch, Redirect } from "react-router-dom";
 import "./api/axiosDefaults";
 import SignUpForm from "./pages/auth/SignUpForm";
@@ -8,15 +9,15 @@ import SignInForm from "./pages/auth/SignInForm";
 import HomePage from "./pages/HomePage";
 import RecipeFeedPage from "./pages/RecipeFeedPage";
 import CreateRecipePage from "./pages/CreateRecipePage";
+import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
+import { useEffect } from "react";
 import {
   CurrentUserProvider,
   useCurrentUser,
 } from "./contexts/CurrentUserContext";
-import DashboardPage from "./pages/DashboardPage";
-import ProfilePage from "./pages/ProfilePage";
-import { useEffect } from "react";
 
-// Custom PrivateRoute for authenticated routes
+// PrivateRoute to check user authentication
 function PrivateRoute({ component: Component, ...rest }) {
   const currentUser = useCurrentUser();
   return (
@@ -33,6 +34,7 @@ function App() {
   useEffect(() => {
     const token = localStorage.getItem("authToken");
     if (token) {
+      // Add any actions to perform on mount with token
     }
   }, []);
 
@@ -73,5 +75,9 @@ function App() {
     </CurrentUserProvider>
   );
 }
+
+PrivateRoute.propTypes = {
+  component: PropTypes.elementType.isRequired,
+};
 
 export default App;

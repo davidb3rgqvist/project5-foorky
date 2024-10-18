@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import PropTypes from "prop-types";
 import { Card, Button, Form, FormControl, Collapse } from "react-bootstrap";
 import styles from "../styles/FilterSearchCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
@@ -6,7 +7,7 @@ import buttonStyles from "../styles/Button.module.css";
 const FilterSearchCard = ({ handleSearch, filters, setFilters }) => {
   // State to store the current search query
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // State to toggle the expansion of the filter section
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -137,6 +138,16 @@ const FilterSearchCard = ({ handleSearch, filters, setFilters }) => {
       </Card.Body>
     </Card>
   );
+};
+
+FilterSearchCard.propTypes = {
+  handleSearch: PropTypes.func.isRequired,
+  filters: PropTypes.shape({
+    difficulty: PropTypes.string,
+    cookTime: PropTypes.string,
+    sortBy: PropTypes.string,
+  }).isRequired,
+  setFilters: PropTypes.func.isRequired,
 };
 
 export default FilterSearchCard;
