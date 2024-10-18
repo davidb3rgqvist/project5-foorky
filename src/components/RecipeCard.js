@@ -206,7 +206,16 @@ const RecipeCard = ({ recipe, onDelete }) => {
   };
 
   return (
-    <div ref={cardRef} className={`${styles.cardContainer}`} onClick={handleFlip}>
+    <div
+      ref={cardRef}
+      className={`${styles.cardContainer}`}
+      onClick={handleFlip}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") handleFlip();
+      }}
+    >
       {/* Alert Section */}
       {alertMessage && (
         <Alert variant={alertVariant} onClose={() => setAlertMessage(null)} dismissible>
@@ -245,17 +254,32 @@ const RecipeCard = ({ recipe, onDelete }) => {
         {/* Back Side */}
         <div className={styles.cardBack}>
           <div className={styles.cardBackContent} onClick={preventFlip}>
-            <h3 onClick={() => setShowIngredients(!showIngredients)}>
+            <h3
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowIngredients(!showIngredients)}
+              onKeyDown={(e) => e.key === "Enter" && setShowIngredients(!showIngredients)}
+            >
               {showIngredients ? "▾ Ingredients" : "▸ Ingredients"}
             </h3>
             {showIngredients && <p>{recipe.ingredients}</p>}
 
-            <h3 onClick={() => setShowSteps(!showSteps)}>
+            <h3
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowSteps(!showSteps)}
+              onKeyDown={(e) => e.key === "Enter" && setShowSteps(!showSteps)}
+            >
               {showSteps ? "▾ Steps" : "▸ Steps"}
             </h3>
             {showSteps && <p>{recipe.steps}</p>}
 
-            <h3 onClick={() => setShowComments(!showComments)}>
+            <h3
+              role="button"
+              tabIndex={0}
+              onClick={() => setShowComments(!showComments)}
+              onKeyDown={(e) => e.key === "Enter" && setShowComments(!showComments)}
+            >
               {showComments ? "▾ Comments" : "▸ Comments"}
             </h3>
             {showComments && (
