@@ -52,6 +52,11 @@ function HomePage() {
             key={index}
             className={styles.BenefitColumn}
             style={{ display: index === activeIndex ? "block" : "none" }}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setActiveIndex(index);
+            }}
           >
             <i className={`${styles.BenefitIcon} ${benefit.icon}`}></i>
             <h2 className={styles.BenefitHeading}>{benefit.heading}</h2>
@@ -66,7 +71,12 @@ function HomePage() {
           <span
             key={index}
             className={`${styles.SwipeDot} ${index === activeIndex ? styles.active : ""}`}
+            role="button"
+            tabIndex={0}
             onClick={() => setActiveIndex(index)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") setActiveIndex(index);
+            }}
           ></span>
         ))}
       </div>

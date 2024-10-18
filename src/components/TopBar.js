@@ -58,12 +58,20 @@ const TopBar = () => {
       </Button>
 
       {profiles.map((profile) => (
-        <div key={profile.id} className={styles.profileItem}>
+        <div
+          key={profile.id}
+          className={styles.profileItem}
+          role="button"
+          tabIndex={0}
+          onClick={() => handleProfileClick(profile.id)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") handleProfileClick(profile.id);
+          }}
+        >
           <img
             src={profile.image || "default-profile.jpg"}
             alt={profile.username || profile.name}
             className={styles.profileImage}
-            onClick={() => handleProfileClick(profile.id)}
           />
           <p className={styles.profileName}>
             {profile.name || profile.username}

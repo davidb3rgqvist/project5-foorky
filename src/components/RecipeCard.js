@@ -6,6 +6,7 @@ import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
+
 const RecipeCard = ({ recipe, onDelete }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [likes, setLikes] = useState(recipe.likes_count || 0);
@@ -137,7 +138,6 @@ const RecipeCard = ({ recipe, onDelete }) => {
   };
 
   const handleEdit = (recipe) => {
-    // Navigate to the edit page (assuming you have a route for it)
     window.location.href = `/edit-recipe/${recipe.id}`;
   };
 
@@ -170,7 +170,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
   return (
     <div
       ref={cardRef}
-      className={`${styles.cardContainer}`}
+      className={styles.cardContainer}
       onClick={handleFlip}
       role="button"
       tabIndex={0}
@@ -215,20 +215,29 @@ const RecipeCard = ({ recipe, onDelete }) => {
 
         {/* Back Side */}
         <div className={styles.cardBack}>
-          <div className={styles.cardBackContent} onClick={preventFlip}>
-            <h3 onClick={() => setShowIngredients(!showIngredients)}>
+          <div className={styles.cardBackContent}>
+            <button
+              className={styles.toggleButton}
+              onClick={() => setShowIngredients(!showIngredients)}
+            >
               {showIngredients ? "▾ Ingredients" : "▸ Ingredients"}
-            </h3>
+            </button>
             {showIngredients && <p>{recipe.ingredients}</p>}
 
-            <h3 onClick={() => setShowSteps(!showSteps)}>
+            <button
+              className={styles.toggleButton}
+              onClick={() => setShowSteps(!showSteps)}
+            >
               {showSteps ? "▾ Steps" : "▸ Steps"}
-            </h3>
+            </button>
             {showSteps && <p>{recipe.steps}</p>}
 
-            <h3 onClick={() => setShowComments(!showComments)}>
+            <button
+              className={styles.toggleButton}
+              onClick={() => setShowComments(!showComments)}
+            >
               {showComments ? "▾ Comments" : "▸ Comments"}
-            </h3>
+            </button>
             {showComments && (
               <div className={styles.commentsSection}>
                 {comments.length > 0 ? (
