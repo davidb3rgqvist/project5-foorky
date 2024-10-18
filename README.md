@@ -33,6 +33,37 @@ The frontend of **Foorky 2.0** is built using **React.js** and **React Bootstrap
 
 The frontend connects to the **Foorky 2.0** backend, which is a Django REST API, using secure authentication mechanisms and performs all operations like recipe creation, management, and user interactions.
 
+## Understanding Agile Project Management
+
+In this project, I have followed the principles of **Agile Project Management**. Agile emphasizes iterative development. User stories, acceptance criteria, and key features are developed incrementally, ensuring that the product evolves. By breaking down the project into user stories, I ensure a focus on delivering value in small, manageable increments.
+
+[Kanban board](https://github.com/users/davidb3rgqvist/projects/7/views/1)
+
+Below is a table summarizing the user stories, components, and acceptance criteria for the project:
+
+| Category     | User Story                                                                                  | Acceptance Criteria                                                                                                          | Key Components                                    |
+|--------------|---------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------|
+| UI Components| As a user, I want to register for an account so that I can have a personal profile with a picture and bio | Users can register, upload a profile picture, and edit bio after signing up.                                                 | SignUpForm, ProfilePage, ProfileEditForm          |
+| UI Components| As a user, I want to register for an account so that I can create, like, and comment on recipes | Users can register and access recipe creation, like, and comment functionality.                                              | Recipe, RecipePage, Comment                      |
+| UI Components| As a user, I want to register for an account so that I can follow other users and their recipes | Registered users can follow/unfollow others, and the follow button is available on profiles.                                 | Profile, ProfilePage                             |
+| Recipes      | As a visitor, I want to view a list of recipes so that I can browse the most recent recipe uploads | A recipe feed displays recent uploads with titles, images, and descriptions.                                                 | RecipesPage                                      |
+| Recipes      | As a visitor, I want to view an individual recipe so that I can see user feedback, i.e., likes and comments | Clicking on a recipe shows detailed information, with likes and comments.                                                   | Recipe, RecipePage                               |
+| Recipes      | As a visitor, I want to search a list of recipes so that I can find a recipe by a specific ingredient, cuisine, or title | A search bar filters recipes by ingredient, title, or cuisine, with dynamic results.                                         | RecipesPage, SearchBar                           |
+| Recipes      | As a visitor, I want to scroll through a list of recipes so that I can browse the site more comfortably | Infinite scrolling loads more recipes as the user scrolls, with pagination/loading indicators.                               | InfiniteScrollComponent                          |
+| Recipes      | As a user, I want to edit and delete my recipe so that I can correct or hide any mistakes in my recipe | Edit and delete options are only visible to the recipe owner, and changes are reflected immediately.                         | RecipeEditForm, MoreDropdownMenu                 |
+| Recipes      | As a user, I want to create a recipe so that I can share my favorite meals with others          | A form allows users to input recipe details and upload an image, with the recipe visible after submission.                    | RecipeCreateForm                                 |
+| Recipes      | As a user, I want to view liked recipes so that I can go back to my favorite recipes easily      | Liked recipes are accessible from the profile or a dedicated section.                                                        | RecipesPage, LikedRecipesSection                 |
+| Recipes      | As a user, I want to view followed users' recipes so that I can keep up with my favorite users' recipes | Recipes from followed users appear in a separate feed or section.                                                            | RecipesPage, FollowingRecipesSection             |
+| Likes        | As a user, I want to like a recipe so that I can express my appreciation for a recipe            | Clicking the like button increments the like counter, and a user can only like a recipe once.                                | RecipeLikeIcon                                   |
+| Likes        | As a user, I want to unlike a recipe so that I can express that my interest in the recipe has faded | Clicking the unlike button decrements the like counter.                                                                     | RecipeUnlikeIcon                                 |
+| Comments     | As a user, I want to create a comment so that I can share my thoughts on a recipe                 | The comment form is available on the recipe page, and comments appear in real-time after submission.                         | RecipePage, CommentCreateForm                    |
+| Comments     | As a user, I want to edit and delete my comment so that I can correct or hide any mistakes in my comment | Edit and delete options are available for the user's own comments.                                                          | RecipePage, Comment, MoreDropdownMenu            |
+| Profiles     | As a user, I want to view a profile so that I can see a user's recent recipes, followers, following count, and liked recipes | The profile page displays user-specific data, including recipes, followers, and following details.                           | ProfilePage, Recipe                              |
+| Profiles     | As a user, I want to edit my profile so that I can update my profile information                 | The profile edit form allows the user to update their name, bio, and profile image.                                           | ProfileEditForm                                  |
+| Followers    | As a user, I want to follow a profile so that I can show my interest in someone's recipes         | Clicking the follow button toggles to unfollow, and updates the follower count in real-time.                                  | ProfileFollowButton                              |
+| Followers    | As a user, I want to unfollow a profile so that I can express that my interest has faded          | Clicking the unfollow button removes the user’s recipes from the following feed, and the status persists across sessions.     | ProfileUnfollowButton                            |
+
+
 ## UX Design
 
 ### Strategy:
