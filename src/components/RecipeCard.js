@@ -176,8 +176,11 @@ const RecipeCard = ({ recipe, onDelete }) => {
       role="button"
       tabIndex={0}
       onKeyDown={(e) => {
-        // Check if the comment field is focused, if not, allow flip
-        if (document.activeElement !== document.querySelector(`.${styles.commentInput}`)) {
+        // Prevent flip if focused on an input or textarea
+        if (
+          document.activeElement.tagName !== "TEXTAREA" &&
+          document.activeElement.tagName !== "INPUT"
+        ) {
           if (e.key === "Enter" || e.key === " ") handleFlip();
         }
       }}
