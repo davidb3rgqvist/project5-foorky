@@ -21,6 +21,7 @@
 - [Technology Stack](#technology-stack)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Reusable React Components](#reusable-react-components)
 - [API Integration](#api-integration)
 - [Responsive Design](#responsive-design)
 - [Testing](#testing)
@@ -207,6 +208,96 @@ The frontend communicates with the backend via the Foorky 2.0 API. All data is f
 - **Followers**: `/followers/` (POST, DELETE)
 
 The backend uses Django REST Framework, and more details about the endpoints can be found in the backend README.
+
+## Reusable React Components
+
+### 1. ProfileCard
+The `ProfileCard` component displays user profile information such as followers, following count, and the number of recipes the user has created. It includes:
+
+- **File Upload**: Allows users to upload and update their profile picture.
+- **Form Management**: Users can edit profile information such as name, bio, and email.
+- **Success/Error Messages**: Provides visual feedback after successful updates or when an error occurs.
+
+### Key Functionalities:
+- Editing and deleting the profile.
+- Displays important metrics such as followers and created recipes.
+- Mobile-responsive design for various screen sizes.
+
+### Props:
+- `user` (object): The current user data.
+- `onEdit` (function): Callback to handle profile edits.
+- `onDelete` (function): Callback to handle profile deletion.
+
+---
+
+### 2. FilterSearchCard
+The `FilterSearchCard` component is designed for filtering and searching recipes. It includes:
+
+- **Search Bar**: Allows users to search for recipes by name or keyword.
+- **Filters**: Users can filter by difficulty level and cook time.
+- **Sorting Options**: Sorts recipes by created date or alphabetically (A-Z).
+
+### Key Functionalities:
+- Easy integration with any recipe data feed.
+- Fully customizable filters for search queries.
+- Responsive design ensuring a smooth user experience across devices.
+
+### Props:
+- `onSearch` (function): Callback for handling search queries.
+- `onFilterChange` (function): Callback for updating filter selections.
+- `onSortChange` (function): Callback for updating sort order.
+
+---
+
+## 3. RecipeCard
+The `RecipeCard` component displays detailed information about a recipe. It includes:
+
+- **Image Display**: Shows a large recipe image.
+- **Flip Animation**: The card flips 180 degrees to reveal the recipe details and comment section.
+- **Like/Unlike Functionality**: Allows users to like and unlike recipes.
+- **Comment Section**: Users can add comments, and the card handles both displaying and adding comments.
+- **CRUD Functionality**: Supports editing and deleting recipes (for recipe owners).
+
+### Key Functionalities:
+- Provides a visual and interactive way to display recipes with flipping cards.
+- Includes like and comment features to increase engagement.
+- Fully customizable with toggles for ingredients, steps, and comments.
+
+### Props:
+- `recipe` (object): The recipe data (includes title, image, ingredients, steps, etc.).
+- `onDelete` (function): Callback for handling recipe deletion.
+
+---
+
+### 4. Dashboard
+The `Dashboard` component serves as the user's control panel, displaying:
+
+- **Created Recipes**: Lists all recipes created by the user.
+- **Liked Recipes**: Shows recipes that the user has liked.
+- **Profile Management**: Allows users to update personal information like name, bio, and image.
+- **Metrics**: Displays key metrics such as the number of followers and following.
+
+### Key Functionalities:
+- Central hub for the user's activity and profile management.
+- Clean design and intuitive layout for easy navigation.
+
+---
+
+### 5. RecipeFeed
+The `RecipeFeed` component displays a paginated list of recipes. Each card in the feed includes:
+
+- **Recipe Image**: Shows a large image of the recipe.
+- **Recipe Details**: A brief overview with title, description, and cook time.
+- **Flip Feature**: Clicking the card flips it to show the full recipe and comment section.
+
+### Key Functionalities:
+- Pagination for easy browsing of multiple recipes.
+- Integrates with search and filter functionality for improved user experience.
+
+---
+
+Each component is designed to be easily reusable across multiple parts of the application, promoting clean code architecture and maintainability. You can customize the components by passing the appropriate props for each use case. Detailed error handling and user feedback mechanisms are implemented in all components for a seamless user experience.
+
 
 ## Responsive Design
 
