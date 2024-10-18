@@ -6,6 +6,7 @@ import buttonStyles from "../styles/Button.module.css";
 import { useSwipe } from "../hooks/useSwipe";
 
 function HomePage() {
+  // Array of benefit objects containing icon, heading, and text to display in the benefits section
   const benefits = [
     {
       icon: "fas fa-utensils",
@@ -24,6 +25,7 @@ function HomePage() {
     },
   ];
 
+  // Destructure activeIndex and setActiveIndex from the useSwipe hook, passing the length of the benefits array
   const { activeIndex, setActiveIndex } = useSwipe(benefits.length);
 
   return (
@@ -33,10 +35,12 @@ function HomePage() {
         <Container>
           <Row>
             <Col className="text-center">
+              {/* Hero text displaying the main message */}
               <h1 className={styles.HeroText}>
                 Foorky connects you with a global community of culinary
                 enthusiasts. Join us and find your next favorite recipe!
               </h1>
+              {/* Call to action button linking to the signup page */}
               <Link to="/signup" className={buttonStyles.CTAButton}>
                 Get Started
               </Link>
@@ -54,10 +58,12 @@ function HomePage() {
             style={{ display: index === activeIndex ? "block" : "none" }}
             role="button"
             tabIndex={0}
+            // Set active index on keyboard navigation (Enter or Space key)
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") setActiveIndex(index);
             }}
           >
+            {/* Display the icon, heading, and text for each benefit */}
             <i className={`${styles.BenefitIcon} ${benefit.icon}`}></i>
             <h2 className={styles.BenefitHeading}>{benefit.heading}</h2>
             <p className={styles.BenefitText}>{benefit.text}</p>
@@ -65,7 +71,7 @@ function HomePage() {
         ))}
       </Container>
 
-      {/* Dots to indicate active section */}
+      {/* Dots to indicate the currently active benefit section */}
       <div className={styles.SwipeDots}>
         {benefits.map((_, index) => (
           <span
@@ -73,6 +79,7 @@ function HomePage() {
             className={`${styles.SwipeDot} ${index === activeIndex ? styles.active : ""}`}
             role="button"
             tabIndex={0}
+            // Update active index on dot click or keyboard navigation
             onClick={() => setActiveIndex(index)}
             onKeyDown={(e) => {
               if (e.key === "Enter" || e.key === " ") setActiveIndex(index);
@@ -86,6 +93,7 @@ function HomePage() {
         <Container>
           <Row>
             <Col className="text-center">
+              {/* Text displaying information about the platform */}
               <div className={styles.AboutText}>
                 Find new exciting dishes every day – from beginners to seasoned
                 chefs!
@@ -100,6 +108,7 @@ function HomePage() {
         <Container>
           <Row>
             <Col className="text-center">
+              {/* Footer text displaying copyright information */}
               <div className={styles.FooterText}>
                 © 2024 Foorky | Your guide to exciting eating habits.
               </div>
