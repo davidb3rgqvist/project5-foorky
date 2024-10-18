@@ -6,7 +6,6 @@ import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
-
 const RecipeCard = ({ recipe, onDelete }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [likes, setLikes] = useState(recipe.likes_count || 0);
@@ -72,7 +71,8 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
-  const handleToggleLike = () => {
+  const handleToggleLike = (e) => {
+    preventFlip(e);
     if (isLiked) {
       handleUnlike();
     } else {
@@ -137,7 +137,8 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
-  const handleEdit = (recipe) => {
+  const handleEdit = (event) => {
+    preventFlip(event);
     window.location.href = `/edit-recipe/${recipe.id}`;
   };
 
@@ -218,7 +219,10 @@ const RecipeCard = ({ recipe, onDelete }) => {
           <div className={styles.cardBackContent}>
             <button
               className={styles.toggleButton}
-              onClick={() => setShowIngredients(!showIngredients)}
+              onClick={(e) => {
+                preventFlip(e);
+                setShowIngredients(!showIngredients);
+              }}
             >
               {showIngredients ? "▾ Ingredients" : "▸ Ingredients"}
             </button>
@@ -226,7 +230,10 @@ const RecipeCard = ({ recipe, onDelete }) => {
 
             <button
               className={styles.toggleButton}
-              onClick={() => setShowSteps(!showSteps)}
+              onClick={(e) => {
+                preventFlip(e);
+                setShowSteps(!showSteps);
+              }}
             >
               {showSteps ? "▾ Steps" : "▸ Steps"}
             </button>
@@ -234,7 +241,10 @@ const RecipeCard = ({ recipe, onDelete }) => {
 
             <button
               className={styles.toggleButton}
-              onClick={() => setShowComments(!showComments)}
+              onClick={(e) => {
+                preventFlip(e);
+                setShowComments(!showComments);
+              }}
             >
               {showComments ? "▾ Comments" : "▸ Comments"}
             </button>
@@ -280,7 +290,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
                 <>
                   <button
                     className={buttonStyles.cardButton}
-                    onClick={() => handleEdit(recipe)}
+                    onClick={handleEdit}
                   >
                     Edit
                   </button>
