@@ -7,6 +7,7 @@ import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
 
 const RecipeCard = ({ recipe, onDelete }) => {
+  // State variables for handling card flip, likes, comments, and visibility toggles
   const [isFlipped, setIsFlipped] = useState(false);
   const [likes, setLikes] = useState(recipe.likes_count || 0);
   const [isLiked, setIsLiked] = useState(recipe.is_liked);
@@ -22,9 +23,13 @@ const RecipeCard = ({ recipe, onDelete }) => {
   const currentUser = useCurrentUser();
   const cardRef = useRef(null);
 
+  // Function to toggle the card flip state
   const handleFlip = () => setIsFlipped(!isFlipped);
+  
+  // Prevent flip function to stop propagation on specific elements
   const preventFlip = (e) => e.stopPropagation();
 
+  // Function to display alert messages with a timeout
   const showAlert = (message, variant) => {
     setAlertMessage(message);
     setAlertVariant(variant);
@@ -33,6 +38,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }, 3000);
   };
 
+  // Handle like functionality by making a POST request
   const handleLike = async () => {
     try {
       const response = await axios.post(
@@ -54,6 +60,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
+  // Handle unlike functionality by making a DELETE request
   const handleUnlike = async () => {
     try {
       const response = await axios.delete(`/likes/${recipe.id}/`, {
@@ -71,6 +78,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
+  // Toggle the like or unlike state
   const handleToggleLike = (e) => {
     preventFlip(e);
     if (isLiked) {
@@ -80,6 +88,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
+  // Fetch comments related to the recipe
   const fetchComments = useCallback(async () => {
     try {
       const { data } = await axios.get("/comments/");
@@ -93,12 +102,14 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   }, [recipe.id]);
 
+  // Load comments when the component mounts
   useEffect(() => {
     if (recipe.id) {
       fetchComments();
     }
   }, [recipe.id, fetchComments]);
 
+  // Close the card when clicking outside of it
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (cardRef.current && !cardRef.current.contains(event.target) && isFlipped) {
@@ -109,6 +120,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, [isFlipped]);
 
+  // Handle adding a new comment
   const handleAddComment = async (event) => {
     preventFlip(event);
 
@@ -137,16 +149,19 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
+  // Handle editing the recipe
   const handleEdit = (event) => {
     preventFlip(event);
     window.location.href = `/edit-recipe/${recipe.id}`;
   };
 
+  // Confirm deletion of the recipe
   const confirmDelete = (event) => {
     preventFlip(event);
     setShowDeleteConfirm(true);
   };
 
+  // Delete the recipe
   const handleDelete = async (event) => {
     preventFlip(event);
 
@@ -217,6 +232,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
         {/* Back Side */}
         <div className={styles.cardBack}>
           <div className={styles.cardBackContent}>
+            {/* Toggle Ingredients */}
             <button
               className={styles.toggleButton}
               onClick={(e) => {
@@ -228,6 +244,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
             </button>
             {showIngredients && <p>{recipe.ingredients}</p>}
 
+            {/* Toggle Steps */}
             <button
               className={styles.toggleButton}
               onClick={(e) => {
@@ -239,6 +256,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
             </button>
             {showSteps && <p>{recipe.steps}</p>}
 
+            {/* Toggle Comments */}
             <button
               className={styles.toggleButton}
               onClick={(e) => {
@@ -262,23 +280,26 @@ const RecipeCard = ({ recipe, onDelete }) => {
                 ) : (
                   <p>No comments yet.</p>
                 )}
+                {/* Add Comment Section */}
                 <div className={styles.addComment}>
-                  <input
-                    type="text"
+                  <textarea
+                    className={styles.commentInput}
                     value={newComment}
-                    placeholder="Add a comment..."
                     onChange={(e) => setNewComment(e.target.value)}
+                    placeholder="Add a comment..."
+                    onClick={preventFlip}
                   />
                   <button
-                    className={buttonStyles.commentButton}
+                    className={buttonStyles.cardButton}
                     onClick={handleAddComment}
                   >
-                    Add
+                    Add Comment
                   </button>
                 </div>
               </div>
             )}
 
+            {/* Like, Edit, and Delete Actions */}
             <div className={styles.actionsBack}>
               <button
                 className={buttonStyles.cardButton}
@@ -304,6 +325,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
               )}
             </div>
 
+            {/* Display Recipe Owner */}
             <div className={styles.chefName}>
               <p>Created by: {recipe.owner}</p>
             </div>
@@ -323,6 +345,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
   );
 };
 
+// Prop Types for Type Checking
 RecipeCard.propTypes = {
   recipe: PropTypes.shape({
     id: PropTypes.string.isRequired,
