@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import PropTypes from "prop-types";
 import { Alert } from "react-bootstrap";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import styles from "../styles/RecipeCard.module.css";
 import buttonStyles from "../styles/Button.module.css";
@@ -16,14 +15,11 @@ const RecipeCard = ({ recipe, onDelete }) => {
   const [showSteps, setShowSteps] = useState(true);
   const [showComments, setShowComments] = useState(true);
   const [newComment, setNewComment] = useState("");
-  const [editCommentId, setEditCommentId] = useState(null);
-  const [editCommentContent, setEditCommentContent] = useState("");
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertVariant, setAlertVariant] = useState("success");
   const [comments, setComments] = useState([]);
 
   const currentUser = useCurrentUser();
-  const history = useHistory();
   const cardRef = useRef(null);
 
   const handleFlip = () => setIsFlipped(!isFlipped);
@@ -140,43 +136,9 @@ const RecipeCard = ({ recipe, onDelete }) => {
     }
   };
 
-  const handleEditComment = async (commentId) => {
-    const token = localStorage.getItem("authToken");
-    try {
-      await axios.put(
-        `/comments/${commentId}/`,
-        { content: editCommentContent, recipe: recipe.id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setEditCommentId(null);
-      setEditCommentContent("");
-      fetchComments();
-      showAlert("Comment updated successfully!", "success");
-    } catch (error) {
-      console.error("Error editing comment:", error);
-      showAlert("Failed to edit comment. Please try again.", "danger");
-    }
-  };
-
-  const handleDeleteComment = async (commentId) => {
-    const token = localStorage.getItem("authToken");
-    try {
-      await axios.delete(`/comments/${commentId}/`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      fetchComments();
-      showAlert("Comment deleted successfully.", "success");
-    } catch (error) {
-      console.error("Error deleting comment:", error);
-      showAlert("Failed to delete comment. Please try again.", "danger");
-    }
-  };
-
   const handleEdit = (recipe) => {
-    history.push({
-      pathname: "/create-recipe",
-      state: { recipe },
-    });
+    // Navigate to the edit page (assuming you have a route for it)
+    window.location.href = `/edit-recipe/${recipe.id}`;
   };
 
   const confirmDelete = (event) => {
@@ -254,105 +216,39 @@ const RecipeCard = ({ recipe, onDelete }) => {
         {/* Back Side */}
         <div className={styles.cardBack}>
           <div className={styles.cardBackContent} onClick={preventFlip}>
-            <h3
-              role="button"
-              tabIndex={0}
-              onClick={() => setShowIngredients(!showIngredients)}
-              onKeyDown={(e) => e.key === "Enter" && setShowIngredients(!showIngredients)}
-            >
+            <h3 onClick={() => setShowIngredients(!showIngredients)}>
               {showIngredients ? "▾ Ingredients" : "▸ Ingredients"}
             </h3>
             {showIngredients && <p>{recipe.ingredients}</p>}
 
-            <h3
-              role="button"
-              tabIndex={0}
-              onClick={() => setShowSteps(!showSteps)}
-              onKeyDown={(e) => e.key === "Enter" && setShowSteps(!showSteps)}
-            >
+            <h3 onClick={() => setShowSteps(!showSteps)}>
               {showSteps ? "▾ Steps" : "▸ Steps"}
             </h3>
             {showSteps && <p>{recipe.steps}</p>}
 
-            <h3
-              role="button"
-              tabIndex={0}
-              onClick={() => setShowComments(!showComments)}
-              onKeyDown={(e) => e.key === "Enter" && setShowComments(!showComments)}
-            >
+            <h3 onClick={() => setShowComments(!showComments)}>
               {showComments ? "▾ Comments" : "▸ Comments"}
             </h3>
             {showComments && (
               <div className={styles.commentsSection}>
-                <div>
-                  {/* Comments List */}
-                  {comments.length > 0 ? (
-                    comments.map((comment) => (
-                      <div key={comment.id} className={styles.commentItem}>
-                        {editCommentId === comment.id ? (
-                          <>
-                            <input
-                              type="text"
-                              value={editCommentContent}
-                              onChange={(e) =>
-                                setEditCommentContent(e.target.value)
-                              }
-                            />
-                            <button
-                              className={buttonStyles.commentButton}
-                              onClick={() => handleEditComment(comment.id)}
-                            >
-                              Save
-                            </button>
-                            <button
-                              className={buttonStyles.commentButton}
-                              onClick={() => setEditCommentId(null)}
-                            >
-                              Cancel
-                            </button>
-                          </>
-                        ) : (
-                          <>
-                            <p>{comment.content}</p>
-                            <p className={styles.commentAuthor}>
-                              <em>— Chef: {comment.owner}</em>
-                            </p>
-                          </>
-                        )}
-
-                        {currentUser?.username === comment.owner && (
-                          <>
-                            <button
-                              className={buttonStyles.commentButton}
-                              onClick={() => {
-                                setEditCommentId(comment.id);
-                                setEditCommentContent(comment.content);
-                              }}
-                            >
-                              Edit
-                            </button>
-                            <button
-                              className={buttonStyles.commentButton}
-                              onClick={() => handleDeleteComment(comment.id)}
-                            >
-                              Delete
-                            </button>
-                          </>
-                        )}
-                        <hr className={styles.commentDivider} />
-                      </div>
-                    ))
-                  ) : (
-                    <p>No comments yet.</p>
-                  )}
-                </div>
+                {comments.length > 0 ? (
+                  comments.map((comment) => (
+                    <div key={comment.id} className={styles.commentItem}>
+                      <p>{comment.content}</p>
+                      <p className={styles.commentAuthor}>
+                        <em>— Chef: {comment.owner}</em>
+                      </p>
+                    </div>
+                  ))
+                ) : (
+                  <p>No comments yet.</p>
+                )}
                 <div className={styles.addComment}>
                   <input
                     type="text"
                     value={newComment}
                     placeholder="Add a comment..."
                     onChange={(e) => setNewComment(e.target.value)}
-                    onClick={preventFlip}
                   />
                   <button
                     className={buttonStyles.commentButton}
@@ -398,7 +294,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
 
       {/* Delete Confirmation Modal */}
       {showDeleteConfirm && (
-        <div className={styles.deleteConfirmModal} onClick={preventFlip}>
+        <div className={styles.deleteConfirmModal}>
           <p>Are you sure you want to delete this recipe?</p>
           <button onClick={handleDelete}>Yes</button>
           <button onClick={() => setShowDeleteConfirm(false)}>No</button>
@@ -422,9 +318,7 @@ RecipeCard.propTypes = {
     is_liked: PropTypes.bool,
     owner: PropTypes.string.isRequired,
   }).isRequired,
-  onUpdate: PropTypes.func,
   onDelete: PropTypes.func,
-  onAddComment: PropTypes.func,
 };
 
 export default RecipeCard;
