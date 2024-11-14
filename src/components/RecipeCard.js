@@ -140,7 +140,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
 
   const handleEdit = (event) => {
     preventFlip(event);
-    window.location.href = `/edit-recipe/${recipe.id}`;
+    window.location.href = `/create-recipe/${recipe.id}`;
   };
 
   const confirmDelete = (event) => {
