@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { useHistory } from "react-router-dom";
 import PropTypes from "prop-types";
 import { Alert } from "react-bootstrap";
 import axios from "axios";
@@ -18,6 +19,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
   const [alertMessage, setAlertMessage] = useState(null);
   const [alertVariant, setAlertVariant] = useState("success");
   const [comments, setComments] = useState([]);
+  const history = useHistory();
 
   const currentUser = useCurrentUser();
   const cardRef = useRef(null);
@@ -140,7 +142,10 @@ const RecipeCard = ({ recipe, onDelete }) => {
 
   const handleEdit = (event) => {
     preventFlip(event);
-    window.location.href = `/create-recipe/${recipe.id}`;
+    history.push({
+      pathname: "/create-recipe",
+      state: { recipe },
+    });
   };
 
   const confirmDelete = (event) => {

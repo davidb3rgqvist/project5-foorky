@@ -116,6 +116,11 @@ const CreateRecipePage = () => {
       );
       return;
     }
+    if (formData.cook_time && formData.cook_time < 0) {
+      setErrorMessage("Cook time cannot be less than 0 minutes.");
+    } else {
+      setErrorMessage(null); // Clear error if input is valid
+    }
 
     // Prepare the form data for submission
     const formDataToSubmit = new FormData();
@@ -219,6 +224,7 @@ const CreateRecipePage = () => {
             name="cook_time"
             value={formData.cook_time}
             onChange={handleChange}
+            min="0"
           />
         </Form.Group>
 
