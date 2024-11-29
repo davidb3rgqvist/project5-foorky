@@ -26,6 +26,7 @@
 - [Responsive Design](#responsive-design)
 - [Testing](#testing)
 - [Deployment](#deployment)
+- [Bug Fixes](#bug-fixes)
 - [Credits](#credits)
 
 ## Project Overview
@@ -364,21 +365,33 @@ Manual testing was performed to ensure all components work as expected. Some of 
 
 ## Deployment
 
-The frontend can be deployed to platforms like Netlify, Vercel, or any static hosting service that supports React.
+Both the **Foorky 2.0** frontend and backend were deployed using **Heroku**.
 
-### Steps to Deploy to Netlify
+### Backend Deployment
+- The backend was deployed using Heroku with the following steps:
+  1. Install `gunicorn` and configure `Procfile` for production.
+  2. Configure `settings.py` for Heroku, including `ALLOWED_HOSTS`, `DATABASES`, and static file management.
+  3. Push the code to Heroku and run database migrations.
 
-1. **Connect the GitHub repository**: In your Netlify account, create a new project and link it to your GitHub repo.
-2. **Set build command**: Set the build command to `npm run build`.
-3. **Set environment variables**: Add the same environment variables from your `.env` file in the Netlify dashboard.
-4. **Deploy**: Once everything is set up, trigger a deploy.
+Deployed Backend URL: [Backend API](https://project5-api-a299de19cbb3.herokuapp.com)
 
-### Steps to Deploy to Vercel
+### Frontend Deployment
+- The React frontend was deployed to Heroku with the following steps:
+  1. Build the app using `npm run build`.
+  2. Use `static.json` to configure routes for React Router.
+  3. Push the code to Heroku, ensuring the `REACT_APP_BACKEND_URL` environment variable is set.
 
-1. **Connect the GitHub repository**: In your Vercel account, create a new project and link it to your GitHub repo.
-2. **Set build command**: Set the build command to `npm run build`.
-3. **Set environment variables**: Add the same environment variables from your `.env` file in the Vercel dashboard.
-4. **Deploy**: Trigger a deploy, and Vercel will handle the rest.
+Deployed Frontend URL: [Frontend App](https://foorky-fe-79ffc00345fc.herokuapp.com)
+
+## Bug Fixes
+
+1. **"Page Not Found" on Edit Recipe**
+   - **Issue:** Attempting to edit a recipe resulted in a "Page Not Found" error.
+   - **Resolution:** Fixed by passing the recipe data via `state` when navigating to the `/create-recipe` route. This allowed the existing route to handle both creating and editing recipes without requiring additional route definitions.
+
+ **Negative Value Allowed for Cook Time**
+   - **Issue:** Users could input negative values in the "Cook Time" field, leading to invalid data.
+   - **Resolution:** Added validation to restrict input below 0 using `min="0"` in the backend as well as checking `formData.cook_time < 0` in the frontend to ensure negative values are not accepted.
 
 ## Credits
 
