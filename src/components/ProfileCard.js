@@ -32,6 +32,17 @@ const ProfileCard = ({
     age: profileData.age || "", // Age is optional
   });
 
+  // Handler for real-time validation of age
+  const handleAgeChange = (e) => {
+    const age = e.target.value;
+    if (age && (age <= 0 || age > 120)) {
+      setErrorMessage("Age must be between 1 and 120.");
+    } else {
+      setErrorMessage("");
+    }
+    setUpdatedProfileData({ ...updatedProfileData, age });
+  };
+
   // State for handling image preview
   const [imagePreview, setImagePreview] = useState(
     profileData.image || "/path-to-default/default-profile.jpg"
@@ -224,13 +235,10 @@ const ProfileCard = ({
                   type="number"
                   className={styles.formControl}
                   value={updatedProfileData.age}
-                  onChange={(e) =>
-                    setUpdatedProfileData({
-                      ...updatedProfileData,
-                      age: e.target.value,
-                    })
-                  }
+                  onChange={handleAgeChange}
                   placeholder="Age (optional)"
+                  min="1"
+                  max="120"
                 />
 
                 {/* Hidden file input */}

@@ -334,7 +334,7 @@ const RecipeCard = ({ recipe, onDelete }) => {
 // Prop Types for Type Checking
 RecipeCard.propTypes = {
   recipe: PropTypes.shape({
-    id: PropTypes.number.isRequired,
+    id: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     short_description: PropTypes.string,
     cook_time: PropTypes.number,
