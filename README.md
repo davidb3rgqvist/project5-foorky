@@ -389,7 +389,7 @@ Deployed Frontend URL: [Frontend App](https://foorky-fe-79ffc00345fc.herokuapp.c
    - **Issue:** Attempting to edit a recipe resulted in a "Page Not Found" error.
    - **Resolution:** Fixed by passing the recipe data via `state` when navigating to the `/create-recipe` route. This allowed the existing route to handle both creating and editing recipes without requiring additional route definitions.
 
- **Negative Value Allowed for Cook Time and profile age**
+2. **Negative Value Allowed for Cook Time and profile age**
    - **Issue:** Users could input negative values in the "Cook Time" and "profile age" field, leading to invalid data.
    - **Resolution:** Added validation to restrict input below 0 using `min="0"` in the backend as well as checking `formData.cook_time < 0` in the frontend to ensure negative values are not accepted.
 
